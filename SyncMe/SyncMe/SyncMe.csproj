@@ -196,8 +196,15 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CalendarsController.cs" />
+    <Compile Include="Controllers\ContactRequestsController.cs" />
+    <Compile Include="Controllers\EventInvitationsController.cs" />
+    <Compile Include="Controllers\EventsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\MembersController.cs" />
+    <Compile Include="Controllers\ProfilesController.cs" />
+    <Compile Include="Controllers\SyncRequestsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -279,6 +286,41 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Users\Index.cshtml" />
+    <Content Include="Views\Members\Create.cshtml" />
+    <Content Include="Views\Members\Delete.cshtml" />
+    <Content Include="Views\Members\Details.cshtml" />
+    <Content Include="Views\Members\Edit.cshtml" />
+    <Content Include="Views\Members\Index.cshtml" />
+    <Content Include="Views\Calendars\Create.cshtml" />
+    <Content Include="Views\Calendars\Delete.cshtml" />
+    <Content Include="Views\Calendars\Details.cshtml" />
+    <Content Include="Views\Calendars\Edit.cshtml" />
+    <Content Include="Views\Calendars\Index.cshtml" />
+    <Content Include="Views\ContactRequests\Create.cshtml" />
+    <Content Include="Views\ContactRequests\Delete.cshtml" />
+    <Content Include="Views\ContactRequests\Details.cshtml" />
+    <Content Include="Views\ContactRequests\Edit.cshtml" />
+    <Content Include="Views\ContactRequests\Index.cshtml" />
+    <Content Include="Views\Events\Create.cshtml" />
+    <Content Include="Views\Events\Delete.cshtml" />
+    <Content Include="Views\Events\Details.cshtml" />
+    <Content Include="Views\Events\Edit.cshtml" />
+    <Content Include="Views\Events\Index.cshtml" />
+    <Content Include="Views\EventInvitations\Create.cshtml" />
+    <Content Include="Views\EventInvitations\Delete.cshtml" />
+    <Content Include="Views\EventInvitations\Details.cshtml" />
+    <Content Include="Views\EventInvitations\Edit.cshtml" />
+    <Content Include="Views\EventInvitations\Index.cshtml" />
+    <Content Include="Views\Profiles\Create.cshtml" />
+    <Content Include="Views\Profiles\Delete.cshtml" />
+    <Content Include="Views\Profiles\Details.cshtml" />
+    <Content Include="Views\Profiles\Edit.cshtml" />
+    <Content Include="Views\Profiles\Index.cshtml" />
+    <Content Include="Views\SyncRequests\Create.cshtml" />
+    <Content Include="Views\SyncRequests\Delete.cshtml" />
+    <Content Include="Views\SyncRequests\Details.cshtml" />
+    <Content Include="Views\SyncRequests\Edit.cshtml" />
+    <Content Include="Views\SyncRequests\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
