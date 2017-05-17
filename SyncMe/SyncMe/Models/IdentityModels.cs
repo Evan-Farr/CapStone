@@ -29,5 +29,12 @@ namespace SyncMe.Models
         {
             return new ApplicationDbContext();
         }
+        public DbSet<Member> Members { get; set; }
+        public DbSet<Profile> Profiles { get; set; }
+        public DbSet<Calendar> Calendars { get; set; }
+        public DbSet<Event> Events { get; set; }
+        public DbSet<ContactRequest> ContactRequests { get; set; }
+        public DbSet<SyncRequest> SyncRequests { get; set; }
+        public DbSet<EventInvitation> EventInvitations { get; set; }
     }
 }

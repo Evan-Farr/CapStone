@@ -1,0 +1,70 @@
+﻿@model SyncMe.Models.Member
+@{
+    ViewBag.Title = "Index";
+}
+
+@if (ViewBag.displayMenu == "Yes")
+{
+    <div class="accountPage">
+        <hr />
+        <div class="col-md-12">
+            <div class="text-success">
+                @TempData["Message"]
+            </div>
+            <div class="text-danger">
+                @TempData["ErrorMessage"]
+            </div>
+        </div>
+        <h3>
+            @Html.ActionLink("View Parents", "Index", "Parents", null, new { @class = "btn btn-primary btn-lg" })
+            <br /><br />
+            @Html.ActionLink("View Children", "Index", "Children", null, new { @class = "btn btn-primary btn-lg" })
+            <br /><br />
+            @Html.ActionLink("View Employees", "Index", "Employees", null, new { @class = "btn btn-primary btn-lg" })
+            <br /><br />
+            @Html.ActionLink("View Day Cares", "Index", "DayCares", null, new { @class = "btn btn-primary btn-lg" })
+            <br /><br />
+            @Html.ActionLink("View All Daily Reports", "Index", "DailyReports", null, new { @class = "btn btn-primary btn-lg" })
+            <br /><br /><br /><br />
+        </h3>
+    </div>
+}
+else if (ViewBag.displayMenu == "Member")
+{
+    <div class="accountPage">
+        <hr />
+        <div class="col-md-12">
+            <div class="text-success">
+                @TempData["Message"]
+            </div>
+            <div class="text-warning">
+                @TempData["ErrorMessage"]
+            </div>
+        </div>
+        <h3>
+            <br />
+            @Html.ActionLink("My Profile", "PrivateDetails", "Members", new { id = ViewBag.Id }, new { @class = "btn btn-primary btn-lg" })
+            <br /><br />
+            @Html.ActionLink("My Friends", "ViewFriends", "Members", new { id = ViewBag.Id }, new { @class = "btn btn-primary btn-lg" })
+            <br /><br />
+            @Html.ActionLink("My Calendar", "Calendar", "Members", null, new { @class = "btn btn-primary btn-lg" })
+        </h3>
+        <hr />
+        <div class="col-md-12">
+            <h2>@Html.Label("Find Contact")</h2>
+            @using (Html.BeginForm("FindContact", "Members", FormMethod.Post))
+            {
+                @Html.TextBoxFor(model => model.Contacts, new { placeholder = "Calvin Calendar" })
+                @Html.ValidationMessageFor(model => model.Contacts)
+                <button class="btn btn-primary btn-md" type="submit">Search</button>
+            }
+        </div>
+        <div class="col-md-12">
+            <div class="text-warning">
+                @TempData["ErrorMessage1"]
+            </div>
+        </div>
+        <br /><br /><br />
+    </div>
+}
+
