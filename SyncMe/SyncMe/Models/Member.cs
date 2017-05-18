@@ -14,6 +14,7 @@ namespace SyncMe.Models
             ContactRequests = new List<ContactRequest>();
             SyncRequests = new List<SyncRequest>();
             EventInvitations = new List<EventInvitation>();
+            Calendar = new Calendar();
         }
 
         [Key]

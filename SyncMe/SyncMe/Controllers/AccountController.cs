@@ -146,7 +146,7 @@ namespace SyncMe.Controllers
         }
 
         // POST: /Account/Register
-        //[HttpPost]
+        [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
@@ -164,12 +164,12 @@ namespace SyncMe.Controllers
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-                    await this.UserManager.AddToRoleAsync(user.Id, model.UserRoles);
+                    await this.UserManager.AddToRoleAsync(user.Id, "Member");
                     //if (model.UserRoles == "Member")
                     //{
                         return RedirectToAction("Create", "Members");
                     //}
-                }
+                 }
                 AddErrors(result);
             }
             // If we got this far, something failed, redisplay form

@@ -65,8 +65,8 @@ namespace SyncMe.Models
     {
         [Required]
         [Display(Name = "UserRoles")]
-        //public string UserRoles { get { return UserRoles; } set { UserRoles = "Member"; } }
-        public string UserRoles { get; set; }
+        public string UserRoles { /*get { return UserRoles; } */set { UserRoles = "Member"; } }
+        //public string UserRoles { get; set; }
 
         [Required]
         [EmailAddress]

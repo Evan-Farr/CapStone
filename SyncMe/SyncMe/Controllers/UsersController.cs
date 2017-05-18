@@ -39,11 +39,11 @@ namespace SyncMe.Controllers
                     {
                         contacts.Add(new SelectListItem { Text = contact.FirstName + " " + contact.LastName, Value = contact.Id.ToString() });
                     }
-                    foreach(var item in member.Calendar.Events)
-                    {
-                        Events.Add(item);
-                    }
-                    ViewBag.Calendar.Events = Events;
+                    //foreach(var item in member.Calendar.Events)
+                    //{
+                    //    Events.Add(item);
+                    //}
+                    //ViewBag.Calendar.Events = Events;
                     ViewBag.Contacts = contacts;
                     ViewBag.displayMenu = "Member";
                 }
