@@ -7,6 +7,8 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using SyncMe.Models;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace SyncMe.Controllers
 {
@@ -50,9 +52,16 @@ namespace SyncMe.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Events.Add(@event);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                var holder = User.Identity.GetUserId();
+                var same = db.Users.Where(s => s.Id == holder).FirstOrDefault();
+                if (isUser("Member"))
+                {
+                    var member = db.Members.Where(u => u.UserId.Id == holder).FirstOrDefault();
+                    member.Calendar.Events.Add(@event);
+                    db.Events.Add(@event);
+                    db.SaveChanges();
+                    return RedirectToAction("Index", "Users");
+                }
             }
 
             return View(@event);
@@ -84,7 +93,7 @@ namespace SyncMe.Controllers
             {
                 db.Entry(@event).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Users");
             }
             return View(@event);
         }
@@ -112,7 +121,7 @@ namespace SyncMe.Controllers
             Event @event = db.Events.Find(id);
             db.Events.Remove(@event);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Users");
         }
 
         protected override void Dispose(bool disposing)
@@ -122,6 +131,26 @@ namespace SyncMe.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        private bool isUser(string role)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var user = User.Identity;
+                ApplicationDbContext context = new ApplicationDbContext();
+                var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
+                var s = UserManager.GetRoles(user.GetUserId());
+                if (s[0].ToString() == role)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            return false;
         }
     }
 }

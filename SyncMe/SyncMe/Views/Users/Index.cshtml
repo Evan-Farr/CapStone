@@ -66,4 +66,59 @@ else if (ViewBag.displayMenu == "Member")
         </div>
         <br /><br /><br />
     </div>
+    <br /><br />
+    @Html.ActionLink("Add New Event", "Create", "Events", null, new { @class = "btn btn-primary btn-lg" })
+    <br /><br />
+    <div class="col-md-12">
+        <div id="fullCalModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 id="modalTitle" class="modal-title"></h4>
+                    </div>
+                    <h5 id="modalStart" class="modal-body"></h5>
+                    <h5 id="modalEnd" class="modal-body"></h5>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="calendar"></div>
+    </div>
+
+    <script>
+    $(document).ready(function () {
+        var date = new Date();
+        var d = date.getDate();
+        var m = date.getMonth();
+        var y = date.getFullYear();
+
+        $('#calendar').fullCalendar({
+            editable: true,
+            year: y,
+            month: m,
+            date: d,
+            header: {
+                left: 'title',
+                right: 'prev,next today,agendaDay,agendaWeek,month'
+            },
+            defaultView: 'month',
+            minTime: 7,
+            maxTime: 22,
+            editable: true,
+            droppable: false,
+            slotMinutes: 15,
+            disableResizing: false,
+            events: @Html.Raw(Json.Encode(Model)),
+            eventClick: function(event, jsEvent, view){
+                console.log(event);
+                $('#modalTitle').html(event.title);
+                $('#modalStart').html(event.start.toString("MM/dd/yyyy hh:mm tt"));
+                $('#modalEnd').html(event.end.toString("MM/dd/yyyy hh:mm tt"));
+                $('#fullCalModal').modal();
+            }
+        });
+    });
+    </script>
 }
