@@ -54,7 +54,7 @@ else if (ViewBag.displayMenu == "Member")
             <h2>@Html.Label("Find Contact")</h2>
             @using (Html.BeginForm("FindContact", "Members", FormMethod.Post))
             {
-                @Html.TextBoxFor(model => model.Contacts, new { placeholder = "Calvin Calendar" })
+                @Html.TextBoxFor(model => model.Contacts, new { placeholder = "John Smith" })
                 @Html.ValidationMessageFor(model => model.Contacts)
                 <button class="btn btn-primary btn-md" type="submit">Search</button>
             }
@@ -84,7 +84,7 @@ else if (ViewBag.displayMenu == "Member")
                 </div>
             </div>
         </div>
-        <div id="calendar"></div>
+        <div id="calendar" class="col-md-12"></div>
     </div>
 
     <script>
@@ -100,22 +100,22 @@ else if (ViewBag.displayMenu == "Member")
             month: m,
             date: d,
             header: {
-                left: 'title',
-                right: 'prev,next today,agendaDay,agendaWeek,month'
+                left: 'Title',
+                right: 'Prev,Next,Today,AgendaDay,AgendaWeek,Month'
             },
             defaultView: 'month',
             minTime: 7,
             maxTime: 22,
             editable: true,
-            droppable: false,
+            droppable: true,
             slotMinutes: 15,
             disableResizing: false,
-            events: @Html.Raw(Json.Encode(Model)),
+            events: @Html.Raw(Json.Encode(Model.Events)),
             eventClick: function(event, jsEvent, view){
                 console.log(event);
-                $('#modalTitle').html(event.title);
-                $('#modalStart').html(event.start.toString("MM/dd/yyyy hh:mm tt"));
-                $('#modalEnd').html(event.end.toString("MM/dd/yyyy hh:mm tt"));
+                $('#modalTitle').html(event.Title);
+                $('#modalStart').html(event.StartTime);
+                $('#modalEnd').html(event.EndTime);
                 $('#fullCalModal').modal();
             }
         });

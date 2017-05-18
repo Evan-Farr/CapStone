@@ -7,13 +7,13 @@ namespace SyncMe.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class instantiatedacalendarinmembermodel : IMigrationMetadata
+    public sealed partial class newfirstmigration : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(instantiatedacalendarinmembermodel));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(newfirstmigration));
         
         string IMigrationMetadata.Id
         {
-            get { return "201705181942071_instantiated a calendar in member model"; }
+            get { return "201705182031070_new first migration"; }
         }
         
         string IMigrationMetadata.Source

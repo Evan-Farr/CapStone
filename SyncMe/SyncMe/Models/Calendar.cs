@@ -8,15 +8,15 @@ namespace SyncMe.Models
 {
     public class Calendar
     {
-        public Calendar()
-        {
-            Events = new List<Event>();
-        }
+        //public Calendar()
+        //{
+        //    Events = new List<Event>();
+        //}
 
         [Key]
         public int Id { get; set; }
         
 
-        public virtual ICollection<Event> Events { get; set; }
+        //public virtual ICollection<Event> Events { get; set; }
     }
 }

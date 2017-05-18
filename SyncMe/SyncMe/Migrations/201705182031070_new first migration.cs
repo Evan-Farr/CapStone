@@ -3,7 +3,7 @@ namespace SyncMe.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class setupmodels : DbMigration
+    public partial class newfirstmigration : DbMigration
     {
         public override void Up()
         {
@@ -14,28 +14,6 @@ namespace SyncMe.Migrations
                         Id = c.Int(nullable: false, identity: true),
                     })
                 .PrimaryKey(t => t.Id);
-            
-            CreateTable(
-                "dbo.Events",
-                c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        Title = c.String(nullable: false),
-                        StreetAddress = c.String(),
-                        City = c.String(),
-                        State = c.String(),
-                        ZipCode = c.String(maxLength: 5),
-                        StartDate = c.DateTime(nullable: false),
-                        EndDate = c.DateTime(nullable: false),
-                        StartTime = c.String(),
-                        EndTime = c.String(),
-                        Details = c.String(),
-                        Private = c.Boolean(nullable: false),
-                        Calendar_Id = c.Int(),
-                    })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Calendars", t => t.Calendar_Id)
-                .Index(t => t.Calendar_Id);
             
             CreateTable(
                 "dbo.ContactRequests",
@@ -116,6 +94,28 @@ namespace SyncMe.Migrations
                 .ForeignKey("dbo.Members", t => t.Sender_Id)
                 .Index(t => t.Event_Id)
                 .Index(t => t.Sender_Id);
+            
+            CreateTable(
+                "dbo.Events",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        Title = c.String(nullable: false),
+                        StreetAddress = c.String(),
+                        City = c.String(),
+                        State = c.String(),
+                        ZipCode = c.String(maxLength: 5),
+                        StartDate = c.DateTime(nullable: false),
+                        EndDate = c.DateTime(nullable: false),
+                        StartTime = c.String(),
+                        EndTime = c.String(),
+                        Details = c.String(),
+                        Private = c.Boolean(nullable: false),
+                        Member_Id = c.Int(),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Members", t => t.Member_Id)
+                .Index(t => t.Member_Id);
             
             CreateTable(
                 "dbo.SyncRequests",
@@ -219,13 +219,13 @@ namespace SyncMe.Migrations
             DropForeignKey("dbo.SyncRequests", "Sender_Id", "dbo.Members");
             DropForeignKey("dbo.SyncRequests", "Reciever_Id", "dbo.Members");
             DropForeignKey("dbo.Members", "Profile_Id", "dbo.Profiles");
+            DropForeignKey("dbo.Events", "Member_Id", "dbo.Members");
             DropForeignKey("dbo.EventInvitations", "Sender_Id", "dbo.Members");
             DropForeignKey("dbo.EventInvitations", "Event_Id", "dbo.Events");
             DropForeignKey("dbo.Profiles", "Member_Id1", "dbo.Members");
             DropForeignKey("dbo.Profiles", "Member_Id", "dbo.Members");
             DropForeignKey("dbo.ContactRequests", "Member_Id", "dbo.Members");
             DropForeignKey("dbo.Members", "Calendar_Id", "dbo.Calendars");
-            DropForeignKey("dbo.Events", "Calendar_Id", "dbo.Calendars");
             DropIndex("dbo.AspNetRoles", "RoleNameIndex");
             DropIndex("dbo.AspNetUserRoles", new[] { "RoleId" });
             DropIndex("dbo.AspNetUserRoles", new[] { "UserId" });
@@ -235,6 +235,7 @@ namespace SyncMe.Migrations
             DropIndex("dbo.SyncRequests", new[] { "Member_Id" });
             DropIndex("dbo.SyncRequests", new[] { "Sender_Id" });
             DropIndex("dbo.SyncRequests", new[] { "Reciever_Id" });
+            DropIndex("dbo.Events", new[] { "Member_Id" });
             DropIndex("dbo.EventInvitations", new[] { "Sender_Id" });
             DropIndex("dbo.EventInvitations", new[] { "Event_Id" });
             DropIndex("dbo.Profiles", new[] { "Member_Id1" });
@@ -245,18 +246,17 @@ namespace SyncMe.Migrations
             DropIndex("dbo.ContactRequests", new[] { "Sender_Id" });
             DropIndex("dbo.ContactRequests", new[] { "Reciever_Id" });
             DropIndex("dbo.ContactRequests", new[] { "Member_Id" });
-            DropIndex("dbo.Events", new[] { "Calendar_Id" });
             DropTable("dbo.AspNetRoles");
             DropTable("dbo.AspNetUserRoles");
             DropTable("dbo.AspNetUserLogins");
             DropTable("dbo.AspNetUserClaims");
             DropTable("dbo.AspNetUsers");
             DropTable("dbo.SyncRequests");
+            DropTable("dbo.Events");
             DropTable("dbo.EventInvitations");
             DropTable("dbo.Profiles");
             DropTable("dbo.Members");
             DropTable("dbo.ContactRequests");
-            DropTable("dbo.Events");
             DropTable("dbo.Calendars");
         }
     }

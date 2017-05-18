@@ -57,7 +57,7 @@ namespace SyncMe.Controllers
                 if (isUser("Member"))
                 {
                     var member = db.Members.Where(u => u.UserId.Id == holder).FirstOrDefault();
-                    member.Calendar.Events.Add(@event);
+                    member.Events.Add(@event);
                     db.Events.Add(@event);
                     db.SaveChanges();
                     return RedirectToAction("Index", "Users");

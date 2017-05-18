@@ -34,16 +34,16 @@ namespace SyncMe.Controllers
                     var member = db.Members.Where(b => b.UserId.Id == holder).Select(q => q).FirstOrDefault();
                     ViewBag.Id = temp;
                     List<SelectListItem> contacts = new List<SelectListItem>();
-                    List<Event> Events = new List<Event>();
+                    List<SelectListItem> events = new List<SelectListItem>();
                     foreach (var contact in member.Contacts)
                     {
                         contacts.Add(new SelectListItem { Text = contact.FirstName + " " + contact.LastName, Value = contact.Id.ToString() });
                     }
-                    //foreach(var item in member.Calendar.Events)
-                    //{
-                    //    Events.Add(item);
-                    //}
-                    //ViewBag.Calendar.Events = Events;
+                    foreach (var item in member.Events)
+                    {
+                        events.Add(new SelectListItem { Text = item.Title + " " + item.StartDate, Value = item.Id.ToString() });
+                    }
+                    ViewBag.Events = events;
                     ViewBag.Contacts = contacts;
                     ViewBag.displayMenu = "Member";
                 }
