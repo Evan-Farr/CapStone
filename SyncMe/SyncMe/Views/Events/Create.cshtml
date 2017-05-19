@@ -55,34 +55,30 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.start, htmlAttributes: new { @class = "control-label col-md-2" })
+            <label class="control-label  col-md-2">Start Date</label>
             <div class="col-md-10">
-                @Html.EditorFor(model => model.start, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.start, "", new { @class = "text-danger" })
+                <input type="date" name="StartDate" />
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.end, htmlAttributes: new { @class = "control-label col-md-2" })
+            <label class="control-label col-md-2">Start Time</label>
             <div class="col-md-10">
-                @Html.EditorFor(model => model.end, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.end, "", new { @class = "text-danger" })
+                <input type="time" name="StartTime" />
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.startTime, htmlAttributes: new { @class = "control-label col-md-2" })
+            <label class="control-label col-md-2">End Date</label>
             <div class="col-md-10">
-                @Html.EditorFor(model => model.startTime, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.startTime, "", new { @class = "text-danger" })
+                <input type="date" name="EndDate" />
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.endTime, htmlAttributes: new { @class = "control-label col-md-2" })
+            <label class="control-label col-md-2">End Time</label>
             <div class="col-md-10">
-                @Html.EditorFor(model => model.endTime, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.endTime, "", new { @class = "text-danger" })
+                <input type="time" name="EndTime" />
             </div>
         </div>
 

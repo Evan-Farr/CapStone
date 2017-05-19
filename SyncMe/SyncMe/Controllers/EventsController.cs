@@ -10,6 +10,7 @@ using SyncMe.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Web.Routing;
+using System.Globalization;
 
 namespace SyncMe.Controllers
 {
@@ -49,10 +50,18 @@ namespace SyncMe.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,title,streetAddress,city,state,zipCode,start,end,startTime,endTime,details,isPrivate")] Event @event)
+        public ActionResult Create([Bind(Include = "Id,title,streetAddress,city,state,zipCode,start,end,startTime,endTime,details,isPrivate")] Event @event, DateTime StartDate, DateTime EndDate, DateTime StartTime, DateTime EndTime)
         {
             if (ModelState.IsValid)
             {
+                @event.start = StartDate.Date.Add(DateTime.Parse(StartTime));
+                @event.end = EndDate.ToString("yyyy-MM-dd ") + EndTime.ToString("HH:mm:ss");
+                string startDate = StartDate.ToString("yyyy-MM-dd");
+                string endDate = EndDate.ToString("yyyy-MM-dd");
+                string startTime = StartTime.ToString("HH:mm:ss");
+                string endTime = EndTime.ToString("HH:mm:ss");
+                @event.start = DateTime.ParseExact(startDate + " " + startTime, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                @event.end = DateTime.ParseExact(endDate + " " + endTime, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
                 var holder = User.Identity.GetUserId();
                 var member = db.Members.Where(u => u.UserId.Id == holder).Select(s => s).FirstOrDefault();
                 member.Events.Add(@event);

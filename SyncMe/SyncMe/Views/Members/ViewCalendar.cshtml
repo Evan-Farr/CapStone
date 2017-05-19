@@ -19,9 +19,11 @@
         <center>
             @Html.ActionLink("Add New Event", "Create", "Events", null, new { @class = "btn btn-primary btn-md" })
             <br /><br />
-            @Html.ActionLink("My Profile", "PrivateDetails", "Members", new { id = ViewBag.Id }, new { @class = "btn btn-primary btn-md" })
+            @Html.ActionLink("My Profile", "PrivateDetails", "Members", null, new { @class = "btn btn-primary btn-md" })
             <br /><br />
-            @Html.ActionLink("Contacts", "ViewContacts", "Members", new { id = ViewBag.Id }, new { @class = "btn btn-primary btn-md" })
+            @Html.ActionLink("Contacts", "ViewContacts", "Members", null, new { @class = "btn btn-primary btn-md" })
+            <br /><br />
+            @Html.ActionLink("View All Events", "PrivateIndex", "Events", null, new { @class = "btn btn-primary btn-md" })
         </center>
     </div>
     <div class="col-md-11">
@@ -33,15 +35,15 @@
                     </div>
                     <h5 id="modalStart" class="modal-body"></h5>
                     <h5 id="modalEnd" class="modal-body"></h5>
-                    <h5 id="modalStartTime" class="modal-body"></h5>
-                    <h5 id="modalEndTime" class="modal-body"></h5>
                     <h5 id="modalDetails" class="modal-body"></h5>
                     <h5 id="modalPrivate" class="modal-body"></h5>
                     <div class="modal-footer">
-                        @Html.ActionLink("Edit", "Edit", "Events", @*new { id =  },*@ new { @class = "btn btn-default" })
-                        @Html.ActionLink("Send Invite", "SendInvite", "Members", @*new { id =  },*@ new { @class = "btn btn-default" })
-                        @Html.ActionLink("Get Directions", "GetDirections", "Events", @*new { id =  },*@ new { @class = "btn btn-default" })
-                        @Html.ActionLink("Weather Forecast", "GetWeather", "Events", @*new { id =  },*@ new { @class = "btn btn-default" })
+                        @Html.ActionLink("Send Invite", "SendInvite", "Members", @*new { id =  },*@ new { @class = "btn btn-primary btn-sm" })
+                        @Html.ActionLink("Get Directions", "GetDirections", "Events", @*new { id =  },*@ new { @class = "btn btn-primary btn-sm" })
+                        @Html.ActionLink("Weather Forecast", "GetWeather", "Events", @*new { id =  },*@ new { @class = "btn btn-primary btn-sm" })
+                        @Html.ActionLink("Edit", "Edit", "Events", @*new { id =  },*@ new { @class = "btn btn-primary btn-sm" })
+                        @Html.ActionLink("Delete", "Delete", "Events", @*new { id =  },*@ new { @class = "btn btn-primary btn-sm" })
+                        <br /><br />
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
                 </div>
@@ -59,28 +61,32 @@
         var y = date.getFullYear();
 
         $('#calendar').fullCalendar({
+            allDay: false,
+            timezone: 'local',
+            selectable: true,
+            selectHelper: true,
             editable: true,
             year: y,
             month: m,
             date: d,
             header: {
                 left: 'title',
-                right: 'prev,next today,agendaDay,agendaWeek,month'
+                right: 'prev,next,today,agendaDay,agendaWeek,month'
             },
             defaultView: 'month',
-            minTime: 7,
-            maxTime: 22,
             editable: true,
+            //googleCalendarApiKey: 'API-Key',
             droppable: true,
-            slotMinutes: 15,
+            slotDuration: '00:30:00',
+            scrollTime: '12:00:00 AM',
+            slotEventOverLap: true,
             disableResizing: false,
+            eventOrder: '-start',
             events: @Html.Raw(Json.Encode(Model)),
             eventClick: function(event, jsEvent, view){
                 $('#modalTitle').html(event.title);
-                $('#modalStart').html("Start Date: " + event.start.toString("MM/dd/yyyy"));
-                $('#modalEnd').html("End Date: " + event.end);
-                $('#modalStartTime').html("Start Time: " + event.startTime);
-                $('#modalEndTime').html("End Time: " + event.endTime);
+                $('#modalStart').html("Start: " + event.start.toString("MM/dd/yyyy h:mm tt"));
+                $('#modalEnd').html("End: " + event.end.toString("MM/dd/yyyy h:mm tt"));
                 $('#modalDetails').html("Details: " + event.details);
                 $('#modalPrivate').html("Private: " + event.isPrivate);
                 $('#fullCalModal').modal();

@@ -22,9 +22,9 @@ namespace SyncMe.Models
         [Required, DataType(DataType.Date)]
         public DateTime end { get; set; }
         [DataType(DataType.Time)]
-        public string startTime { get; set; }
+        public DateTime startTime { get; set; }
         [DataType(DataType.Time)]
-        public string endTime { get; set; }
+        public DateTime endTime { get; set; }
         [DataType(DataType.MultilineText)]
         public string details { get; set; }
         [Required]
