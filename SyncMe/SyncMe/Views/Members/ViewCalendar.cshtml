@@ -3,6 +3,8 @@
     ViewBag.Title = "ViewCalendar";
 }
 
+<br />
+<hr />
 <div class="col-md-12">
     <div class="text-success">
         @TempData["Message"]
@@ -14,7 +16,13 @@
 <hr />
 <container>
     <div class="col-md-1">
-        @Html.ActionLink("Add New Event", "Create", "Events", null, new { @class = "btn btn-primary btn-md" })
+        <center>
+            @Html.ActionLink("Add New Event", "Create", "Events", null, new { @class = "btn btn-primary btn-md" })
+            <br /><br />
+            @Html.ActionLink("My Profile", "PrivateDetails", "Members", new { id = ViewBag.Id }, new { @class = "btn btn-primary btn-md" })
+            <br /><br />
+            @Html.ActionLink("Contacts", "ViewContacts", "Members", new { id = ViewBag.Id }, new { @class = "btn btn-primary btn-md" })
+        </center>
     </div>
     <div class="col-md-11">
         <div id="fullCalModal" class="modal fade">
@@ -25,8 +33,6 @@
                     </div>
                     <h5 id="modalStart" class="modal-body"></h5>
                     <h5 id="modalEnd" class="modal-body"></h5>
-                    <h5 id="modalDetails" class="modal-body"></h5>
-                    <h5 id="modalPrivate" class="modal-body"></h5>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
@@ -65,8 +71,6 @@
                 $('#modalTitle').html(event.Title);
                 $('#modalStart').html(event.StartTime);
                 $('#modalEnd').html(event.EndTime);
-                $('#modalDetails').html(event.Details);
-                $('#modalPrivate').html(event.Private);
                 $('#fullCalModal').modal();
             }
         });

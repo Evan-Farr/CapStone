@@ -11,25 +11,25 @@ namespace SyncMe.Models
         [Key]
         public int Id { get; set; }
         [Required]
-        public string Title { get; set; }
-        public string StreetAddress { get; set; }
-        public string City { get; set; }
-        public string State { get; set; }
+        public string title { get; set; }
+        public string streetAddress { get; set; }
+        public string city { get; set; }
+        public string state { get; set; }
         [StringLength(5)]
-        public string ZipCode { get; set; }
+        public string zipCode { get; set; }
         [Required, DataType(DataType.Date)]
-        public DateTime StartDate { get; set; }
+        public DateTime start { get; set; }
         [Required, DataType(DataType.Date)]
-        public DateTime EndDate { get; set; }
+        public DateTime end { get; set; }
         [DataType(DataType.Time)]
-        public string StartTime { get; set; }
+        public string startTime { get; set; }
         [DataType(DataType.Time)]
-        public string EndTime { get; set; }
+        public string endTime { get; set; }
         [DataType(DataType.MultilineText)]
-        public string Details { get; set; }
+        public string details { get; set; }
         [Required]
-        public bool Private { get; set; }
-        public bool Active { get { if (EndDate < DateTime.Today) { return false; } else { return true; } } }
+        public bool isPrivate { get; set; }
+        public bool active { get { if (end < DateTime.Today) { return false; } else { return true; } } }
 
     }
 }

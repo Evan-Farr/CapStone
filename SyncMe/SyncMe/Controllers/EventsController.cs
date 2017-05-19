@@ -48,7 +48,7 @@ namespace SyncMe.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Title,StreetAddress,City,State,ZipCode,StartDate,EndDate,StartTime,EndTime,Details,Private")] Event @event)
+        public ActionResult Create([Bind(Include = "Id,title,streetAddress,city,state,zipCode,start,end,startTime,endTime,details,isPrivate")] Event @event)
         {
             if (ModelState.IsValid)
             {
@@ -82,13 +82,13 @@ namespace SyncMe.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Title,StreetAddress,City,State,ZipCode,StartDate,EndDate,StartTime,EndTime,Details,Private")] Event @event)
+        public ActionResult Edit([Bind(Include = "Id,title,streetAddress,city,state,zipCode,start,end,startTime,endTime,details,isPrivate")] Event @event)
         {
             if (ModelState.IsValid)
             {
                 db.Entry(@event).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index", "Users");
+                return RedirectToAction("ViewCalendar", "Members");
             }
             return View(@event);
         }

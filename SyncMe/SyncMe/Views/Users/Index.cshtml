@@ -39,7 +39,7 @@ else if (ViewBag.displayMenu == "Member")
             <br />
             @Html.ActionLink("My Profile", "PrivateDetails", "Members", new { id = ViewBag.Id }, new { @class = "btn btn-primary btn-lg" })
             <br /><br />
-            @Html.ActionLink("My Friends", "ViewFriends", "Members", new { id = ViewBag.Id }, new { @class = "btn btn-primary btn-lg" })
+            @Html.ActionLink("My Contacts", "ViewContacts", "Members", new { id = ViewBag.Id }, new { @class = "btn btn-primary btn-lg" })
             <br /><br />
             @Html.ActionLink("My Calendar", "ViewCalendar", "Members", null, new { @class = "btn btn-primary btn-lg" })
         </h3>

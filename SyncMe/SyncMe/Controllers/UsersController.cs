@@ -41,7 +41,7 @@ namespace SyncMe.Controllers
                     }
                     foreach (var item in member.Events)
                     {
-                        events.Add(new SelectListItem { Text = item.Title + " " + item.StartDate, Value = item.Id.ToString() });
+                        events.Add(new SelectListItem { Text = item.title + " " + item.start, Value = item.Id.ToString() });
                     }
                     ViewBag.Events = events;
                     ViewBag.Contacts = contacts;

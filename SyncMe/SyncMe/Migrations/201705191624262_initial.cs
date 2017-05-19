@@ -3,7 +3,7 @@ namespace SyncMe.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class newfirstmigration : DbMigration
+    public partial class initial : DbMigration
     {
         public override void Up()
         {
@@ -100,17 +100,17 @@ namespace SyncMe.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        Title = c.String(nullable: false),
-                        StreetAddress = c.String(),
-                        City = c.String(),
-                        State = c.String(),
-                        ZipCode = c.String(maxLength: 5),
-                        StartDate = c.DateTime(nullable: false),
-                        EndDate = c.DateTime(nullable: false),
-                        StartTime = c.String(),
-                        EndTime = c.String(),
-                        Details = c.String(),
-                        Private = c.Boolean(nullable: false),
+                        title = c.String(nullable: false),
+                        streetAddress = c.String(),
+                        city = c.String(),
+                        state = c.String(),
+                        zipCode = c.String(maxLength: 5),
+                        start = c.DateTime(nullable: false),
+                        end = c.DateTime(nullable: false),
+                        startTime = c.String(),
+                        endTime = c.String(),
+                        details = c.String(),
+                        isPrivate = c.Boolean(nullable: false),
                         Member_Id = c.Int(),
                     })
                 .PrimaryKey(t => t.Id)

@@ -132,7 +132,7 @@ namespace SyncMe.Controllers
         {
             var current = User.Identity.GetUserId();
             var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
-            List<Event> events = new List<Event>();
+            var events = new List<Event>();
             foreach(var item in member.Events)
             {
                 events.Add(item);
