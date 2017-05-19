@@ -33,7 +33,15 @@
                     </div>
                     <h5 id="modalStart" class="modal-body"></h5>
                     <h5 id="modalEnd" class="modal-body"></h5>
+                    <h5 id="modalStartTime" class="modal-body"></h5>
+                    <h5 id="modalEndTime" class="modal-body"></h5>
+                    <h5 id="modalDetails" class="modal-body"></h5>
+                    <h5 id="modalPrivate" class="modal-body"></h5>
                     <div class="modal-footer">
+                        @Html.ActionLink("Edit", "Edit", "Events", @*new { id =  },*@ new { @class = "btn btn-default" })
+                        @Html.ActionLink("Send Invite", "SendInvite", "Members", @*new { id =  },*@ new { @class = "btn btn-default" })
+                        @Html.ActionLink("Get Directions", "GetDirections", "Events", @*new { id =  },*@ new { @class = "btn btn-default" })
+                        @Html.ActionLink("Weather Forecast", "GetWeather", "Events", @*new { id =  },*@ new { @class = "btn btn-default" })
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
                 </div>
@@ -51,6 +59,7 @@
         var y = date.getFullYear();
 
         $('#calendar').fullCalendar({
+            editable: true,
             year: y,
             month: m,
             date: d,
@@ -67,10 +76,13 @@
             disableResizing: false,
             events: @Html.Raw(Json.Encode(Model)),
             eventClick: function(event, jsEvent, view){
-                console.log(event);
-                $('#modalTitle').html(event.Title);
-                $('#modalStart').html(event.StartTime);
-                $('#modalEnd').html(event.EndTime);
+                $('#modalTitle').html(event.title);
+                $('#modalStart').html("Start Date: " + event.start.toString("MM/dd/yyyy"));
+                $('#modalEnd').html("End Date: " + event.end);
+                $('#modalStartTime').html("Start Time: " + event.startTime);
+                $('#modalEndTime').html("End Time: " + event.endTime);
+                $('#modalDetails').html("Details: " + event.details);
+                $('#modalPrivate').html("Private: " + event.isPrivate);
                 $('#fullCalModal').modal();
             }
         });

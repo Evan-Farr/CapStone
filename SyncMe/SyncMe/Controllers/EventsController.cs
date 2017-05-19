@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using SyncMe.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System.Web.Routing;
 
 namespace SyncMe.Controllers
 {
@@ -57,7 +58,7 @@ namespace SyncMe.Controllers
                 member.Events.Add(@event);
                 db.Events.Add(@event);
                 db.SaveChanges();
-                return RedirectToAction("ViewCalendar", "Members");
+                return RedirectToAction("ViewCalendar", new RouteValueDictionary(new { controller = "Members", action = "ViewCalendar" }));
             }
             return View(@event);
         }
@@ -88,7 +89,7 @@ namespace SyncMe.Controllers
             {
                 db.Entry(@event).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("ViewCalendar", "Members");
+                return RedirectToAction("ViewCalendar", new RouteValueDictionary(new { controller = "Members", action = "ViewCalendar" }));
             }
             return View(@event);
         }
