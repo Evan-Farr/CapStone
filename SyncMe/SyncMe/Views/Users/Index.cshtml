@@ -16,15 +16,9 @@
             </div>
         </div>
         <h3>
-            @Html.ActionLink("View Parents", "Index", "Parents", null, new { @class = "btn btn-primary btn-lg" })
+            @Html.ActionLink("View All Members", "Index", "Members", null, new { @class = "btn btn-primary btn-lg" })
             <br /><br />
-            @Html.ActionLink("View Children", "Index", "Children", null, new { @class = "btn btn-primary btn-lg" })
-            <br /><br />
-            @Html.ActionLink("View Employees", "Index", "Employees", null, new { @class = "btn btn-primary btn-lg" })
-            <br /><br />
-            @Html.ActionLink("View Day Cares", "Index", "DayCares", null, new { @class = "btn btn-primary btn-lg" })
-            <br /><br />
-            @Html.ActionLink("View All Daily Reports", "Index", "DailyReports", null, new { @class = "btn btn-primary btn-lg" })
+            @Html.ActionLink("View All Events", "Index", "Events", null, new { @class = "btn btn-primary btn-lg" })
             <br /><br /><br /><br />
         </h3>
     </div>
@@ -47,7 +41,7 @@ else if (ViewBag.displayMenu == "Member")
             <br /><br />
             @Html.ActionLink("My Friends", "ViewFriends", "Members", new { id = ViewBag.Id }, new { @class = "btn btn-primary btn-lg" })
             <br /><br />
-            @Html.ActionLink("My Calendar", "Calendar", "Members", null, new { @class = "btn btn-primary btn-lg" })
+            @Html.ActionLink("My Calendar", "ViewCalendar", "Members", null, new { @class = "btn btn-primary btn-lg" })
         </h3>
         <hr />
         <div class="col-md-12">
@@ -66,59 +60,4 @@ else if (ViewBag.displayMenu == "Member")
         </div>
         <br /><br /><br /><hr />
     </div>
-    <br /><br />
-    @Html.ActionLink("Add New Event", "Create", "Events", null, new { @class = "btn btn-primary btn-lg" })
-    <br /><br />
-    <div class="col-md-12">
-        <div id="fullCalModal" class="modal fade">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 id="modalTitle" class="modal-title"></h4>
-                    </div>
-                    <h5 id="modalStart" class="modal-body"></h5>
-                    <h5 id="modalEnd" class="modal-body"></h5>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="calendar" class="col-md-12"></div>
-    </div>
-
-    <script>
-    $(document).ready(function () {
-        var date = new Date();
-        var d = date.getDate();
-        var m = date.getMonth();
-        var y = date.getFullYear();
-
-        $('#calendar').fullCalendar({
-            editable: true,
-            year: y,
-            month: m,
-            date: d,
-            header: {
-                left: 'Title',
-                right: 'Prev,Next,Today,AgendaDay,AgendaWeek,Month'
-            },
-            defaultView: 'month',
-            minTime: 7,
-            maxTime: 22,
-            editable: true,
-            droppable: true,
-            slotMinutes: 15,
-            disableResizing: false,
-            events: @Html.Raw(Json.Encode(Model.Events)),
-            eventClick: function(event, jsEvent, view){
-                console.log(event);
-                $('#modalTitle').html(event.Title);
-                $('#modalStart').html(event.StartTime);
-                $('#modalEnd').html(event.EndTime);
-                $('#fullCalModal').modal();
-            }
-        });
-    });
-    </script>
 }

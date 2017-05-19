@@ -6,7 +6,25 @@
     <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    @Styles.Render("~/Content/fullcalendar")
 
+    <style>
+        #map {
+            height: 500px;
+        }
+    </style>
+    <style>
+        #calendar {
+            height: 500px;
+            padding-left: 50px;
+        }
+    </style>
+
+    <link rel='stylesheet' href='~/fullcalendar-3.4.0/fullcalendar.css' />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src='~/fullcalendar-3.4.0/lib/jquery.min.js'></script>
+    <script src='~/fullcalendar-3.4.0/lib/moment.min.js'></script>
+    <script src='~/fullcalendar-3.4.0/fullcalendar.js'></script>
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -33,12 +51,14 @@
     <div class="container body-content">
         @RenderBody()
         <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - EF devCodeCamp CapStone project</p>
-        </footer>
+        <center>
+            <footer class="navbar-fixed-bottom">
+                @*<p>&copy; @DateTime.Now.Year - EF devCodeCamp CapStone project</p>*@
+            </footer>
+        </center>
     </div>
 
-    @Scripts.Render("~/bundles/jquery")
+    @*@Scripts.Render("~/bundles/jquery")*@
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 </body>

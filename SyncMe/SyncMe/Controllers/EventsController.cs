@@ -53,17 +53,12 @@ namespace SyncMe.Controllers
             if (ModelState.IsValid)
             {
                 var holder = User.Identity.GetUserId();
-                var same = db.Users.Where(s => s.Id == holder).FirstOrDefault();
-                if (isUser("Member"))
-                {
-                    var member = db.Members.Where(u => u.UserId.Id == holder).FirstOrDefault();
-                    member.Events.Add(@event);
-                    db.Events.Add(@event);
-                    db.SaveChanges();
-                    return RedirectToAction("Index", "Users");
-                }
+                var member = db.Members.Where(u => u.UserId.Id == holder).Select(s => s).FirstOrDefault();
+                member.Events.Add(@event);
+                db.Events.Add(@event);
+                db.SaveChanges();
+                return RedirectToAction("ViewCalendar", "Members");
             }
-
             return View(@event);
         }
 

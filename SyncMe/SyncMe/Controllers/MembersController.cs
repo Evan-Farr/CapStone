@@ -56,7 +56,7 @@ namespace SyncMe.Controllers
                 member.UserId = same;
                 db.Members.Add(member);
                 db.SaveChanges();
-                return RedirectToAction("Index", "Users");
+                return RedirectToAction("ViewCalendar", "Members");
             }
 
             return View(member);
@@ -126,6 +126,18 @@ namespace SyncMe.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public ActionResult ViewCalendar()
+        {
+            var current = User.Identity.GetUserId();
+            var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
+            List<Event> events = new List<Event>();
+            foreach(var item in member.Events)
+            {
+                events.Add(item);
+            }
+            return View(events);
         }
     }
 }
