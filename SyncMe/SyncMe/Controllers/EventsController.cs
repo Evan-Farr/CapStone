@@ -54,14 +54,8 @@ namespace SyncMe.Controllers
         {
             if (ModelState.IsValid)
             {
-                @event.start = StartDate.Date.Add(DateTime.Parse(StartTime));
-                @event.end = EndDate.ToString("yyyy-MM-dd ") + EndTime.ToString("HH:mm:ss");
-                string startDate = StartDate.ToString("yyyy-MM-dd");
-                string endDate = EndDate.ToString("yyyy-MM-dd");
-                string startTime = StartTime.ToString("HH:mm:ss");
-                string endTime = EndTime.ToString("HH:mm:ss");
-                @event.start = DateTime.ParseExact(startDate + " " + startTime, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-                @event.end = DateTime.ParseExact(endDate + " " + endTime, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                @event.start = StartDate.AddHours(StartTime.Hour).AddMinutes(StartTime.Minute).AddSeconds(StartTime.Second);
+                @event.end = EndDate.AddHours(EndTime.Hour).AddMinutes(EndTime.Minute).AddSeconds(EndTime.Second);             
                 var holder = User.Identity.GetUserId();
                 var member = db.Members.Where(u => u.UserId.Id == holder).Select(s => s).FirstOrDefault();
                 member.Events.Add(@event);

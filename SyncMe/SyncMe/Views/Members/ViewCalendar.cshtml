@@ -85,8 +85,8 @@
             events: @Html.Raw(Json.Encode(Model)),
             eventClick: function(event, jsEvent, view){
                 $('#modalTitle').html(event.title);
-                $('#modalStart').html("Start: " + event.start.toString("MM/dd/yyyy h:mm tt"));
-                $('#modalEnd').html("End: " + event.end.toString("MM/dd/yyyy h:mm tt"));
+                $('#modalStart').html("Start: " + event.start._d.toLocaleDateString() + " " + event.start._d.toLocaleTimeString());
+                $('#modalEnd').html("End: " + event.end._d.toLocaleDateString() + " " + event.end._d.toLocaleTimeString());
                 $('#modalDetails').html("Details: " + event.details);
                 $('#modalPrivate').html("Private: " + event.isPrivate);
                 $('#fullCalModal').modal();
