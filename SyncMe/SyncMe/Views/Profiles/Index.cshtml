@@ -4,11 +4,18 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>All Profiles</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+<hr />
+<div class="col-md-12">
+    <div class="text-success">
+        @TempData["Message"]
+    </div>
+    <div class="text-warning">
+        @TempData["ErrorMessage"]
+    </div>
+</div>
+<hr />
 <table class="table">
     <tr>
         <th>

@@ -1,7 +1,7 @@
 ﻿@model SyncMe.Models.Profile
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "PrivateDetails";
 }
 
 <div>
@@ -82,14 +82,9 @@
     </dl>
 </div>
 <p>
-    @if (User.IsInRole("Admin"))
-    {
-        @Html.ActionLink("Edit", "Edit", new { id = Model.Id })
-        @Html.ActionLink("Back to List", "Index")
-    }
-    else
-    {
-        @Html.ActionLink("Edit", "Edit", new { id = Model.Id })
-        @Html.ActionLink("Back", "ViewCalendar", "Members")
-    }
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id })
+    @Html.ActionLink("Back", "ViewCalendar", "Members")
+
+    @*@Html.ActionLink("Send Contact Request", "SendContactRequest", "Members", new { id = Model.Id }, null)
+        @Html.ActionLink("Back", "ViewCalendar", "Members")*@
 </p>

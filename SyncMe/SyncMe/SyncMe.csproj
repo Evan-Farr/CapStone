@@ -799,6 +799,8 @@
     <Content Include="Views\Members\ViewCalendar.cshtml" />
     <Content Include="Views\Members\PrivateDetails.cshtml" />
     <Content Include="Views\Events\PrivateIndex.cshtml" />
+    <Content Include="Views\Profiles\PrivateDetails.cshtml" />
+    <Content Include="Views\Members\ViewContacts.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

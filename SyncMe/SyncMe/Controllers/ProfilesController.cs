@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using SyncMe.Models;
+using Microsoft.AspNet.Identity;
 
 namespace SyncMe.Controllers
 {
@@ -35,6 +36,13 @@ namespace SyncMe.Controllers
             return View(profile);
         }
 
+        public ActionResult PrivateDetails()
+        {
+            var current = User.Identity.GetUserId();
+            var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
+            return View(member.Profile);
+        }
+
         // GET: Profiles/Create
         public ActionResult Create()
         {
@@ -50,9 +58,13 @@ namespace SyncMe.Controllers
         {
             if (ModelState.IsValid)
             {
+                var current = User.Identity.GetUserId();
+                var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
+                member.Profile = profile;
+                profile.Member = member;
                 db.Profiles.Add(profile);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("ViewCalendar", "Members");
             }
 
             return View(profile);
@@ -113,6 +125,25 @@ namespace SyncMe.Controllers
             db.Profiles.Remove(profile);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        public ActionResult RemoveContact(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Profile profile = db.Profiles.Find(id);
+            if (profile == null)
+            {
+                TempData["ErrorMessage"] = "**A problem occurred while removing contact. Please try again later.";
+                return RedirectToAction("ViewContacts", "Members");
+            }
+            var current = User.Identity.GetUserId();
+            var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
+            member.Contacts.Remove(profile);
+            TempData["Message"] = "**SyncMe member successfully removed from your contacts.";
+            return RedirectToAction("ViewContacts", "Members");
         }
 
         protected override void Dispose(bool disposing)

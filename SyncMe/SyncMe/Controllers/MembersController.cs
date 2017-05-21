@@ -63,9 +63,8 @@ namespace SyncMe.Controllers
                 member.UserId = same;
                 db.Members.Add(member);
                 db.SaveChanges();
-                return RedirectToAction("ViewCalendar", "Members");
+                return RedirectToAction("Create", "Profiles");
             }
-
             return View(member);
         }
 
@@ -161,6 +160,13 @@ namespace SyncMe.Controllers
                     return RedirectToAction("Register", "Account");
                 }
             }
+        }
+
+        public ActionResult ViewContacts()
+        {
+            var current = User.Identity.GetUserId();
+            var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
+            return View(member.Contacts.ToList());
         }
     }
 }

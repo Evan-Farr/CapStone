@@ -1,0 +1,66 @@
+﻿@model IEnumerable<SyncMe.Models.Profile>
+
+@{
+    ViewBag.Title = "ViewContacts";
+}
+
+<h2>My Contacts</h2>
+
+<hr />
+<div class="col-md-12">
+    <div class="text-success">
+        @TempData["Message"]
+    </div>
+    <div class="text-warning">
+        @TempData["ErrorMessage"]
+    </div>
+</div>
+<hr />
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayName("Profile Picture")
+        </th>
+        <th>
+            @Html.DisplayName("Company")
+        </th>
+        <th>
+            @Html.DisplayName("Education")
+        </th>
+        <th>
+            @Html.DisplayName("Phone #")
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProfilePictureId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CompanyName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SchoolName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Phone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.ActionLink("Remove Contact", "RemoveContact", "Profiles", new { id = item.Id }, null)
+            </td>
+        </tr>
+    }
+</table>
+<p>
+    @Html.ActionLink("Back", "ViewCalendar", "Members")
+</p>
+

@@ -4,14 +4,14 @@
     ViewBag.Title = "Create";
 }
 
-<h2>Create</h2>
+<h2>Let's set up your profile!</h2>
 
 @using (Html.BeginForm()) 
 {
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
-        <h4>Profile</h4>
+        <h4>Your profile contains the information visible to other SyncMe members, and your contacts.</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
@@ -63,5 +63,12 @@
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @if (User.IsInRole("Admin"))
+    {
+        @Html.ActionLink("Back to List", "Index")
+    }
+    else
+    {
+        @Html.ActionLink("Skip", "ViewCalendar", "Members")
+    }
 </div>
