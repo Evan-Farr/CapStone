@@ -36,6 +36,13 @@ namespace SyncMe.Controllers
             return View(member);
         }
 
+        public ActionResult PrivateDetails()
+        {
+            var current = User.Identity.GetUserId();
+            var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
+            return View(member);
+        }
+
         // GET: Members/Create
         public ActionResult Create()
         {
@@ -130,14 +137,20 @@ namespace SyncMe.Controllers
 
         public ActionResult ViewCalendar()
         {
-            var current = User.Identity.GetUserId();
-            var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
-            var events = new List<Event>();
-            foreach(var item in member.Events)
+            try
             {
-                events.Add(item);
+                var current = User.Identity.GetUserId();
+                var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
+                var events = new List<Event>();
+                foreach (var item in member.Events)
+                {
+                    events.Add(item);
+                }
+                return View(events);
+            }catch
+            {
+                return RedirectToAction("Register", "Account");
             }
-            return View(events);
         }
     }
 }

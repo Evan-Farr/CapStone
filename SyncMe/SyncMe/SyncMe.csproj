@@ -797,6 +797,7 @@
     <Content Include="Views\Shared\_Layout.Mobile.cshtml" />
     <Content Include="Scripts\jquery.mobile-1.4.5.min.map" />
     <Content Include="Views\Members\ViewCalendar.cshtml" />
+    <Content Include="Views\Members\PrivateDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

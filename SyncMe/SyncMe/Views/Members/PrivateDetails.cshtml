@@ -1,13 +1,12 @@
 ﻿@model SyncMe.Models.Member
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "PrivateDetails";
 }
 
 <h2>Account Details</h2>
 
 <div>
-    <h4>Member</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -81,9 +80,11 @@
         <dd>
             @Html.DisplayFor(model => model.Email)
         </dd>
+
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Edit", "Edit", "Members", new { id = Model.Id }, null) |
+    @Html.ActionLink("Back", "Index", "Manage")
 </p>
+
