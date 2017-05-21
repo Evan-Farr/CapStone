@@ -81,7 +81,7 @@ namespace SyncMe.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    if (User.IsInRole("Admin")) { return RedirectToLocal(returnUrl); }
+                    if (User.IsInRole("Admin")) { return RedirectToAction("Index", "Users"); }
                     else { return RedirectToAction("ViewCalendar", "Members"); }
                 case SignInStatus.LockedOut:
                     return View("Lockout");

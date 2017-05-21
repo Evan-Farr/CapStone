@@ -4,45 +4,42 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>All Events</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Title)
+            @Html.DisplayName("Title")
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.StreetAddress)
+            @Html.DisplayName("Street Address")
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.City)
+            @Html.DisplayName("City")
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.State)
+            @Html.DisplayName("State")
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ZipCode)
+            @Html.DisplayName("Zip Code")
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.StartDate)
+            @Html.DisplayName("Start Date")
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.EndDate)
+            @Html.DisplayName("End Date")
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.StartTime)
+            @Html.DisplayName("Start Time")
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.EndTime)
+            @Html.DisplayName("End Time")
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Details)
+            @Html.DisplayName("Details")
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Private)
+            @Html.DisplayName("Set To Private")
         </th>
         <th></th>
     </tr>
@@ -50,37 +47,37 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Title)
+            @Html.DisplayFor(modelItem => item.title)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.StreetAddress)
+            @Html.DisplayFor(modelItem => item.streetAddress)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.City)
+            @Html.DisplayFor(modelItem => item.city)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.State)
+            @Html.DisplayFor(modelItem => item.state)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.ZipCode)
+            @Html.DisplayFor(modelItem => item.zipCode)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.StartDate)
+            @Html.DisplayFor(modelItem => item.start)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.EndDate)
+            @Html.DisplayFor(modelItem => item.end)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.StartTime)
+            @Html.DisplayFor(modelItem => item.startTime)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.EndTime)
+            @Html.DisplayFor(modelItem => item.endTime)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Details)
+            @Html.DisplayFor(modelItem => item.details)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Private)
+            @Html.DisplayFor(modelItem => item.isPrivate)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
@@ -89,5 +86,8 @@
         </td>
     </tr>
 }
-
 </table>
+
+<p>
+    @Html.ActionLink("Back to List", "Index")
+</p>

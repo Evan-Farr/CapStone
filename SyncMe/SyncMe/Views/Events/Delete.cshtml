@@ -12,91 +12,91 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Title)
+            @Html.DisplayName("Title")
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Title)
+            @Html.DisplayFor(model => model.title)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.StreetAddress)
+            @Html.DisplayName("Street Address")
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.StreetAddress)
+            @Html.DisplayFor(model => model.streetAddress)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.City)
+            @Html.DisplayName("City")
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.City)
+            @Html.DisplayFor(model => model.city)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.State)
+            @Html.DisplayName("State")
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.State)
+            @Html.DisplayFor(model => model.state)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.ZipCode)
+            @Html.DisplayName("Zip Code")
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.ZipCode)
+            @Html.DisplayFor(model => model.zipCode)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.StartDate)
+            @Html.DisplayName("Start Date")
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.StartDate)
+            @Html.DisplayFor(model => model.start)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.EndDate)
+            @Html.DisplayName("End Date")
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.EndDate)
+            @Html.DisplayFor(model => model.end)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.StartTime)
+            @Html.DisplayName("Start Time")
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.StartTime)
+            @Html.DisplayFor(model => model.startTime)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.EndTime)
+            @Html.DisplayName("End Time")
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.EndTime)
+            @Html.DisplayFor(model => model.endTime)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Details)
+            @Html.DisplayName("Details")
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Details)
+            @Html.DisplayFor(model => model.details)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Private)
+            @Html.DisplayName("Set To Private")
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Private)
+            @Html.DisplayFor(model => model.isPrivate)
         </dd>
 
     </dl>
@@ -106,7 +106,14 @@
 
         <div class="form-actions no-color">
             <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
+            @if (User.IsInRole("Admin"))
+            {
+                @Html.ActionLink("Back to List", "Index")
+            }
+            else
+            {
+                @Html.ActionLink("Cancel", "PrivateIndex")
+            }
         </div>
     }
 </div>

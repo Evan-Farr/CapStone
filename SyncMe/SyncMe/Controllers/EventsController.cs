@@ -24,6 +24,21 @@ namespace SyncMe.Controllers
             return View(db.Events.ToList());
         }
 
+        public ActionResult PrivateIndex()
+        {
+            var current = User.Identity.GetUserId();
+            var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
+            var events = new List<Event>();
+            foreach(var item in member.Events)
+            {
+                if(item.active == true)
+                {
+                    events.Add(item);
+                }
+            }
+            return View(events);
+        }
+
         // GET: Events/Details/5
         public ActionResult Details(int? id)
         {
@@ -61,6 +76,7 @@ namespace SyncMe.Controllers
                 member.Events.Add(@event);
                 db.Events.Add(@event);
                 db.SaveChanges();
+                TempData["Message"] = "**New event successfully created!";
                 return RedirectToAction("ViewCalendar", new RouteValueDictionary(new { controller = "Members", action = "ViewCalendar" }));
             }
             return View(@event);
@@ -92,6 +108,7 @@ namespace SyncMe.Controllers
             {
                 db.Entry(@event).State = EntityState.Modified;
                 db.SaveChanges();
+                TempData["Message"] = "**Event successfully updated.";
                 return RedirectToAction("ViewCalendar", new RouteValueDictionary(new { controller = "Members", action = "ViewCalendar" }));
             }
             return View(@event);
@@ -118,9 +135,18 @@ namespace SyncMe.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Event @event = db.Events.Find(id);
+            var member = db.Members.Where(m => m.Events.Contains(@event)).Select(s => s).FirstOrDefault();
+            member.Events.Remove(@event);
             db.Events.Remove(@event);
             db.SaveChanges();
-            return RedirectToAction("Index", "Users");
+            if (User.IsInRole("Admin"))
+            {
+                return RedirectToAction("Index", "Users");
+            }else
+            {
+                TempData["Message"] = "**Event successfully deleted.";
+                return RedirectToAction("ViewCalendar", "Members");
+            }
         }
 
         protected override void Dispose(bool disposing)

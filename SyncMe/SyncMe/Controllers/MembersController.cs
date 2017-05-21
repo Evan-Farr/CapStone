@@ -95,7 +95,11 @@ namespace SyncMe.Controllers
             {
                 db.Entry(member).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index", "Users");
+                if (User.IsInRole("Admin"))
+                {
+                    return RedirectToAction("Index", "Users");
+                }
+                return RedirectToAction("Index", "Manage");
             }
             return View(member);
         }
@@ -149,7 +153,13 @@ namespace SyncMe.Controllers
                 return View(events);
             }catch
             {
-                return RedirectToAction("Register", "Account");
+                if (User.IsInRole("Admin"))
+                {
+                    return RedirectToAction("Index", "Users");
+                }else
+                {
+                    return RedirectToAction("Register", "Account");
+                }
             }
         }
     }

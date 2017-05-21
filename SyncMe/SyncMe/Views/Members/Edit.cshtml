@@ -97,6 +97,12 @@
 }
 
 <div>
-    @*@Html.ActionLink("Back to List", "Index") //Admin*@
-    @Html.ActionLink("Cancel", "PrivateDetails", "Members")
+    @if (User.IsInRole("Admin"))
+    {
+        @Html.ActionLink("Back to List", "Index")
+    }
+    else
+    {
+        @Html.ActionLink("Cancel", "PrivateDetails", "Members")
+    }
 </div>
