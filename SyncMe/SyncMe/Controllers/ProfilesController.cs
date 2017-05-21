@@ -61,7 +61,7 @@ namespace SyncMe.Controllers
             {
                 var current = User.Identity.GetUserId();
                 var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
-                HttpPostedFileBase ProfilePictureId = Request.Files["ImageUrl"];
+                HttpPostedFileBase ProfilePictureId = Request.Files["ProfilePictureId"];
                 if (ProfilePictureId != null && ProfilePictureId.ContentLength > 0)
                     try
                     {
