@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using SyncMe.Models;
 using Microsoft.AspNet.Identity;
+using System.IO;
 
 namespace SyncMe.Controllers
 {
@@ -60,6 +61,19 @@ namespace SyncMe.Controllers
             {
                 var current = User.Identity.GetUserId();
                 var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
+                HttpPostedFileBase ProfilePictureId = Request.Files["ImageUrl"];
+                if (ProfilePictureId != null && ProfilePictureId.ContentLength > 0)
+                    try
+                    {
+                        var fileName = Path.GetFileName(ProfilePictureId.FileName);
+                        var path = Path.Combine(Server.MapPath("~/App_Data/uploads"), fileName);
+                        ProfilePictureId.SaveAs(path);
+                        profile.ProfilePictureId = path;
+                    }
+                    catch
+                    {
+
+                    }
                 member.Profile = profile;
                 profile.Member = member;
                 db.Profiles.Add(profile);
@@ -145,6 +159,36 @@ namespace SyncMe.Controllers
             TempData["Message"] = "**SyncMe member successfully removed from your contacts.";
             return RedirectToAction("ViewContacts", "Members");
         }
+
+        //[HttpPost]
+        //public ActionResult UploadImage(HttpPostedFileBase file)
+        //{
+        //    if (file != null)
+        //    {
+        //        //get the bytes from the uploaded file
+        //        byte[] data = GetBytesFromFile(file);
+        //        var current = User.Identity.GetUserId();
+        //        var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
+        //        member.Profile.ProfilePictureId = data;
+        //        db.SaveChanges();
+        //    }
+        //    return RedirectToAction("Create", "Profiles");
+        //}
+
+        ////Method to convert file into byte array
+        //private byte[] GetBytesFromFile(HttpPostedFileBase file)
+        //{
+        //    using (Stream inputStream = file.InputStream)
+        //    {
+        //        MemoryStream memoryStream = inputStream as MemoryStream;
+        //        if (memoryStream == null)
+        //        {
+        //            memoryStream = new MemoryStream();
+        //            inputStream.CopyTo(memoryStream);
+        //        }
+        //        return memoryStream.ToArray();
+        //    }
+        //}
 
         protected override void Dispose(bool disposing)
         {

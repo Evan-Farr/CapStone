@@ -17,8 +17,9 @@
         <div class="form-group">
             @Html.Label("Profile Picture", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.ProfilePictureId, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.ProfilePictureId, new { htmlAttributes = new { type = "file", id = "ProfilePictureId", onchange = "PreviewImage()" } })
                 @Html.ValidationMessageFor(model => model.ProfilePictureId, "", new { @class = "text-danger" })
+                <img id="uploadPreview" style="width: 100px; height: 100px;" />
             </div>
         </div>
 
