@@ -42,7 +42,6 @@ namespace SyncMe.Controllers
             return View(Profiles);
         }
 
-        [HttpPost]
         public ActionResult SearchResults(string name)
         {
             var user = User.Identity.GetUserId();

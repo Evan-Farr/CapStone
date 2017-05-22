@@ -12,7 +12,7 @@
 </div>
 <div class="col-md-12">
     <h2>@Html.Label("Search")</h2>
-    @using (Html.BeginForm("SearchResults", "Profiles", FormMethod.Post))
+    @using (Html.BeginForm("SearchResults", "Profiles", FormMethod.Get))
             {
         <input type="text" name="name" />
         <button class="btn btn-primary btn-sm" type="submit">Search</button>
