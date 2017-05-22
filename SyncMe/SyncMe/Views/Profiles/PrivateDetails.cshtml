@@ -5,7 +5,7 @@
 }
 <br /><br />
 <div>
-    <img src="@Url.Action("SelectPicture")" alt="" style="padding-left: 87px;"/>
+    <img src="@Url.Action("SelectPicture", new { id = Model.Id })" alt="" style="padding-left: 87px;"/>
 </div>
 <div>
     <hr />
@@ -78,6 +78,7 @@
 </div>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id })
+    <br />
     @Html.ActionLink("Back", "ViewCalendar", "Members")
 
     @*@Html.ActionLink("Send Contact Request", "SendContactRequest", "Members", new { id = Model.Id }, null)

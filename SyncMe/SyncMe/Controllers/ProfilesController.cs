@@ -136,11 +136,13 @@ namespace SyncMe.Controllers
                     profile.ProfilePictureId = bytes;
                     db.Entry(profile).State = EntityState.Modified;
                     db.SaveChanges();
+                    if (User.IsInRole("Admin")) { return RedirectToAction("Details", new { id = profile.Id }); }
                     return RedirectToAction("PrivateDetails");
                 }
                 profile.ProfilePictureId = profile.ProfilePictureId;
                 db.Entry(profile).State = EntityState.Modified;
                 db.SaveChanges();
+                if (User.IsInRole("Admin")) { return RedirectToAction("Details", new { id = profile.Id }); }
                 return RedirectToAction("PrivateDetails");
             }
             return View(profile);
@@ -169,33 +171,16 @@ namespace SyncMe.Controllers
             Profile profile = db.Profiles.Find(id);
             db.Profiles.Remove(profile);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            if (User.IsInRole("Admin")) { TempData["Message"] = "**Profile successfully deleted."; return RedirectToAction("Index"); }
+            TempData["Message"] = "**Your Profile has successfully been deleted.";
+            return RedirectToAction("ViewCalendar", "Members");
         }
 
-        public ActionResult RemoveContact(int? id)
+        public void SelectPicture(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Profile profile = db.Profiles.Find(id);
-            if (profile == null)
-            {
-                TempData["ErrorMessage"] = "**A problem occurred while removing contact. Please try again later.";
-                return RedirectToAction("ViewContacts", "Members");
-            }
-            var current = User.Identity.GetUserId();
-            var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
-            member.Contacts.Remove(profile);
-            TempData["Message"] = "**SyncMe member successfully removed from your contacts.";
-            return RedirectToAction("ViewContacts", "Members");
-        }
-
-        public void SelectPicture()
-        {
-            var current = User.Identity.GetUserId();
-            var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
-            var profile = db.Profiles.Where(p => p.Member.Id == member.Id).Select(a => a).FirstOrDefault();
+            //var current = User.Identity.GetUserId();
+            //var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
+            var profile = db.Profiles.Where(p => p.Id == id).Select(a => a).FirstOrDefault();
             try
             {
                 WebImage wi = new WebImage(profile.ProfilePictureId);
@@ -206,6 +191,25 @@ namespace SyncMe.Controllers
                 WebImage wiDefault = new WebImage("~/App_Data/uploads/no-profile-image.jpg");
                 wiDefault.Resize(200, 200, true, true);
                 wiDefault.Write();
+            }
+        }
+
+        public void SelectAllPictures()
+        {
+            foreach(var profile in db.Profiles)
+            {
+                try
+                {
+                    WebImage wi = new WebImage(profile.ProfilePictureId);
+                    wi.Resize(100, 100, true, true);
+                    wi.Write();
+                }
+                catch
+                {
+                    WebImage wiDefault = new WebImage("~/App_Data/uploads/no-profile-image.jpg");
+                    wiDefault.Resize(100, 100, true, true);
+                    wiDefault.Write();
+                }
             }
         }
 

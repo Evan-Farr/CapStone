@@ -4,7 +4,7 @@
     ViewBag.Title = "Index";
 }
 
-<h2>All Profiles</h2>
+<h2>SyncMe Profiles</h2>
 
 <hr />
 <div class="col-md-12">
@@ -20,6 +20,15 @@
     <tr>
         <th>
             @Html.DisplayName("Profile Picture")
+        </th>
+        <th>
+            @Html.DisplayName("Name")
+        </th>
+        <th>
+            @Html.DisplayName("Age")
+        </th>
+        <th>
+            @Html.DisplayName("State")
         </th>
         <th>
             @Html.DisplayName("Company")
@@ -39,7 +48,17 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            <img src="@Url.Action("SelectPicture")" alt=""/>
+            <img src="@Url.Action("SelectAllPictures")" alt=""/>
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FirstName)
+            @Html.DisplayFor(modelItem => item.LastName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Age)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.State)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.CompanyName)
@@ -54,13 +73,22 @@
             @Html.DisplayFor(modelItem => item.Email)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+            @if (User.IsInRole("Admin"))
+            {
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) 
+                <br />
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) 
+                <br />
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            }else
+            {
+                @Html.ActionLink("Send Contact Request", "SendContactRequest", "Members", new { id = item.Id }, null)
+            }
+
         </td>
     </tr>
 }
 </table>
 <p>
-    @Html.ActionLink("Back", "Index")
+    @Html.ActionLink("Back", "Index", "Users")
 </p>

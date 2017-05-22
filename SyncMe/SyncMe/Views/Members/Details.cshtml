@@ -87,11 +87,17 @@
     @if (User.IsInRole("Admin"))
     {
         @Html.ActionLink("Edit", "Edit", "Members", new { id = Model.Id }, null)
-        @Html.ActionLink("Back to List", "Index", "Members")
+        <br />
+        @Html.ActionLink("View All Profiles", "Index", "Profiles")
+        <br />
+        @Html.ActionLink("View All Members", "Index", "Members")
+        <br />
+        @Html.ActionLink("Done", "Index", "Users")
     }
     else
     {
         @Html.ActionLink("Edit", "Edit", "Members", new { id = Model.Id }, null)
+        <br />
         @Html.ActionLink("Back", "Index", "Manage")
     }
     @*@Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |

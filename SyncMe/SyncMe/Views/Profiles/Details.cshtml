@@ -6,7 +6,7 @@
 
 <br /><br />
 <div>
-    <img src="@Url.Action("SelectPicture")" alt="" style="padding-left: 87px;" />
+    <img src="@Url.Action("SelectPicture", new { id = Model.Id })" alt="" style="padding-left: 87px;" />
 </div>
 <div>
     <hr />
@@ -80,12 +80,16 @@
 <p>
     @if (User.IsInRole("Admin"))
     {
-        @Html.ActionLink("Edit", "Edit", new { id = Model.Id })
+        @Html.ActionLink("Member's Account Info", "Details", "Members", new { id = Model.Member.Id }, null)
+        <br />
+        @Html.ActionLink("Edit ", "Edit", new { id = Model.Id })
+        <br />
         @Html.ActionLink("Back to List", "Index")
     }
     else
     {
         @Html.ActionLink("Edit", "Edit", new { id = Model.Id })
+        <br />
         @Html.ActionLink("Back", "ViewCalendar", "Members")
     }
 </p>

@@ -168,5 +168,41 @@ namespace SyncMe.Controllers
             var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
             return View(member.Contacts.ToList());
         }
+
+        public ActionResult SendContactRequest(int id)
+        {
+            var current = User.Identity.GetUserId();
+            var sender = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
+            var profile = db.Profiles.Where(p => p.Id == id).Select(a => a).FirstOrDefault();
+            var receiver = db.Members.Where(w => w.Id == profile.Member.Id).Select(t => t).FirstOrDefault();
+            ContactRequest contactRequest = new ContactRequest();
+            contactRequest.Sender = sender;
+            contactRequest.Reciever = receiver;
+            contactRequest.Status = "Pending";
+            contactRequest.DateSent = DateTime.Today;
+            receiver.ContactRequests.Add(contactRequest);
+            db.ContactRequests.Add(contactRequest);
+            TempData["Message"] = "**Contact request successfully sent!";
+            return RedirectToAction("ViewContacts");
+        }
+
+        public ActionResult RemoveContact(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Profile profile = db.Profiles.Find(id);
+            if (profile == null)
+            {
+                TempData["ErrorMessage"] = "**A problem occurred while removing contact. Please try again later.";
+                return RedirectToAction("ViewContacts");
+            }
+            var current = User.Identity.GetUserId();
+            var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
+            member.Contacts.Remove(profile);
+            TempData["Message"] = "**SyncMe member successfully removed from your contacts.";
+            return RedirectToAction("ViewContacts");
+        }
     }
 }
