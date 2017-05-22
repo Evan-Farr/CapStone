@@ -181,7 +181,15 @@ namespace SyncMe.Controllers
         {
             var current = User.Identity.GetUserId();
             var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
-            return View(member.Contacts.ToList());
+            var profiles = new List<Profile>();
+            foreach(var profile in member.Contacts)
+            {
+                if(profile.Member.Id != member.Id)
+                {
+                    profiles.Add(profile);
+                }
+            }
+            return View(profiles);
         }
 
         public ActionResult SendContactRequest(int id)
@@ -229,7 +237,7 @@ namespace SyncMe.Controllers
         {
             var user = User.Identity.GetUserId();
             var member = db.Members.Where(u => u.UserId.Id == user).Select(s => s).FirstOrDefault();
-            var contactRequest = db.ContactRequests.Where(a => a.Id == contactRequestId).Select(p => p).FirstOrDefault();
+            var contactRequest = db.ContactRequests.Where(a => a.Id == id).Select(p => p).FirstOrDefault();
             member.ContactRequests.Remove(contactRequest);
             contactRequest.Status = "Denied";
             db.SaveChanges();

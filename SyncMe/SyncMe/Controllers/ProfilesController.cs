@@ -23,6 +23,50 @@ namespace SyncMe.Controllers
             return View(db.Profiles.ToList());
         }
 
+        public ActionResult Search()
+        {
+            var user = User.Identity.GetUserId();
+            var member = db.Members.Where(u => u.UserId.Id == user).Select(s => s).FirstOrDefault();
+            var profiles = db.Profiles.ToList();
+            var Profiles = new List<Profile>();
+            foreach (var profile in profiles)
+            {
+                foreach(var contact in member.Contacts)
+                {
+                    if (profile.Id != contact.Id && profile.Member.Id != member.Id)
+                    {
+                        Profiles.Add(profile);
+                    }
+                }
+            }
+            return View(Profiles);
+        }
+
+        [HttpPost]
+        public ActionResult SearchResults(string name)
+        {
+            var user = User.Identity.GetUserId();
+            var member = db.Members.Where(u => u.UserId.Id == user).Select(s => s).FirstOrDefault();
+            var profiles = db.Profiles.ToList();
+            var Profiles = new List<Profile>();
+            foreach (var profile in profiles)
+            {
+                foreach (var contact in member.Contacts)
+                {
+                    if (profile.Id != contact.Id && name.ToLower().Contains(profile.FirstName.ToLower()) || name.ToLower().Contains(profile.LastName.ToLower()))
+                    {
+                        Profiles.Add(profile);
+                    }
+                }
+            }
+            if(Profiles.Count == 0)
+            {
+                TempData["ErrorMessage"] = "**No SyncMe matches were found for that search....";
+                return RedirectToAction("Search");
+            }
+            return View(Profiles);
+        }
+
         // GET: Profiles/Details/5
         public ActionResult Details(int? id)
         {

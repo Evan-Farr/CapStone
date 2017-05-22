@@ -800,6 +800,7 @@
     <Content Include="Views\Members\ViewContacts.cshtml" />
     <Content Include="Views\Members\ViewContactRequests.cshtml" />
     <Content Include="Views\Members\ContactRequest.cshtml" />
+    <Content Include="Views\Profiles\Search.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

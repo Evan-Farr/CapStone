@@ -22,6 +22,15 @@
             @Html.DisplayName("Profile Picture")
         </th>
         <th>
+            @Html.DisplayName("Name")
+        </th>
+        <th>
+            @Html.DisplayName("Age")
+        </th>
+        <th>
+            @Html.DisplayName("State")
+        </th>
+        <th>
             @Html.DisplayName("Company")
         </th>
         <th>
@@ -38,27 +47,42 @@
 
     @foreach (var item in Model)
     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProfilePictureId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CompanyName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SchoolName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Phone)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.ActionLink("Remove Contact", "RemoveContact", "Profiles", new { id = item.Id }, null)
-            </td>
-        </tr>
+        var member = HttpContext.Current.User;
+        if (item.Member != member)
+        {
+            <tr>
+                <td>
+                    <img src="@Url.Action("SelectPicture", "Profiles", new { id = item.Id })" alt="" />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Age)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.State)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CompanyName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SchoolName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Phone)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.ActionLink("Remove Contact", "RemoveContact", "Profiles", new { id = item.Id }, null)
+                </td>
+            </tr>
+        }
     }
+
 </table>
 <p>
     @Html.ActionLink("Back", "ViewCalendar", "Members")

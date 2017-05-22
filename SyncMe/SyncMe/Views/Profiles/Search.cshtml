@@ -1,0 +1,24 @@
+﻿@model IEnumerable<SyncMe.Models.Profile>
+
+@{
+    ViewBag.Title = "Search";
+}
+
+<br />
+<div class="col-md-12">
+    <div class="text-warning">
+        @TempData["ErrorMessage"]
+    </div>
+</div>
+<div class="col-md-12">
+    <h2>@Html.Label("Search")</h2>
+    @using (Html.BeginForm("FindMember", "Profiles", FormMethod.Post))
+            {
+        @Html.TextBox(null, null, new { placeholder = "John Smith" })
+        <button class="btn btn-primary btn-md" type="submit">Search</button>
+    }
+</div>
+
+<hr />
+<h2>SyncMe Members</h2>
+
