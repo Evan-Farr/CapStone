@@ -42,7 +42,7 @@ namespace SyncMe.Controllers
         {
             var current = User.Identity.GetUserId();
             var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
-            var profile = db.Profiles.Where(p => p.Member == member).Select(a => a).FirstOrDefault();
+            var profile = db.Profiles.Where(p => p.Member.Id == member.Id).Select(a => a).FirstOrDefault();
             return View(profile);
         }
 
@@ -110,13 +110,38 @@ namespace SyncMe.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,ProfilePictureId,CompanyName,SchoolName,Phone,Email")] Profile profile)
+        public ActionResult Edit([Bind(Include = "Id,ProfilePictureId,CompanyName,SchoolName,Phone,Email")] Profile profile, HttpPostedFileBase file2)
         {
             if (ModelState.IsValid)
             {
+                var current = User.Identity.GetUserId();
+                var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
+                string fileName = "";
+                byte[] bytes;
+                int bytesToRead;
+                int numBytesRead;
+                if (file2 != null)
+                {
+                    fileName = Path.GetFileName(file2.FileName);
+                    bytes = new byte[file2.ContentLength];
+                    bytesToRead = (int)file2.ContentLength;
+                    numBytesRead = 0;
+                    while (bytesToRead > 0)
+                    {
+                        int n = file2.InputStream.Read(bytes, numBytesRead, bytesToRead);
+                        if (n == 0) { break; }
+                        numBytesRead += n;
+                        bytesToRead -= n;
+                    }
+                    profile.ProfilePictureId = bytes;
+                    db.Entry(profile).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("PrivateDetails");
+                }
+                profile.ProfilePictureId = profile.ProfilePictureId;
                 db.Entry(profile).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("PrivateDetails");
             }
             return View(profile);
         }
@@ -170,48 +195,18 @@ namespace SyncMe.Controllers
         {
             var current = User.Identity.GetUserId();
             var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
-            var profile = db.Profiles.Where(p => p.Member == member).Select(a => a).FirstOrDefault();
-            WebImage wi = new WebImage(profile.ProfilePictureId);
-            wi.Resize(200, 200, true, true);
-            wi.Write();
-        }
-
-        //[HttpPost]
-        //public ActionResult UploadImage(HttpPostedFileBase file)
-        //{
-        //    if (file != null)
-        //    {
-        //        //get the bytes from the uploaded file
-        //        byte[] data = GetBytesFromFile(file);
-        //        var current = User.Identity.GetUserId();
-        //        var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
-        //        member.Profile.ProfilePictureId = data;
-        //        db.SaveChanges();
-        //    }
-        //    return RedirectToAction("Create", "Profiles");
-        //}
-
-        ////Method to convert file into byte array
-        //private byte[] GetBytesFromFile(HttpPostedFileBase file)
-        //{
-        //    using (Stream inputStream = file.InputStream)
-        //    {
-        //        MemoryStream memoryStream = inputStream as MemoryStream;
-        //        if (memoryStream == null)
-        //        {
-        //            memoryStream = new MemoryStream();
-        //            inputStream.CopyTo(memoryStream);
-        //        }
-        //        return memoryStream.ToArray();
-        //    }
-        //}
-
-        public ActionResult MyImage(int id, int img)
-
-        {
-            ViewBag.Pic = img;
-            Profile profile = db.Profiles.Find(id);
-            return View(profile);
+            var profile = db.Profiles.Where(p => p.Member.Id == member.Id).Select(a => a).FirstOrDefault();
+            try
+            {
+                WebImage wi = new WebImage(profile.ProfilePictureId);
+                wi.Resize(200, 200, true, true);
+                wi.Write();
+            }catch
+            {
+                WebImage wiDefault = new WebImage("~/App_Data/uploads/no-profile-image.jpg");
+                wiDefault.Resize(200, 200, true, true);
+                wiDefault.Write();
+            }
         }
 
         protected override void Dispose(bool disposing)

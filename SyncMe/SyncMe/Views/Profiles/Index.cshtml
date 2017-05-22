@@ -39,7 +39,7 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.ProfilePictureId)
+            <img src="@Url.Action("SelectPicture")" alt=""/>
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.CompanyName)
