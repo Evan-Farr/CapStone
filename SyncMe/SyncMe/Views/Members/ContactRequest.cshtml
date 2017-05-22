@@ -1,10 +1,8 @@
-﻿@model IEnumerable<SyncMe.Models.Profile>
+﻿@model SyncMe.Models.Profile
 
 @{
     ViewBag.Title = "ContactRequest";
 }
-
-<h2>ContactRequest</h2>
 
 <hr />
 <div class="col-md-12">
@@ -16,68 +14,79 @@
     </div>
 </div>
 <hr />
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayName("Profile Picture")
-        </th>
-        <th>
-            @Html.DisplayName("Name")
-        </th>
-        <th>
-            @Html.DisplayName("Age")
-        </th>
-        <th>
-            @Html.DisplayName("State")
-        </th>
-        <th>
-            @Html.DisplayName("Company")
-        </th>
-        <th>
-            @Html.DisplayName("Education")
-        </th>
-        <th>
-            @Html.DisplayName("Phone #")
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Email)
-        </th>
-        <th></th>
-    </tr>
+<br /><br />
+<div>
+    <img src="@Url.Action("SelectPicture", "Profiles", new { id = Model.Id })" alt="" style="padding-left: 87px;" />
+</div>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayName("First Name")
+        </dt>
 
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                <img src="@Url.Action("SelectPicture", "Profiles", new { id = item.Id })" alt="" />
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
-                @Html.DisplayFor(modelItem => item.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Age)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.State)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CompanyName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SchoolName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Phone)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-            </td>
-        </tr>
-    }
-</table>
+        <dd>
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Last Name")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Age")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Age)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("State")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.State)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Company")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CompanyName)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Education")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SchoolName)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Phone #")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Phone)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+    </dl>
+</div>
 <p>
-    @Html.ActionLink("Back", "Index", "Users")
+    @Html.ActionLink("Back", "ViewContactRequests")
 </p>

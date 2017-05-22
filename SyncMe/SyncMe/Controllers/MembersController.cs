@@ -49,12 +49,7 @@ namespace SyncMe.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Member member = db.Members.Find(id);
-            if (member == null)
-            {
-                return HttpNotFound();
-            }
-            var profile = db.Profiles.Where(p => p.Member.Id == member.Id).Select(s => s).FirstOrDefault();
+            var profile = db.Profiles.Where(p => p.Member.Id == id).Select(s => s).FirstOrDefault();
             return View(profile);
         }
 
@@ -181,8 +176,9 @@ namespace SyncMe.Controllers
         {
             var current = User.Identity.GetUserId();
             var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
+            var contacts = member.Contacts.ToList();
             var profiles = new List<Profile>();
-            foreach(var profile in member.Contacts)
+            foreach(var profile in contacts)
             {
                 if(profile.Member.Id != member.Id)
                 {
@@ -192,7 +188,7 @@ namespace SyncMe.Controllers
             return View(profiles);
         }
 
-        public ActionResult SendContactRequest(int id)
+        public ActionResult SendContactRequest(int? id)
         {
             var current = User.Identity.GetUserId();
             var sender = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
@@ -223,13 +219,14 @@ namespace SyncMe.Controllers
             var user = User.Identity.GetUserId();
             var member = db.Members.Where(u => u.UserId.Id == user).Select(s => s).FirstOrDefault();
             var contactRequest = db.ContactRequests.Where(a => a.Id == id).Select(p => p).FirstOrDefault();
-            var profile = db.Profiles.Where(p => p.Member.Id == contactRequest.Sender.Id).Select(k => k).FirstOrDefault();
-            var profile2 = db.Profiles.Where(l => l.Member.Id == member.Id).Select(i => i).FirstOrDefault();
+            var sender = db.Members.Where(n => n.Id == contactRequest.Sender.Id).Select(o => o).FirstOrDefault();
+            var receiver = db.Members.Where(t => t.Id == contactRequest.Reciever.Id).Select(q => q).FirstOrDefault();
+            var senderProfile = db.Profiles.Where(r => r.Member.Id == sender.Id).Select(k => k).FirstOrDefault();
+            var receiverProfile = db.Profiles.Where(l => l.Member.Id == receiver.Id).Select(i => i).FirstOrDefault();
             contactRequest.Status = "Approved";
-            member.Contacts.Add(profile);
-            contactRequest.Sender.Contacts.Add(profile2);
-            member.ContactRequests.Remove(contactRequest);
-            db.ContactRequests.Remove(contactRequest);
+            receiver.Contacts.Add(senderProfile);
+            sender.Contacts.Add(receiverProfile);
+            receiver.ContactRequests.Remove(contactRequest);
             db.SaveChanges();
             TempData["Message"] = "**You have a new contact!";
             return RedirectToAction("ViewContactRequests");
