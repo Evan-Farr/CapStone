@@ -41,7 +41,6 @@ namespace SyncMe.Models
         public virtual ICollection<ContactRequest> ContactRequests { get; set; }
         public virtual ICollection<SyncRequest> SyncRequests { get; set; }
         public virtual ICollection<EventInvitation> EventInvitations { get; set; }
-        public virtual Profile Profile { get; set; }
         public virtual Calendar Calendar { get; set; }
         public virtual ICollection<Event> Events { get; set; }
         public virtual ApplicationUser UserId { get; set; }

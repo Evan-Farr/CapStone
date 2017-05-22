@@ -42,7 +42,8 @@ namespace SyncMe.Controllers
         {
             var current = User.Identity.GetUserId();
             var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
-            return View(member.Profile);
+            var profile = db.Profiles.Where(p => p.Member == member).Select(a => a).FirstOrDefault();
+            return View(profile);
         }
 
         // GET: Profiles/Create
@@ -81,7 +82,6 @@ namespace SyncMe.Controllers
                     }
                     profile.ProfilePictureId = bytes;
                 }
-                member.Profile = profile;
                 profile.Member = member;
                 db.Profiles.Add(profile);
                 db.SaveChanges();
@@ -170,7 +170,8 @@ namespace SyncMe.Controllers
         {
             var current = User.Identity.GetUserId();
             var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
-            WebImage wi = new WebImage(member.Profile.ProfilePictureId);
+            var profile = db.Profiles.Where(p => p.Member == member).Select(a => a).FirstOrDefault();
+            WebImage wi = new WebImage(profile.ProfilePictureId);
             wi.Resize(200, 200, true, true);
             wi.Write();
         }

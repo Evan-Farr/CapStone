@@ -49,15 +49,12 @@ namespace SyncMe.Migrations
                         Phone = c.String(maxLength: 10),
                         Email = c.String(),
                         Calendar_Id = c.Int(),
-                        Profile_Id = c.Int(),
                         UserId_Id = c.String(maxLength: 128),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Calendars", t => t.Calendar_Id)
-                .ForeignKey("dbo.Profiles", t => t.Profile_Id)
                 .ForeignKey("dbo.AspNetUsers", t => t.UserId_Id)
                 .Index(t => t.Calendar_Id)
-                .Index(t => t.Profile_Id)
                 .Index(t => t.UserId_Id);
             
             CreateTable(
@@ -71,13 +68,10 @@ namespace SyncMe.Migrations
                         Phone = c.String(maxLength: 10),
                         Email = c.String(),
                         Member_Id = c.Int(),
-                        Member_Id1 = c.Int(),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Members", t => t.Member_Id)
-                .ForeignKey("dbo.Members", t => t.Member_Id1)
-                .Index(t => t.Member_Id)
-                .Index(t => t.Member_Id1);
+                .Index(t => t.Member_Id);
             
             CreateTable(
                 "dbo.EventInvitations",
@@ -218,11 +212,9 @@ namespace SyncMe.Migrations
             DropForeignKey("dbo.SyncRequests", "Member_Id", "dbo.Members");
             DropForeignKey("dbo.SyncRequests", "Sender_Id", "dbo.Members");
             DropForeignKey("dbo.SyncRequests", "Reciever_Id", "dbo.Members");
-            DropForeignKey("dbo.Members", "Profile_Id", "dbo.Profiles");
             DropForeignKey("dbo.Events", "Member_Id", "dbo.Members");
             DropForeignKey("dbo.EventInvitations", "Sender_Id", "dbo.Members");
             DropForeignKey("dbo.EventInvitations", "Event_Id", "dbo.Events");
-            DropForeignKey("dbo.Profiles", "Member_Id1", "dbo.Members");
             DropForeignKey("dbo.Profiles", "Member_Id", "dbo.Members");
             DropForeignKey("dbo.ContactRequests", "Member_Id", "dbo.Members");
             DropForeignKey("dbo.Members", "Calendar_Id", "dbo.Calendars");
@@ -238,10 +230,8 @@ namespace SyncMe.Migrations
             DropIndex("dbo.Events", new[] { "Member_Id" });
             DropIndex("dbo.EventInvitations", new[] { "Sender_Id" });
             DropIndex("dbo.EventInvitations", new[] { "Event_Id" });
-            DropIndex("dbo.Profiles", new[] { "Member_Id1" });
             DropIndex("dbo.Profiles", new[] { "Member_Id" });
             DropIndex("dbo.Members", new[] { "UserId_Id" });
-            DropIndex("dbo.Members", new[] { "Profile_Id" });
             DropIndex("dbo.Members", new[] { "Calendar_Id" });
             DropIndex("dbo.ContactRequests", new[] { "Sender_Id" });
             DropIndex("dbo.ContactRequests", new[] { "Reciever_Id" });
