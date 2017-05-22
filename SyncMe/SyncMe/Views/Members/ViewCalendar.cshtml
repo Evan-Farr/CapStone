@@ -21,11 +21,14 @@
             <br /><br />
             @Html.ActionLink("My Profile", "PrivateDetails", "Profiles", null, new { @class = "btn btn-primary btn-md" })
             <br /><br />
-            @Html.ActionLink("Contacts", "ViewContacts", "Members", null, new { @class = "btn btn-primary btn-md" })
+            @Html.ActionLink("My Contacts", "ViewContacts", "Members", null, new { @class = "btn btn-primary btn-md" })
             <br /><br />
             @Html.ActionLink("View All Events", "PrivateIndex", "Events", null, new { @class = "btn btn-primary btn-md" })
             <br /><br>
-            @Html.ActionLink("Find SyncMe Members", "Search", "Profiles", null, new { @class = "btn btn-primary btn-md" })
+            @Html.ActionLink("Search Members", "Search", "Profiles", null, new { @class = "btn btn-primary btn-md" })
+            <br /><br>
+            @Html.ActionLink("Contact Requests", "ViewContactRequests", "Members", null, new { @class = "btn btn-primary btn-md" })
+            <br /><br>
         </center>
     </div>
     <div class="col-md-11">

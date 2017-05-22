@@ -801,6 +801,7 @@
     <Content Include="Views\Members\ViewContactRequests.cshtml" />
     <Content Include="Views\Members\ContactRequest.cshtml" />
     <Content Include="Views\Profiles\Search.cshtml" />
+    <Content Include="Views\Profiles\SearchResults.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

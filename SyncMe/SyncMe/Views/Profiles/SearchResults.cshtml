@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<SyncMe.Models.Profile>
 
 @{
-    ViewBag.Title = "Search";
+    ViewBag.Title = "SearchResults";
 }
 
 <br />
@@ -14,12 +14,13 @@
     <h2>@Html.Label("Search")</h2>
     @using (Html.BeginForm("SearchResults", "Profiles", FormMethod.Post))
             {
-        <input type="text" name="name" />
+        <input type="text" name="name"/>
         <button class="btn btn-primary btn-sm" type="submit">Search</button>
     }
 </div>
 <br /><br /><br /><br /><br /><br />
 <hr />
+<h5>Search Results</h5>
 <table class="table">
     <tr>
         <th>

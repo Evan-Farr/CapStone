@@ -205,6 +205,7 @@ namespace SyncMe.Controllers
             contactRequest.DateSent = DateTime.Today;
             receiver.ContactRequests.Add(contactRequest);
             db.ContactRequests.Add(contactRequest);
+            db.SaveChanges();
             TempData["Message"] = "**Contact request successfully sent!";
             return RedirectToAction("ViewContacts");
         }
@@ -212,7 +213,8 @@ namespace SyncMe.Controllers
         public ActionResult ViewContactRequests()
         {
             var user = User.Identity.GetUserId();
-            var requests = db.Members.Where(u => u.UserId.Id == user).Select(s => s.ContactRequests).ToList();
+            var member = db.Members.Where(u => u.UserId.Id == user).Select(s => s).FirstOrDefault();
+            var requests = member.ContactRequests.ToList();
             return View(requests);
         }
 
