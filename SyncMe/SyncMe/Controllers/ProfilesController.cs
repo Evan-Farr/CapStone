@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using SyncMe.Models;
 using Microsoft.AspNet.Identity;
 using System.IO;
+using System.Web.Helpers;
 
 namespace SyncMe.Controllers
 {
@@ -55,32 +56,37 @@ namespace SyncMe.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,ProfilePictureId,CompanyName,SchoolName,Phone,Email")] Profile profile)
+        public ActionResult Create([Bind(Include = "Id,ProfilePictureId,CompanyName,SchoolName,Phone,Email")] Profile profile, HttpPostedFileBase file1)
         {
             if (ModelState.IsValid)
             {
                 var current = User.Identity.GetUserId();
                 var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
-                HttpPostedFileBase ProfilePictureId = Request.Files["ProfilePictureId"];
-                if (ProfilePictureId != null && ProfilePictureId.ContentLength > 0)
-                    try
+                string fileName = "";
+                byte[] bytes;
+                int bytesToRead;
+                int numBytesRead;
+                if (file1 != null)
+                {
+                    fileName = Path.GetFileName(file1.FileName);
+                    bytes = new byte[file1.ContentLength];
+                    bytesToRead = (int)file1.ContentLength;
+                    numBytesRead = 0;
+                    while(bytesToRead > 0)
                     {
-                        var fileName = Path.GetFileName(ProfilePictureId.FileName);
-                        var path = Path.Combine(Server.MapPath("~/App_Data/uploads"), fileName);
-                        ProfilePictureId.SaveAs(path);
-                        //profile.ProfilePictureId = path;
+                        int n = file1.InputStream.Read(bytes, numBytesRead, bytesToRead);
+                        if(n == 0) { break; }
+                        numBytesRead += n;
+                        bytesToRead -= n;
                     }
-                    catch
-                    {
-
-                    }
+                    profile.ProfilePictureId = bytes;
+                }
                 member.Profile = profile;
                 profile.Member = member;
                 db.Profiles.Add(profile);
                 db.SaveChanges();
                 return RedirectToAction("ViewCalendar", "Members");
             }
-
             return View(profile);
         }
 
@@ -160,34 +166,51 @@ namespace SyncMe.Controllers
             return RedirectToAction("ViewContacts", "Members");
         }
 
-        [HttpPost]
-        public ActionResult UploadImage(HttpPostedFileBase file)
+        public void SelectPicture()
         {
-            if (file != null)
-            {
-                //get the bytes from the uploaded file
-                byte[] data = GetBytesFromFile(file);
-                var current = User.Identity.GetUserId();
-                var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
-                member.Profile.ProfilePictureId = data;
-                db.SaveChanges();
-            }
-            return RedirectToAction("Create", "Profiles");
+            var current = User.Identity.GetUserId();
+            var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
+            WebImage wi = new WebImage(member.Profile.ProfilePictureId);
+            wi.Resize(200, 200, true, true);
+            wi.Write();
         }
 
-        //Method to convert file into byte array
-        private byte[] GetBytesFromFile(HttpPostedFileBase file)
+        //[HttpPost]
+        //public ActionResult UploadImage(HttpPostedFileBase file)
+        //{
+        //    if (file != null)
+        //    {
+        //        //get the bytes from the uploaded file
+        //        byte[] data = GetBytesFromFile(file);
+        //        var current = User.Identity.GetUserId();
+        //        var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
+        //        member.Profile.ProfilePictureId = data;
+        //        db.SaveChanges();
+        //    }
+        //    return RedirectToAction("Create", "Profiles");
+        //}
+
+        ////Method to convert file into byte array
+        //private byte[] GetBytesFromFile(HttpPostedFileBase file)
+        //{
+        //    using (Stream inputStream = file.InputStream)
+        //    {
+        //        MemoryStream memoryStream = inputStream as MemoryStream;
+        //        if (memoryStream == null)
+        //        {
+        //            memoryStream = new MemoryStream();
+        //            inputStream.CopyTo(memoryStream);
+        //        }
+        //        return memoryStream.ToArray();
+        //    }
+        //}
+
+        public ActionResult MyImage(int id, int img)
+
         {
-            using (Stream inputStream = file.InputStream)
-            {
-                MemoryStream memoryStream = inputStream as MemoryStream;
-                if (memoryStream == null)
-                {
-                    memoryStream = new MemoryStream();
-                    inputStream.CopyTo(memoryStream);
-                }
-                return memoryStream.ToArray();
-            }
+            ViewBag.Pic = img;
+            Profile profile = db.Profiles.Find(id);
+            return View(profile);
         }
 
         protected override void Dispose(bool disposing)

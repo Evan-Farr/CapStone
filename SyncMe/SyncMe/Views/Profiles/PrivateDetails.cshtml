@@ -3,17 +3,26 @@
 @{
     ViewBag.Title = "PrivateDetails";
 }
-
+<div>
+    <img src="@Url.Action("SelectPicture")" alt=""/>
+</div>
 <div>
     <hr />
     <dl class="dl-horizontal">
-        <dt>
+        @*<dt>
             @Html.DisplayName("Profile Picture")
-        </dt>
+        </dt>*@
 
-        <dd>
-            @Html.DisplayFor(model => model.ProfilePictureId)
-        </dd>
+        @*<dd>
+            @if (Model.ProfilePictureId != null)
+            {
+                WebImage wi = new WebImage(Model.ProfilePictureId);
+                wi.Resize(200, 200, true, true);
+                wi.Write();
+                <img id="uploadPreview" style="width: 100px; height: 100px;" />
+                <img alt="tag" src=”@Url.Content("/Profile/MyImage?id =" + Model.Id + "&img=1" )” />
+            }
+        </dd>*@
 
         <dt>
             @Html.DisplayName("First Name")

@@ -6,21 +6,20 @@
 
 <h2>Let's set up your profile!</h2>
 
-@using (Html.BeginForm()) 
-{
+<form name="datapluspics" method="post" enctype="multipart/form-data">
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Your profile contains the information visible to other SyncMe members.</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
         <div class="form-group">
             @Html.Label("Profile Picture", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.ProfilePictureId, new { htmlAttributes = new { type = "file", id = "ProfilePictureId", onchange = "PreviewImage()" } })
-                @Html.ValidationMessageFor(model => model.ProfilePictureId, "", new { @class = "text-danger" })
-                <br />
-                <img id="uploadPreview" style="width: 100px; height: 100px;" />
+                <input type="file" id="file1" name="file1"/>
+                @*<br />
+                <img id="uploadPreview" style="width: 100px; height: 100px;" />*@
             </div>
         </div>
 
@@ -62,15 +61,15 @@
             </div>
         </div>
     </div>
-}
+</form>
 
-<div>
-    @if (User.IsInRole("Admin"))
-    {
-        @Html.ActionLink("Back to List", "Index")
-    }
-    else
-    {
-        @Html.ActionLink("Skip", "ViewCalendar", "Members")
-    }
-</div>
+    <div>
+        @if (User.IsInRole("Admin"))
+        {
+            @Html.ActionLink("Back to List", "Index")
+        }
+        else
+        {
+            @Html.ActionLink("Skip", "ViewCalendar", "Members")
+        }
+    </div>
