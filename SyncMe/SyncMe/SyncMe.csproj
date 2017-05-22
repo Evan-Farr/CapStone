@@ -798,6 +798,8 @@
     <Content Include="Views\Events\PrivateIndex.cshtml" />
     <Content Include="Views\Profiles\PrivateDetails.cshtml" />
     <Content Include="Views\Members\ViewContacts.cshtml" />
+    <Content Include="Views\Members\ViewContactRequests.cshtml" />
+    <Content Include="Views\Members\ContactRequest.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

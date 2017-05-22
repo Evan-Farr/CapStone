@@ -1,0 +1,47 @@
+﻿@model IEnumerable<SyncMe.Models.ContactRequest>
+
+@{
+    ViewBag.Title = "ViewContactRequests";
+}
+
+<h2>Pending Contact Requests</h2>
+
+<div class="col-md-10">
+    <div class="text-success">
+        @TempData["Message"]
+    </div>
+</div>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayName("Date Recieved")
+        </th>
+        <th>
+            @Html.DisplayName("Status")
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateSent)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.ActionLink("View Profile", "ContactRequest", new { id = item.Sender.Id })
+                <br />
+                @Html.ActionLink("Accept", "AcceptContactRequest", new { id = item.Id })
+                <br />
+                @Html.ActionLink("Deny", "DenyContactRequest", new { id = item.Id })
+            </td>
+        </tr>
+    }
+</table>
+<hr />
+<td>
+    @Html.ActionLink("Back", "Index", "Users")
+</td>

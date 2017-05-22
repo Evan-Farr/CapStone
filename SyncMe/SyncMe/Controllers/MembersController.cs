@@ -43,6 +43,21 @@ namespace SyncMe.Controllers
             return View(member);
         }
 
+        public ActionResult ContactRequest(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Member member = db.Members.Find(id);
+            if (member == null)
+            {
+                return HttpNotFound();
+            }
+            var profile = db.Profiles.Where(p => p.Member.Id == member.Id).Select(s => s).FirstOrDefault();
+            return View(profile);
+        }
+
         // GET: Members/Create
         public ActionResult Create()
         {
@@ -184,6 +199,42 @@ namespace SyncMe.Controllers
             db.ContactRequests.Add(contactRequest);
             TempData["Message"] = "**Contact request successfully sent!";
             return RedirectToAction("ViewContacts");
+        }
+
+        public ActionResult ViewContactRequests()
+        {
+            var user = User.Identity.GetUserId();
+            var requests = db.Members.Where(u => u.UserId.Id == user).Select(s => s.ContactRequests).ToList();
+            return View(requests);
+        }
+
+        public ActionResult AcceptContactRequest(int? id)
+        {
+            var user = User.Identity.GetUserId();
+            var member = db.Members.Where(u => u.UserId.Id == user).Select(s => s).FirstOrDefault();
+            var contactRequest = db.ContactRequests.Where(a => a.Id == id).Select(p => p).FirstOrDefault();
+            var profile = db.Profiles.Where(p => p.Member.Id == contactRequest.Sender.Id).Select(k => k).FirstOrDefault();
+            var profile2 = db.Profiles.Where(l => l.Member.Id == member.Id).Select(i => i).FirstOrDefault();
+            contactRequest.Status = "Approved";
+            member.Contacts.Add(profile);
+            contactRequest.Sender.Contacts.Add(profile2);
+            member.ContactRequests.Remove(contactRequest);
+            db.ContactRequests.Remove(contactRequest);
+            db.SaveChanges();
+            TempData["Message"] = "**You have a new contact!";
+            return RedirectToAction("ViewContactRequests");
+        }
+
+        public ActionResult DenyContactRequest(int? id)
+        {
+            var user = User.Identity.GetUserId();
+            var member = db.Members.Where(u => u.UserId.Id == user).Select(s => s).FirstOrDefault();
+            var contactRequest = db.ContactRequests.Where(a => a.Id == contactRequestId).Select(p => p).FirstOrDefault();
+            member.ContactRequests.Remove(contactRequest);
+            contactRequest.Status = "Denied";
+            db.SaveChanges();
+            TempData["Message"] = "**Contact request removed from your pending contact requests.";
+            return RedirectToAction("ViewContactRequests");
         }
 
         public ActionResult RemoveContact(int? id)
