@@ -68,7 +68,7 @@ namespace SyncMe.Controllers
                         var fileName = Path.GetFileName(ProfilePictureId.FileName);
                         var path = Path.Combine(Server.MapPath("~/App_Data/uploads"), fileName);
                         ProfilePictureId.SaveAs(path);
-                        profile.ProfilePictureId = path;
+                        //profile.ProfilePictureId = path;
                     }
                     catch
                     {
@@ -160,35 +160,35 @@ namespace SyncMe.Controllers
             return RedirectToAction("ViewContacts", "Members");
         }
 
-        //[HttpPost]
-        //public ActionResult UploadImage(HttpPostedFileBase file)
-        //{
-        //    if (file != null)
-        //    {
-        //        //get the bytes from the uploaded file
-        //        byte[] data = GetBytesFromFile(file);
-        //        var current = User.Identity.GetUserId();
-        //        var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
-        //        member.Profile.ProfilePictureId = data;
-        //        db.SaveChanges();
-        //    }
-        //    return RedirectToAction("Create", "Profiles");
-        //}
+        [HttpPost]
+        public ActionResult UploadImage(HttpPostedFileBase file)
+        {
+            if (file != null)
+            {
+                //get the bytes from the uploaded file
+                byte[] data = GetBytesFromFile(file);
+                var current = User.Identity.GetUserId();
+                var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
+                member.Profile.ProfilePictureId = data;
+                db.SaveChanges();
+            }
+            return RedirectToAction("Create", "Profiles");
+        }
 
-        ////Method to convert file into byte array
-        //private byte[] GetBytesFromFile(HttpPostedFileBase file)
-        //{
-        //    using (Stream inputStream = file.InputStream)
-        //    {
-        //        MemoryStream memoryStream = inputStream as MemoryStream;
-        //        if (memoryStream == null)
-        //        {
-        //            memoryStream = new MemoryStream();
-        //            inputStream.CopyTo(memoryStream);
-        //        }
-        //        return memoryStream.ToArray();
-        //    }
-        //}
+        //Method to convert file into byte array
+        private byte[] GetBytesFromFile(HttpPostedFileBase file)
+        {
+            using (Stream inputStream = file.InputStream)
+            {
+                MemoryStream memoryStream = inputStream as MemoryStream;
+                if (memoryStream == null)
+                {
+                    memoryStream = new MemoryStream();
+                    inputStream.CopyTo(memoryStream);
+                }
+                return memoryStream.ToArray();
+            }
+        }
 
         protected override void Dispose(bool disposing)
         {

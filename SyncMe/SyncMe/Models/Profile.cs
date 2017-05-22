@@ -10,8 +10,7 @@ namespace SyncMe.Models
     {
         [Key]
         public int Id { get; set; }
-        [DataType(DataType.ImageUrl)]
-        public string ProfilePictureId { get; set; }
+        public byte[] ProfilePictureId { get; set; }
         public string FirstName { get { return this.Member.FirstName; } }
         public string LastName { get { return this.Member.LastName; } }
         public int? Age { get { return this.Member.Age; } }
