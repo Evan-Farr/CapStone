@@ -29,19 +29,31 @@ namespace SyncMe.Controllers
             var member = db.Members.Where(u => u.UserId.Id == user).Select(s => s).FirstOrDefault();
             var profiles = db.Profiles.ToList();
             var Profiles = new List<Profile>();
-            foreach (var profile in profiles)
+            if (member.Contacts.Count != 0)
             {
-                foreach(var contact in member.Contacts)
+                foreach (var profile in profiles)
                 {
-                    if (profile.Id != contact.Id && profile.Member.Id != member.Id)
+                    foreach (var contact in member.Contacts)
                     {
-                        //foreach(var request in profile.Member.ContactRequests)
-                        //{
-                        //    if(request.Sender.Id != member.Id)
-                        //    {
-                                Profiles.Add(profile);
-                        //    }
-                        //}
+                        if (profile.Id != contact.Id)
+                        {
+                            //foreach(var request in profile.Member.ContactRequests)
+                            //{
+                            //    if(request.Sender.Id != member.Id)
+                            //    {
+                            Profiles.Add(profile);
+                            //    }
+                            //}
+                        }
+                    }
+                }
+            }else
+            {
+                foreach(var p in profiles)
+                {
+                    if(p.Member.Id != member.Id)
+                    {
+                        Profiles.Add(p);
                     }
                 }
             }
@@ -198,7 +210,6 @@ namespace SyncMe.Controllers
                     contact.SchoolName = profile.SchoolName;
                     contact.Phone = profile.Phone;
                     contact.Email = profile.Email;
-                    contact.Member = profile.Member;
                     db.Entry(contact).State = EntityState.Modified;
                     db.Entry(profile).State = EntityState.Modified;
                     db.SaveChanges();
@@ -216,7 +227,6 @@ namespace SyncMe.Controllers
                 contact2.SchoolName = profile.SchoolName;
                 contact2.Phone = profile.Phone;
                 contact2.Email = profile.Email;
-                contact2.Member = profile.Member;
                 db.Entry(contact2).State = EntityState.Modified;
                 db.Entry(profile).State = EntityState.Modified;
                 db.SaveChanges();

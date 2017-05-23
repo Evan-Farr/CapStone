@@ -20,7 +20,5 @@ namespace SyncMe.Models
         [StringLength(10)]
         public string Phone { get; set; }
         public string Email { get; set; }
-
-        public virtual Member Member { get; set; }
     }
 }
