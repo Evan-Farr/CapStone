@@ -295,6 +295,25 @@ namespace SyncMe.Controllers
             }
         }
 
+        public void SelectPictureContact(int? id)
+        {
+            //var current = User.Identity.GetUserId();
+            //var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
+            var contact = db.Contacts.Where(p => p.Id == id).Select(a => a).FirstOrDefault();
+            try
+            {
+                WebImage wi = new WebImage(contact.ProfilePictureId);
+                wi.Resize(200, 200, true, true);
+                wi.Write();
+            }
+            catch
+            {
+                WebImage wiDefault = new WebImage("~/App_Data/uploads/no-profile-image.jpg");
+                wiDefault.Resize(200, 200, true, true);
+                wiDefault.Write();
+            }
+        }
+
         public void SelectAllPictures()
         {
             foreach(var profile in db.Profiles)

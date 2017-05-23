@@ -176,15 +176,12 @@ namespace SyncMe.Controllers
         {
             var current = User.Identity.GetUserId();
             var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
-            var contacts = new List<Contact>();
-            foreach(var contact in member.Contacts)
-            {
-                var p = db.Profiles.Where(t => t.Id == contact.Id).Select(a => a).FirstOrDefault();
-                if(p.Member.Id != member.Id)
-                {
-                    contacts.Add(contact);
-                }
-            }
+            //var contacts = new List<Contact>();
+            //foreach(var contact in member.Contacts)
+            //{
+            //    contacts.Add(contact);
+            //}
+            var contacts = member.Contacts.OrderBy(a => a.LastName).ToList();
             return View(contacts);
         }
 
@@ -242,7 +239,7 @@ namespace SyncMe.Controllers
             contact.Email = senderProfile.Email;
             //contact.Member = senderProfile.Member;
             Contact contact2 = new Contact();
-            contact2.Id = senderProfile.Id;
+            contact2.Id = receiverProfile.Id;
             contact2.ProfilePictureId = receiverProfile.ProfilePictureId;
             contact2.FirstName = receiverProfile.FirstName;
             contact2.LastName = receiverProfile.LastName;
@@ -291,10 +288,10 @@ namespace SyncMe.Controllers
             }
             var current = User.Identity.GetUserId();
             var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
-            var profile = db.Profiles.Where(b => b.Id == contact.Id).Select(x => x).FirstOrDefault();
-            var member2 = db.Members.Where(t => t.Id == profile.Member.Id).Select(o => o).FirstOrDefault();
-            var profile2 = db.Profiles.Where(z => z.Member.Id == member.Id).Select(w => w).FirstOrDefault();
-            var contact2 = db.Contacts.Where(a => a.Id == profile2.Id).Select(y => y).FirstOrDefault();
+            var profile = db.Profiles.Where(b => b.Id == contact.Id).Select(x => x).FirstOrDefault(); //members profile
+            var member2 = db.Members.Where(t => t.Id == profile.Member.Id).Select(o => o).FirstOrDefault(); //member?
+            var profile2 = db.Profiles.Where(z => z.Member.Id == member.Id).Select(w => w).FirstOrDefault(); //members profile
+            var contact2 = db.Contacts.Where(a => a.Id == profile2.Id).Select(y => y).FirstOrDefault(); //bobs contact
             member.Contacts.Remove(contact);
             member2.Contacts.Remove(contact2);
             db.SaveChanges();
