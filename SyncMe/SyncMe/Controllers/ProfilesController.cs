@@ -92,7 +92,9 @@ namespace SyncMe.Controllers
         // GET: Profiles/Create
         public ActionResult Create()
         {
-            return View();
+            var current = User.Identity.GetUserId();
+            var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
+            return View(member);
         }
 
         // POST: Profiles/Create
@@ -100,7 +102,7 @@ namespace SyncMe.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,ProfilePictureId,CompanyName,SchoolName,Phone,Email")] Profile profile, HttpPostedFileBase file1)
+        public ActionResult Create([Bind(Include = "Id,ProfilePictureId,FirstName,LastName,Age,State,CompanyName,SchoolName,Phone,Email")] Profile profile, HttpPostedFileBase file1)
         {
             if (ModelState.IsValid)
             {
@@ -153,7 +155,7 @@ namespace SyncMe.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,ProfilePictureId,CompanyName,SchoolName,Phone,Email")] Profile profile, HttpPostedFileBase file2)
+        public ActionResult Edit([Bind(Include = "Id,ProfilePictureId,FirstName,LastName,Age,State,CompanyName,SchoolName,Phone,Email")] Profile profile, HttpPostedFileBase file2)
         {
             if (ModelState.IsValid)
             {

@@ -249,9 +249,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201705231259558_initial.cs" />
-    <Compile Include="Migrations\201705231259558_initial.Designer.cs">
-      <DependentUpon>201705231259558_initial.cs</DependentUpon>
+    <Compile Include="Migrations\201705231357500_initial.cs" />
+    <Compile Include="Migrations\201705231357500_initial.Designer.cs">
+      <DependentUpon>201705231357500_initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -804,15 +804,15 @@
     <Content Include="Views\Profiles\SearchResults.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201705231259558_initial.resx">
-      <DependentUpon>201705231259558_initial.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
     <Content Include="Scripts\jquery-3.1.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.1.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201705231357500_initial.resx">
+      <DependentUpon>201705231357500_initial.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
