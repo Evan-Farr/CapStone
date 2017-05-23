@@ -10,7 +10,7 @@ namespace SyncMe.Models
     {
         public Member()
         {
-            Contacts = new List<Profile>();
+            Contacts = new List<Contact>();
             ContactRequests = new List<ContactRequest>();
             SyncRequests = new List<SyncRequest>();
             EventInvitations = new List<EventInvitation>();
@@ -37,7 +37,7 @@ namespace SyncMe.Models
         public string Email { get; set; }
 
 
-        public virtual ICollection<Profile> Contacts { get; set; }
+        public virtual ICollection<Contact> Contacts { get; set; }
         public virtual ICollection<ContactRequest> ContactRequests { get; set; }
         public virtual ICollection<SyncRequest> SyncRequests { get; set; }
         public virtual ICollection<EventInvitation> EventInvitations { get; set; }

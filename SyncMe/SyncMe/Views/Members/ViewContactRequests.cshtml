@@ -1,23 +1,46 @@
-﻿@model IEnumerable<SyncMe.Models.ContactRequest>
+﻿@model IEnumerable<SyncMe.Models.Profile>
 
 @{
     ViewBag.Title = "ViewContactRequests";
 }
 
 <h2>Pending Contact Requests</h2>
-
-<div class="col-md-10">
+    
+<hr />
+<div class="col-md-12">
     <div class="text-success">
         @TempData["Message"]
     </div>
+    <div class="text-warning">
+        @TempData["ErrorMessage"]
+    </div>
 </div>
+<hr />
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayName("Date Recieved")
+            @Html.DisplayName("Profile Picture")
         </th>
         <th>
-            @Html.DisplayName("Status")
+            @Html.DisplayName("Name")
+        </th>
+        <th>
+            @Html.DisplayName("Age")
+        </th>
+        <th>
+            @Html.DisplayName("State")
+        </th>
+        <th>
+            @Html.DisplayName("Company")
+        </th>
+        <th>
+            @Html.DisplayName("Education")
+        </th>
+        <th>
+            @Html.DisplayName("Phone #")
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
         </th>
         <th></th>
     </tr>
@@ -26,14 +49,31 @@
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.DateSent)
+                <img src="@Url.Action("SelectPicture", "Profiles", new { id = item.Id })" alt="" />
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Status)
+                @Html.DisplayFor(modelItem => item.FirstName)
+                @Html.DisplayFor(modelItem => item.LastName)
             </td>
             <td>
-                @Html.ActionLink("View Profile", "ContactRequest", new { id = item.Sender.Id })
-                <br />
+                @Html.DisplayFor(modelItem => item.Age)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.State)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CompanyName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SchoolName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Phone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
                 @Html.ActionLink("Accept", "AcceptContactRequest", new { id = item.Id })
                 <br />
                 @Html.ActionLink("Deny", "DenyContactRequest", new { id = item.Id })
@@ -41,8 +81,6 @@
         </tr>
     }
 </table>
-<hr />
-<td>
+<p>
     @Html.ActionLink("Back", "ViewCalendar", "Members")
-</td>
-
+</p>

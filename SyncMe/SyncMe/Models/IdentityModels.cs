@@ -36,5 +36,6 @@ namespace SyncMe.Models
         public DbSet<ContactRequest> ContactRequests { get; set; }
         public DbSet<SyncRequest> SyncRequests { get; set; }
         public DbSet<EventInvitation> EventInvitations { get; set; }
+        public DbSet<Contact> Contacts { get; set; }
     }
 }

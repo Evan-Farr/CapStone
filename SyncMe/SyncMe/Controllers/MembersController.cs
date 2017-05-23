@@ -43,15 +43,15 @@ namespace SyncMe.Controllers
             return View(member);
         }
 
-        public ActionResult ContactRequest(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            var profile = db.Profiles.Where(p => p.Member.Id == id).Select(s => s).FirstOrDefault();
-            return View(profile);
-        }
+        //public ActionResult ContactRequest(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    var profile = db.Profiles.Where(p => p.Member.Id == id).Select(s => s).FirstOrDefault();
+        //    return View(profile);
+        //}
 
         // GET: Members/Create
         public ActionResult Create()
@@ -176,15 +176,15 @@ namespace SyncMe.Controllers
         {
             var current = User.Identity.GetUserId();
             var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
-            var profiles = new List<Profile>();
-            foreach(var profile in member.Contacts)
+            var contacts = new List<Contact>();
+            foreach(var contact in member.Contacts)
             {
-                if(profile.Member.Id != member.Id)
+                if(contact.Member.Id != member.Id)
                 {
-                    profiles.Add(profile);
+                    contacts.Add(contact);
                 }
             }
-            return View(profiles);
+            return View(contacts);
         }
 
         public ActionResult SendContactRequest(int? id)
@@ -203,7 +203,7 @@ namespace SyncMe.Controllers
             db.ContactRequests.Add(contactRequest);
             db.SaveChanges();
             TempData["Message"] = "**Contact request successfully sent!";
-            return RedirectToAction("ViewContacts");
+            return RedirectToAction("Search", "Profiles");
         }
 
         public ActionResult ViewContactRequests()
@@ -223,15 +223,38 @@ namespace SyncMe.Controllers
         {
             var user = User.Identity.GetUserId();
             var member = db.Members.Where(u => u.UserId.Id == user).Select(s => s).FirstOrDefault();
-            var contactRequest = db.ContactRequests.Where(a => a.Id == id).Select(p => p).FirstOrDefault();
-            var senderProfile = db.Profiles.Where(n => n.Id == contactRequest.Sender.Id).Select(o => o).FirstOrDefault();
+            var senderProfile = db.Profiles.Where(n => n.Id == id).Select(o => o).FirstOrDefault();
             var sender = db.Members.Where(r => r.Id == senderProfile.Member.Id).Select(k => k).FirstOrDefault();
-            var receiver = member;
             var receiverProfile = db.Profiles.Where(l => l.Member.Id == member.Id).Select(i => i).FirstOrDefault();
+            var contactRequest = db.ContactRequests.Where(c => c.Sender.Id == sender.Id && c.Receiver.Id == member.Id).Select(a => a).FirstOrDefault();
             contactRequest.Status = "Approved";
-            receiver.Contacts.Add(senderProfile);
-            sender.Contacts.Add(receiverProfile);
-            receiver.ContactRequests.Remove(contactRequest);
+            Contact contact = new Contact();
+            contact.Id = senderProfile.Id;
+            contact.ProfilePictureId = senderProfile.ProfilePictureId;
+            contact.FirstName = senderProfile.FirstName;
+            contact.LastName = senderProfile.LastName;
+            contact.Age = senderProfile.Age;
+            contact.State = senderProfile.State;
+            contact.CompanyName = senderProfile.CompanyName;
+            contact.SchoolName = senderProfile.SchoolName;
+            contact.Phone = senderProfile.Phone;
+            contact.Email = senderProfile.Email;
+            contact.Member = senderProfile.Member;
+            Contact contact2 = new Contact();
+            contact2.Id = senderProfile.Id;
+            contact2.ProfilePictureId = receiverProfile.ProfilePictureId;
+            contact2.FirstName = receiverProfile.FirstName;
+            contact2.LastName = receiverProfile.LastName;
+            contact2.Age = receiverProfile.Age;
+            contact2.State = receiverProfile.State;
+            contact2.CompanyName = receiverProfile.CompanyName;
+            contact2.SchoolName = receiverProfile.SchoolName;
+            contact2.Phone = receiverProfile.Phone;
+            contact2.Email = receiverProfile.Email;
+            contact2.Member = receiverProfile.Member;
+            member.Contacts.Add(contact);
+            sender.Contacts.Add(contact2);
+            member.ContactRequests.Remove(contactRequest);
             db.SaveChanges();
             TempData["Message"] = "**You have a new contact!";
             return RedirectToAction("ViewContactRequests");
@@ -241,7 +264,9 @@ namespace SyncMe.Controllers
         {
             var user = User.Identity.GetUserId();
             var member = db.Members.Where(u => u.UserId.Id == user).Select(s => s).FirstOrDefault();
-            var contactRequest = db.ContactRequests.Where(a => a.Id == id).Select(p => p).FirstOrDefault();
+            var senderProfile = db.Profiles.Where(n => n.Id == id).Select(o => o).FirstOrDefault();
+            var sender = db.Members.Where(r => r.Id == senderProfile.Member.Id).Select(k => k).FirstOrDefault();
+            var contactRequest = db.ContactRequests.Where(c => c.Sender.Id == sender.Id && c.Receiver.Id == member.Id).Select(a => a).FirstOrDefault();
             contactRequest.Status = "Denied";
             member.ContactRequests.Remove(contactRequest);
             db.SaveChanges();
@@ -256,14 +281,15 @@ namespace SyncMe.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Profile profile = db.Profiles.Find(id);
-            if (profile == null)
+            Contact contact = db.Contacts.Where(c => c.Id == profile.Id).Select(s => s).FirstOrDefault();
+            if (contact == null)
             {
                 TempData["ErrorMessage"] = "**A problem occurred while removing contact. Please try again later.";
                 return RedirectToAction("ViewContacts");
             }
             var current = User.Identity.GetUserId();
             var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
-            member.Contacts.Remove(profile);
+            member.Contacts.Remove(contact);
             TempData["Message"] = "**SyncMe member successfully removed from your contacts.";
             return RedirectToAction("ViewContacts");
         }

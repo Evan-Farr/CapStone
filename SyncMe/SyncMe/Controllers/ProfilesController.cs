@@ -35,7 +35,13 @@ namespace SyncMe.Controllers
                 {
                     if (profile.Id != contact.Id && profile.Member.Id != member.Id)
                     {
-                        Profiles.Add(profile);
+                        //foreach(var request in profile.Member.ContactRequests)
+                        //{
+                        //    if(request.Sender.Id != member.Id)
+                        //    {
+                                Profiles.Add(profile);
+                        //    }
+                        //}
                     }
                 }
             }
@@ -92,9 +98,7 @@ namespace SyncMe.Controllers
         // GET: Profiles/Create
         public ActionResult Create()
         {
-            var current = User.Identity.GetUserId();
-            var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
-            return View(member);
+            return View();
         }
 
         // POST: Profiles/Create
@@ -108,6 +112,7 @@ namespace SyncMe.Controllers
             {
                 var current = User.Identity.GetUserId();
                 var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
+                profile.Member = member;
                 string fileName = "";
                 byte[] bytes;
                 int bytesToRead;
@@ -127,7 +132,6 @@ namespace SyncMe.Controllers
                     }
                     profile.ProfilePictureId = bytes;
                 }
-                profile.Member = member;
                 db.Profiles.Add(profile);
                 db.SaveChanges();
                 return RedirectToAction("ViewCalendar", "Members");
@@ -179,12 +183,37 @@ namespace SyncMe.Controllers
                         bytesToRead -= n;
                     }
                     profile.ProfilePictureId = bytes;
+                    var contact = db.Contacts.Where(r => r.Id == profile.Id).Select(p => p).FirstOrDefault();
+                    contact.Id = profile.Id;
+                    contact.ProfilePictureId = profile.ProfilePictureId;
+                    contact.FirstName = profile.FirstName;
+                    contact.LastName = profile.LastName;
+                    contact.Age = profile.Age;
+                    contact.State = profile.State;
+                    contact.CompanyName = profile.CompanyName;
+                    contact.SchoolName = profile.SchoolName;
+                    contact.Phone = profile.Phone;
+                    contact.Email = profile.Email;
+                    contact.Member = profile.Member;
+                    db.Entry(contact).State = EntityState.Modified;
                     db.Entry(profile).State = EntityState.Modified;
                     db.SaveChanges();
                     if (User.IsInRole("Admin")) { return RedirectToAction("Details", new { id = profile.Id }); }
                     return RedirectToAction("PrivateDetails");
                 }
-                profile.ProfilePictureId = profile.ProfilePictureId;
+                var contact2 = db.Contacts.Where(c => c.Id == profile.Id).Select(s => s).FirstOrDefault();
+                contact2.Id = profile.Id;
+                contact2.ProfilePictureId = profile.ProfilePictureId;
+                contact2.FirstName = profile.FirstName;
+                contact2.LastName = profile.LastName;
+                contact2.Age = profile.Age;
+                contact2.State = profile.State;
+                contact2.CompanyName = profile.CompanyName;
+                contact2.SchoolName = profile.SchoolName;
+                contact2.Phone = profile.Phone;
+                contact2.Email = profile.Email;
+                contact2.Member = profile.Member;
+                db.Entry(contact2).State = EntityState.Modified;
                 db.Entry(profile).State = EntityState.Modified;
                 db.SaveChanges();
                 if (User.IsInRole("Admin")) { return RedirectToAction("Details", new { id = profile.Id }); }
@@ -214,6 +243,8 @@ namespace SyncMe.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Profile profile = db.Profiles.Find(id);
+            var contact = db.Contacts.Where(c => c.Id == profile.Id).Select(s => s).FirstOrDefault();
+            db.Contacts.Remove(contact);
             db.Profiles.Remove(profile);
             db.SaveChanges();
             if (User.IsInRole("Admin")) { TempData["Message"] = "**Profile successfully deleted."; return RedirectToAction("Index"); }
