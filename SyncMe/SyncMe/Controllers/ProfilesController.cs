@@ -29,26 +29,20 @@ namespace SyncMe.Controllers
             var member = db.Members.Where(u => u.UserId.Id == user).Select(s => s).FirstOrDefault();
             var profiles = db.Profiles.ToList();
             var Profiles = new List<Profile>();
-            if (member.Contacts.Count != 0)
-            {
-                foreach (var profile in profiles)
-                {
-                    foreach (var contact in member.Contacts)
-                    {
-                        if (profile.Id != contact.Id)
-                        {
-                            //foreach(var request in profile.Member.ContactRequests)
-                            //{
-                            //    if(request.Sender.Id != member.Id)
-                            //    {
-                            Profiles.Add(profile);
-                            //    }
-                            //}
-                        }
-                    }
-                }
-            }else
-            {
+            //if (member.Contacts.Count != 0)
+            //{
+            //    foreach (var profile in profiles)
+            //    {
+            //        foreach (var contact in member.Contacts)
+            //        {
+            //            if (profile.Id != contact.Id)
+            //            {
+            //                Profiles.Add(profile);
+            //            }
+            //        }
+            //    }
+            //}else
+            //{
                 foreach(var p in profiles)
                 {
                     if(p.Member.Id != member.Id)
@@ -56,8 +50,13 @@ namespace SyncMe.Controllers
                         Profiles.Add(p);
                     }
                 }
-            }
-            return View(Profiles);
+            //}
+            var viewProfile = db.Profiles.Where(v => v.Member.Id == member.Id).Select(y => y).FirstOrDefault();
+            ViewBag.Id = viewProfile.Id;
+            ViewBag.Contacts = member.Contacts;
+            ViewBag.ContactRequests = member.ContactRequests;
+            ViewBag.AllContactRequests = db.ContactRequests.ToList();
+            return View(Profiles.OrderBy(o => o.LastName));
         }
 
         public ActionResult SearchResults(string name)
@@ -66,26 +65,30 @@ namespace SyncMe.Controllers
             var member = db.Members.Where(u => u.UserId.Id == user).Select(s => s).FirstOrDefault();
             var profiles = db.Profiles.ToList();
             var Profiles = new List<Profile>();
-            if(member.Contacts.Count != 0)
+            foreach (var profile in profiles)
             {
-                foreach (var profile in profiles)
+                if (profile.Member.Id != member.Id)
                 {
-                    foreach (var contact in member.Contacts)
+                    if(profile.FirstName.ToLower().Contains(name.ToLower()))
                     {
-                        if (profile.Id != contact.Id && name.ToLower().Contains(profile.FirstName.ToLower()) || name.ToLower().Contains(profile.LastName.ToLower()))
-                        {
-                            Profiles.Add(profile);
-                        }
+                        Profiles.Add(profile);
+                    }else if (profile.LastName.ToLower().Contains(name.ToLower()))
+                    {
+                        Profiles.Add(profile);
                     }
                 }
-                if (Profiles.Count == 0)
-                {
-                    TempData["ErrorMessage"] = "**No SyncMe matches were found for that search....";
-                    return RedirectToAction("Search");
-                }
-                return View(Profiles);
             }
-            return View(profiles);
+            if (Profiles.Count == 0)
+            {
+                TempData["ErrorMessage"] = "**No SyncMe matches were found for that search....";
+                return RedirectToAction("Search");
+            }
+            var viewProfile = db.Profiles.Where(v => v.Member.Id == member.Id).Select(y => y).FirstOrDefault();
+            ViewBag.Id = viewProfile.Id;
+            ViewBag.Contacts = member.Contacts;
+            ViewBag.ContactRequests = member.ContactRequests;
+            ViewBag.AllContactRequests = db.ContactRequests.ToList();
+            return View(Profiles.OrderBy(m => m.LastName));
         }
 
         // GET: Profiles/Details/5

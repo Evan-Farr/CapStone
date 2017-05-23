@@ -14,7 +14,7 @@
     </div>
 </div>
 <div class="col-md-12">
-    <h2>@Html.Label("Search")</h2>
+    <h2>@Html.Label("Lookup")</h2>
     @using (Html.BeginForm("SearchResults", "Profiles", FormMethod.Get))
             {
         <input type="text" name="name" />
@@ -81,7 +81,49 @@
                 @Html.DisplayFor(modelItem => item.Email)
             </td>
             <td>
-                @Html.ActionLink("Send Contact Request", "SendContactRequest", "Members", new { id = item.Id }, null)
+                @if (ViewBag.Contacts.Count != 0)
+                {
+                    foreach (var contact in ViewBag.Contacts)
+                    {
+                        if (item.Id != contact.Id)
+                        {
+                            if (item.Id == contact.Id)
+                            {
+                                <p style="color: green">Contacts</p>
+                                break;
+                            }
+                        }
+                    }
+                }
+                @if (ViewBag.ContactRequests.Count != 0)
+                {
+                    foreach (var request in ViewBag.ContactRequests)
+                    {
+                        if (item.Id == request.Sender.Id)
+                        {
+                            <p style="color: indianred">Request Pending</p>
+                            break;
+                        }
+                    }
+                }
+                @if (ViewBag.AllContactRequests.Count != 0)
+                {
+                    foreach (var Request in ViewBag.AllContactRequests)
+                    {
+                        if (item.Member.Id == Request.Receiver.Id)
+                        {
+                            if (Request.Sender.Id == ViewBag.Id)
+                            {
+                                <p style="color: indianred">Request Pending</p>
+                                break;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    @Html.ActionLink("Send Contact Request", "SendContactRequest", "Members", new { id = item.Id }, null)
+                }
             </td>
         </tr>
     }
