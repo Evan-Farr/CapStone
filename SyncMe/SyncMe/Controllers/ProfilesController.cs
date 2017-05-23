@@ -219,7 +219,7 @@ namespace SyncMe.Controllers
             return RedirectToAction("ViewCalendar", "Members");
         }
 
-        public void SelectPicture(int id)
+        public void SelectPicture(int? id)
         {
             //var current = User.Identity.GetUserId();
             //var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();

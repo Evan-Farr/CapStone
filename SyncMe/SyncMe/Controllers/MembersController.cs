@@ -191,12 +191,13 @@ namespace SyncMe.Controllers
         public ActionResult SendContactRequest(int? id)
         {
             var current = User.Identity.GetUserId();
-            var sender = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
+            var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
+            var sender = db.Profiles.Where(b => b.Member.Id == member.Id).Select(q => q).FirstOrDefault();
             var profile = db.Profiles.Where(p => p.Id == id).Select(a => a).FirstOrDefault();
             var receiver = db.Members.Where(w => w.Id == profile.Member.Id).Select(t => t).FirstOrDefault();
             ContactRequest contactRequest = new ContactRequest();
             contactRequest.Sender = sender;
-            contactRequest.Reciever = receiver;
+            contactRequest.Receiver = receiver;
             contactRequest.Status = "Pending";
             contactRequest.DateSent = DateTime.Today;
             receiver.ContactRequests.Add(contactRequest);
@@ -220,7 +221,7 @@ namespace SyncMe.Controllers
             var member = db.Members.Where(u => u.UserId.Id == user).Select(s => s).FirstOrDefault();
             var contactRequest = db.ContactRequests.Where(a => a.Id == id).Select(p => p).FirstOrDefault();
             var sender = db.Members.Where(n => n.Id == contactRequest.Sender.Id).Select(o => o).FirstOrDefault();
-            var receiver = db.Members.Where(t => t.Id == contactRequest.Reciever.Id).Select(q => q).FirstOrDefault();
+            var receiver = db.Members.Where(t => t.Id == contactRequest.Receiver.Id).Select(q => q).FirstOrDefault();
             var senderProfile = db.Profiles.Where(r => r.Member.Id == sender.Id).Select(k => k).FirstOrDefault();
             var receiverProfile = db.Profiles.Where(l => l.Member.Id == receiver.Id).Select(i => i).FirstOrDefault();
             contactRequest.Status = "Approved";

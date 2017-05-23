@@ -16,6 +16,7 @@ namespace SyncMe.Models
         public string Status { get; set; }
 
         public virtual Member Sender { get; set; }
+        public virtual Member Receiver { get; set; }
         public virtual Event Event { get; set; }
     }
 }

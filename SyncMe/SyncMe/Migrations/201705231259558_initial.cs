@@ -22,16 +22,13 @@ namespace SyncMe.Migrations
                         Id = c.Int(nullable: false, identity: true),
                         DateSent = c.DateTime(nullable: false),
                         Status = c.String(nullable: false),
-                        Member_Id = c.Int(),
-                        Reciever_Id = c.Int(),
+                        Receiver_Id = c.Int(),
                         Sender_Id = c.Int(),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Members", t => t.Member_Id)
-                .ForeignKey("dbo.Members", t => t.Reciever_Id)
-                .ForeignKey("dbo.Members", t => t.Sender_Id)
-                .Index(t => t.Member_Id)
-                .Index(t => t.Reciever_Id)
+                .ForeignKey("dbo.Members", t => t.Receiver_Id)
+                .ForeignKey("dbo.Profiles", t => t.Sender_Id)
+                .Index(t => t.Receiver_Id)
                 .Index(t => t.Sender_Id);
             
             CreateTable(
@@ -81,13 +78,19 @@ namespace SyncMe.Migrations
                         Date = c.DateTime(nullable: false),
                         Status = c.String(nullable: false),
                         Event_Id = c.Int(),
+                        Receiver_Id = c.Int(),
                         Sender_Id = c.Int(),
+                        Member_Id = c.Int(),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Events", t => t.Event_Id)
+                .ForeignKey("dbo.Members", t => t.Receiver_Id)
                 .ForeignKey("dbo.Members", t => t.Sender_Id)
+                .ForeignKey("dbo.Members", t => t.Member_Id)
                 .Index(t => t.Event_Id)
-                .Index(t => t.Sender_Id);
+                .Index(t => t.Receiver_Id)
+                .Index(t => t.Sender_Id)
+                .Index(t => t.Member_Id);
             
             CreateTable(
                 "dbo.Events",
@@ -118,15 +121,15 @@ namespace SyncMe.Migrations
                         Id = c.Int(nullable: false, identity: true),
                         DateSent = c.DateTime(nullable: false),
                         Status = c.String(nullable: false),
-                        Reciever_Id = c.Int(),
+                        Receiver_Id = c.Int(),
                         Sender_Id = c.Int(),
                         Member_Id = c.Int(),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Members", t => t.Reciever_Id)
+                .ForeignKey("dbo.Members", t => t.Receiver_Id)
                 .ForeignKey("dbo.Members", t => t.Sender_Id)
                 .ForeignKey("dbo.Members", t => t.Member_Id)
-                .Index(t => t.Reciever_Id)
+                .Index(t => t.Receiver_Id)
                 .Index(t => t.Sender_Id)
                 .Index(t => t.Member_Id);
             
@@ -203,20 +206,21 @@ namespace SyncMe.Migrations
         public override void Down()
         {
             DropForeignKey("dbo.AspNetUserRoles", "RoleId", "dbo.AspNetRoles");
-            DropForeignKey("dbo.ContactRequests", "Sender_Id", "dbo.Members");
-            DropForeignKey("dbo.ContactRequests", "Reciever_Id", "dbo.Members");
+            DropForeignKey("dbo.ContactRequests", "Sender_Id", "dbo.Profiles");
             DropForeignKey("dbo.Members", "UserId_Id", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserRoles", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserLogins", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserClaims", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.SyncRequests", "Member_Id", "dbo.Members");
             DropForeignKey("dbo.SyncRequests", "Sender_Id", "dbo.Members");
-            DropForeignKey("dbo.SyncRequests", "Reciever_Id", "dbo.Members");
+            DropForeignKey("dbo.SyncRequests", "Receiver_Id", "dbo.Members");
             DropForeignKey("dbo.Events", "Member_Id", "dbo.Members");
+            DropForeignKey("dbo.EventInvitations", "Member_Id", "dbo.Members");
             DropForeignKey("dbo.EventInvitations", "Sender_Id", "dbo.Members");
+            DropForeignKey("dbo.EventInvitations", "Receiver_Id", "dbo.Members");
             DropForeignKey("dbo.EventInvitations", "Event_Id", "dbo.Events");
             DropForeignKey("dbo.Profiles", "Member_Id", "dbo.Members");
-            DropForeignKey("dbo.ContactRequests", "Member_Id", "dbo.Members");
+            DropForeignKey("dbo.ContactRequests", "Receiver_Id", "dbo.Members");
             DropForeignKey("dbo.Members", "Calendar_Id", "dbo.Calendars");
             DropIndex("dbo.AspNetRoles", "RoleNameIndex");
             DropIndex("dbo.AspNetUserRoles", new[] { "RoleId" });
@@ -226,16 +230,17 @@ namespace SyncMe.Migrations
             DropIndex("dbo.AspNetUsers", "UserNameIndex");
             DropIndex("dbo.SyncRequests", new[] { "Member_Id" });
             DropIndex("dbo.SyncRequests", new[] { "Sender_Id" });
-            DropIndex("dbo.SyncRequests", new[] { "Reciever_Id" });
+            DropIndex("dbo.SyncRequests", new[] { "Receiver_Id" });
             DropIndex("dbo.Events", new[] { "Member_Id" });
+            DropIndex("dbo.EventInvitations", new[] { "Member_Id" });
             DropIndex("dbo.EventInvitations", new[] { "Sender_Id" });
+            DropIndex("dbo.EventInvitations", new[] { "Receiver_Id" });
             DropIndex("dbo.EventInvitations", new[] { "Event_Id" });
             DropIndex("dbo.Profiles", new[] { "Member_Id" });
             DropIndex("dbo.Members", new[] { "UserId_Id" });
             DropIndex("dbo.Members", new[] { "Calendar_Id" });
             DropIndex("dbo.ContactRequests", new[] { "Sender_Id" });
-            DropIndex("dbo.ContactRequests", new[] { "Reciever_Id" });
-            DropIndex("dbo.ContactRequests", new[] { "Member_Id" });
+            DropIndex("dbo.ContactRequests", new[] { "Receiver_Id" });
             DropTable("dbo.AspNetRoles");
             DropTable("dbo.AspNetUserRoles");
             DropTable("dbo.AspNetUserLogins");

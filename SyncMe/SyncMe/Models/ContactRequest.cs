@@ -15,7 +15,7 @@ namespace SyncMe.Models
         [Required]
         public string Status { get; set; }
 
-        public virtual Member Sender { get; set; }
-        public virtual Member Reciever { get; set; }
+        public virtual Profile Sender { get; set; }
+        public virtual Member Receiver { get; set; }
     }
 }
