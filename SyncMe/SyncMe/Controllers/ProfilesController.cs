@@ -52,6 +52,7 @@ namespace SyncMe.Controllers
                 }
             //}
             var viewProfile = db.Profiles.Where(v => v.Member.Id == member.Id).Select(y => y).FirstOrDefault();
+            ViewBag.counter = 0;
             ViewBag.Id = viewProfile.Id;
             ViewBag.Contacts = member.Contacts;
             ViewBag.ContactRequests = member.ContactRequests;
@@ -84,6 +85,7 @@ namespace SyncMe.Controllers
                 return RedirectToAction("Search");
             }
             var viewProfile = db.Profiles.Where(v => v.Member.Id == member.Id).Select(y => y).FirstOrDefault();
+            ViewBag.counter = 0;
             ViewBag.Id = viewProfile.Id;
             ViewBag.Contacts = member.Contacts;
             ViewBag.ContactRequests = member.ContactRequests;

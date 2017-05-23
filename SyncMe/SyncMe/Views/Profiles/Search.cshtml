@@ -81,6 +81,9 @@
                 @Html.DisplayFor(modelItem => item.Email)
             </td>
             <td>
+                @{
+                    ViewBag.counter = 0;
+                }
                 @if (ViewBag.Contacts.Count != 0)
                 {
                     foreach (var contact in ViewBag.Contacts)
@@ -90,23 +93,25 @@
                             if (item.Id == contact.Id)
                             {
                                 <p style="color: green">Contacts</p>
+                                 ViewBag.counter = 1;
                                 break;
                             }
                         }
                     }
                 }
-                @if (ViewBag.ContactRequests.Count != 0)
+                @if (ViewBag.ContactRequests.Count != 0 && ViewBag.counter == 0)
                 {
                     foreach (var request in ViewBag.ContactRequests)
                     {
                         if (item.Id == request.Sender.Id)
                         {
                             <p style="color: indianred">Request Pending</p>
+                            ViewBag.counter = 1;
                             break;
                         }
                     }
                 }
-                @if (ViewBag.AllContactRequests.Count != 0)
+                @if (ViewBag.AllContactRequests.Count != 0 && ViewBag.counter == 0)
                 {
                     foreach (var Request in ViewBag.AllContactRequests)
                     {
@@ -115,12 +120,13 @@
                             if (Request.Sender.Id == ViewBag.Id)
                             {
                                 <p style="color: indianred">Request Pending</p>
+                                ViewBag.counter = 1;
                                 break;
                             }
                         }
                     }
                 }
-                else
+                @if (ViewBag.counter == 0)
                 {
                     @Html.ActionLink("Send Contact Request", "SendContactRequest", "Members", new { id = item.Id }, null)
                 }
