@@ -252,6 +252,8 @@ namespace SyncMe.Controllers
             contact2.Phone = receiverProfile.Phone;
             contact2.Email = receiverProfile.Email;
             contact2.Member = receiverProfile.Member;
+            db.Contacts.Add(contact);
+            db.Contacts.Add(contact2);
             member.Contacts.Add(contact);
             sender.Contacts.Add(contact2);
             member.ContactRequests.Remove(contactRequest);
@@ -280,8 +282,7 @@ namespace SyncMe.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Profile profile = db.Profiles.Find(id);
-            Contact contact = db.Contacts.Where(c => c.Id == profile.Id).Select(s => s).FirstOrDefault();
+            Contact contact = db.Contacts.Find(id);
             if (contact == null)
             {
                 TempData["ErrorMessage"] = "**A problem occurred while removing contact. Please try again later.";
@@ -289,7 +290,11 @@ namespace SyncMe.Controllers
             }
             var current = User.Identity.GetUserId();
             var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
+            var member2 = db.Members.Where(t => t.Id == contact.Member.Id).Select(o => o).FirstOrDefault();
+            var contact2 = db.Contacts.Where(a => a.Member.Id == member.Id).Select(y => y).FirstOrDefault();
             member.Contacts.Remove(contact);
+            member2.Contacts.Remove(contact2);
+            db.SaveChanges();
             TempData["Message"] = "**SyncMe member successfully removed from your contacts.";
             return RedirectToAction("ViewContacts");
         }

@@ -54,22 +54,26 @@ namespace SyncMe.Controllers
             var member = db.Members.Where(u => u.UserId.Id == user).Select(s => s).FirstOrDefault();
             var profiles = db.Profiles.ToList();
             var Profiles = new List<Profile>();
-            foreach (var profile in profiles)
+            if(member.Contacts.Count != 0)
             {
-                foreach (var contact in member.Contacts)
+                foreach (var profile in profiles)
                 {
-                    if (profile.Id != contact.Id && name.ToLower().Contains(profile.FirstName.ToLower()) || name.ToLower().Contains(profile.LastName.ToLower()))
+                    foreach (var contact in member.Contacts)
                     {
-                        Profiles.Add(profile);
+                        if (profile.Id != contact.Id && name.ToLower().Contains(profile.FirstName.ToLower()) || name.ToLower().Contains(profile.LastName.ToLower()))
+                        {
+                            Profiles.Add(profile);
+                        }
                     }
                 }
+                if (Profiles.Count == 0)
+                {
+                    TempData["ErrorMessage"] = "**No SyncMe matches were found for that search....";
+                    return RedirectToAction("Search");
+                }
+                return View(Profiles);
             }
-            if(Profiles.Count == 0)
-            {
-                TempData["ErrorMessage"] = "**No SyncMe matches were found for that search....";
-                return RedirectToAction("Search");
-            }
-            return View(Profiles);
+            return View(profiles);
         }
 
         // GET: Profiles/Details/5
@@ -244,6 +248,17 @@ namespace SyncMe.Controllers
         {
             Profile profile = db.Profiles.Find(id);
             var contact = db.Contacts.Where(c => c.Id == profile.Id).Select(s => s).FirstOrDefault();
+            foreach(var member in db.Members.ToList())
+            {
+                foreach(var contact2 in member.Contacts)
+                {
+                    if(contact2.Id == contact.Id)
+                    {
+                        member.Contacts.Remove(contact2);
+                        break;
+                    }
+                }
+            }
             db.Contacts.Remove(contact);
             db.Profiles.Remove(profile);
             db.SaveChanges();
