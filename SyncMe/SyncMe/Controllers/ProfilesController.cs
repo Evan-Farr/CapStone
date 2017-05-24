@@ -29,28 +29,13 @@ namespace SyncMe.Controllers
             var member = db.Members.Where(u => u.UserId.Id == user).Select(s => s).FirstOrDefault();
             var profiles = db.Profiles.ToList();
             var Profiles = new List<Profile>();
-            //if (member.Contacts.Count != 0)
-            //{
-            //    foreach (var profile in profiles)
-            //    {
-            //        foreach (var contact in member.Contacts)
-            //        {
-            //            if (profile.Id != contact.Id)
-            //            {
-            //                Profiles.Add(profile);
-            //            }
-            //        }
-            //    }
-            //}else
-            //{
-                foreach(var p in profiles)
+            foreach(var p in profiles)
+            {
+                if(p.Member.Id != member.Id)
                 {
-                    if(p.Member.Id != member.Id)
-                    {
-                        Profiles.Add(p);
-                    }
+                    Profiles.Add(p);
                 }
-            //}
+            }
             var viewProfile = db.Profiles.Where(v => v.Member.Id == member.Id).Select(y => y).FirstOrDefault();
             ViewBag.counter = 0;
             ViewBag.Id = viewProfile.Id;
@@ -87,8 +72,8 @@ namespace SyncMe.Controllers
             var viewProfile = db.Profiles.Where(v => v.Member.Id == member.Id).Select(y => y).FirstOrDefault();
             ViewBag.counter = 0;
             ViewBag.Id = viewProfile.Id;
-            ViewBag.Contacts = member.Contacts;
-            ViewBag.ContactRequests = member.ContactRequests;
+            ViewBag.Contacts = member.Contacts.ToList();
+            ViewBag.ContactRequests = member.ContactRequests.ToList();
             ViewBag.AllContactRequests = db.ContactRequests.ToList();
             return View(Profiles.OrderBy(m => m.LastName));
         }
@@ -204,8 +189,8 @@ namespace SyncMe.Controllers
                         bytesToRead -= n;
                     }
                     profile.ProfilePictureId = bytes;
-                    var contact = db.Contacts.Where(r => r.Id == profile.Id).Select(p => p).FirstOrDefault();
-                    contact.Id = profile.Id;
+                    var contact = db.Contacts.Where(r => r.ContactId == profile.Id).Select(p => p).FirstOrDefault();
+                    contact.ContactId = profile.Id;
                     contact.ProfilePictureId = profile.ProfilePictureId;
                     contact.FirstName = profile.FirstName;
                     contact.LastName = profile.LastName;
@@ -221,8 +206,8 @@ namespace SyncMe.Controllers
                     if (User.IsInRole("Admin")) { return RedirectToAction("Details", new { id = profile.Id }); }
                     return RedirectToAction("PrivateDetails");
                 }
-                var contact2 = db.Contacts.Where(c => c.Id == profile.Id).Select(s => s).FirstOrDefault();
-                contact2.Id = profile.Id;
+                var contact2 = db.Contacts.Where(c => c.ContactId == profile.Id).Select(s => s).FirstOrDefault();
+                contact2.ContactId = profile.Id;
                 contact2.ProfilePictureId = profile.ProfilePictureId;
                 contact2.FirstName = profile.FirstName;
                 contact2.LastName = profile.LastName;
@@ -262,12 +247,12 @@ namespace SyncMe.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Profile profile = db.Profiles.Find(id);
-            var contact = db.Contacts.Where(c => c.Id == profile.Id).Select(s => s).FirstOrDefault();
+            var contact = db.Contacts.Where(c => c.ContactId == profile.Id).Select(s => s).FirstOrDefault();
             foreach(var member in db.Members.ToList())
             {
                 foreach(var contact2 in member.Contacts)
                 {
-                    if(contact2.Id == contact.Id)
+                    if(contact2.ContactId == contact.ContactId)
                     {
                         member.Contacts.Remove(contact2);
                         break;
@@ -277,7 +262,7 @@ namespace SyncMe.Controllers
             db.Contacts.Remove(contact);
             db.Profiles.Remove(profile);
             db.SaveChanges();
-            if (User.IsInRole("Admin")) { TempData["Message"] = "**Profile successfully deleted."; return RedirectToAction("Index"); }
+            if (User.IsInRole("Admin")) { TempData["Message"] = "**Profile successfully deleted."; return RedirectToAction("Index", "Users"); }
             TempData["Message"] = "**Your Profile has successfully been deleted.";
             return RedirectToAction("ViewCalendar", "Members");
         }

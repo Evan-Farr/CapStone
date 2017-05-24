@@ -59,6 +59,7 @@ namespace SyncMe.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
+                        ContactId = c.Int(),
                         ProfilePictureId = c.Binary(),
                         FirstName = c.String(),
                         LastName = c.String(),

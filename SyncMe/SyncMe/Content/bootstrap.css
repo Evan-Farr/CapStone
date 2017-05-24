@@ -3106,8 +3106,8 @@ fieldset[disabled] .btn-default:focus,
 .btn-default.disabled.focus,
 .btn-default[disabled].focus,
 fieldset[disabled] .btn-default.focus {
-  background-color: #fff;
-  border-color: #ccc;
+  background-color: #007575;
+  border-color: #43B1B1;
 }
 .btn-default .badge {
   color: #fff;

@@ -52,6 +52,12 @@ textarea {
     color: #ffffff;
 }
 
+.btn-default:active {
+    background-color: #43B1B1;
+    border-color: #007575;
+    color: #ffffff;
+}
+
 .btn-primary {
     background-color: #007575;
     border-color: #43B1B1;
@@ -60,6 +66,16 @@ textarea {
 }
 
 .btn-primary:hover {
+    background-color: #43B1B1;
+    border-color: #007575;
+}
+
+.btn-primary:active {
+    background-color: #43B1B1;
+    border-color: #007575;
+}
+
+.btn-primary::selection {
     background-color: #43B1B1;
     border-color: #007575;
 }

@@ -10,6 +10,7 @@ namespace SyncMe.Models
     {
         [Key]
         public int Id { get; set; }
+        public int? ContactId { get; set; }
         public byte[] ProfilePictureId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
