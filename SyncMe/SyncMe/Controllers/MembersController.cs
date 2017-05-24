@@ -253,6 +253,7 @@ namespace SyncMe.Controllers
             member.Contacts.Add(contact);
             sender.Contacts.Add(contact2);
             member.ContactRequests.Remove(contactRequest);
+            db.ContactRequests.Remove(contactRequest);
             db.SaveChanges();
             TempData["Message"] = "**You have a new contact!";
             return RedirectToAction("ViewContactRequests");
@@ -267,6 +268,7 @@ namespace SyncMe.Controllers
             var contactRequest = db.ContactRequests.Where(c => c.Sender.Id == sender.Id && c.Receiver.Id == member.Id).Select(a => a).FirstOrDefault();
             contactRequest.Status = "Denied";
             member.ContactRequests.Remove(contactRequest);
+            db.ContactRequests.Remove(contactRequest);
             db.SaveChanges();
             TempData["Message"] = "**Request was removed from your pending contact requests.";
             return RedirectToAction("ViewContactRequests");

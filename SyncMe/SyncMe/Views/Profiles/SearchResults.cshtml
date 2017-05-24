@@ -86,14 +86,11 @@
                 {
                     foreach (var contact in ViewBag.Contacts)
                     {
-                        if (item.Id != contact.Id)
+                        if (item.Id == contact.Id)
                         {
-                            if (item.Id == contact.Id)
-                            {
-                                <p style="color: green">Contacts</p>
-                                ViewBag.counter = 1;
-                                break;
-                            }
+                            <p style="color: green">Contacts</p>
+                            ViewBag.counter = 1;
+                            break;
                         }
                     }
                 }
