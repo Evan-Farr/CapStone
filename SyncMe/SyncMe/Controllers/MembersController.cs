@@ -328,7 +328,7 @@ namespace SyncMe.Controllers
             return View(invites.OrderBy(t => t.Date));
         }
 
-        public ActionResult AcceptEventIvitation(Event eventSent, int? id)
+        public ActionResult AcceptEventIvitation(int? id)
         {
             var user = User.Identity.GetUserId();
             var member = db.Members.Where(u => u.UserId.Id == user).Select(s => s).FirstOrDefault();
