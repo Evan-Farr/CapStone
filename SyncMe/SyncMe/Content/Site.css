@@ -23,6 +23,115 @@ textarea {
     max-width: 280px;
 }
 
+.icon-bar {
+    background-color: #fff;
+}
+
 .col-md-1 {
     padding-top: 49px;
+    align-content: center;
+    text-align: center;
+    align-items: center;
+}
+
+.navbar {
+    background-color: #007575;
+    border-color: #43B1B1;
+}
+
+.btn-primary {
+    background-color: #007575;
+    border-color: #43B1B1;
+    opacity: 1;
+    min-width: 150px;
+}
+
+.btn-primary:hover {
+    background-color: #43B1B1;
+    border-color: #007575;
+}
+
+/*.navbar-brand {
+    background-image: url(Images/logo.png);
+    background-size: 100px, 100px;
+    background-repeat: no-repeat;
+    height: 50px;
+    width: 100px;
+}*/
+
+.navbar-inverse .navbar-brand {
+    color: #43B1B1;
+}
+
+.navbar-nav li a {
+    color: #ffffff;
+}
+
+.navbar-nav li a:hover {
+    background-color: #007575;
+    color: #43B1B1;
+}
+
+.navbar-inverse .navbar-nav > li > a {
+    color: #ffffff;
+}
+
+.navbar-inverse .navbar-nav > li > a:hover {
+    color: #43B1B1;
+}
+
+a {
+    color: #007575;
+}
+
+a:hover {
+    color: #43B1B1;
+}
+
+.navbar-inverse .navbar-toggle {
+    color: #43B1B1;
+}
+
+.homepage-jumbotron-bg {
+    /*background-image: url(Images/background2.png);*/
+    background-size: cover;
+    background-position-y: 0px;
+    padding-top: 70px;
+}
+
+.homepage-jumbotron-bg .jumbotron {
+    color: #fff;
+    background: rgba(0,0,0,0.5);
+    height: 700px;
+    text-align: center;
+}
+
+@media screen and (min-width: 768px) {
+    .homepage-jumbotron-bg {
+        background-position-y: -124px;
+    }
+}
+
+.jumbotron-home-text {
+    padding-top: 180px;
+}
+
+.fc-left {
+    color: #007575;
+}
+
+.fc-day-header {
+    color: #007575;
+}
+
+.fc-day-number {
+    color: #007575;
+}
+
+.fc-unthemed td.fc-today {
+    background-color: rgb(67, 177, 177);
+}
+
+.fc-scroller {
+    color: #007575;
 }
