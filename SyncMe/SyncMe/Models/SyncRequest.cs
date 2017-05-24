@@ -11,11 +11,11 @@ namespace SyncMe.Models
         [Key]
         public int Id { get; set; }
         [Required, DataType(DataType.Date)]
-        public DateTime DateSent { get; set; }
+        public DateTime Date { get; set; }
         [Required]
         public string Status { get; set; }
 
-        public virtual Member Sender { get; set; }
+        public virtual Profile Sender { get; set; }
         public virtual Member Receiver { get; set; }
     }
 }

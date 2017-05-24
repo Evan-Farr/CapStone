@@ -300,5 +300,24 @@ namespace SyncMe.Controllers
             TempData["Message"] = "**SyncMe member successfully removed from your contacts.";
             return RedirectToAction("ViewContacts");
         }
+
+        public ActionResult SendEventInvite(int? id)
+        {
+            var current = User.Identity.GetUserId();
+            var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
+            var sender = db.Profiles.Where(b => b.Member.Id == member.Id).Select(q => q).FirstOrDefault();
+            var receiverProfile = db.Profiles.Where(p => p.Id == id).Select(a => a).FirstOrDefault();
+            var receiver = db.Members.Where(w => w.Id == receiverProfile.Member.Id).Select(t => t).FirstOrDefault();
+            EventInvitation eventInvitation = new EventInvitation();
+            eventInvitation.Sender = sender;
+            eventInvitation.Receiver = receiver;
+            eventInvitation.Status = "Pending";
+            eventInvitation.Date = DateTime.Today;
+            receiver.EventInvitations.Add(eventInvitation);
+            db.EventInvitations.Add(eventInvitation);
+            db.SaveChanges();
+            TempData["Message"] = "**Contact request successfully sent!";
+            return RedirectToAction("Search", "Profiles");
+        }
     }
 }

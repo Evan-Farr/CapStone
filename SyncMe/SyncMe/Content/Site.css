@@ -7,6 +7,7 @@
 .body-content {
     padding-left: 15px;
     padding-right: 15px;
+    color: #007575;
 }
 
 /* Override the default bootstrap behavior where horizontal description lists 
@@ -37,6 +38,18 @@ textarea {
 .navbar {
     background-color: #007575;
     border-color: #43B1B1;
+}
+
+.btn-default {
+    background-color: #007575;
+    border-color: #43B1B1;
+    color: #ffffff;
+}
+
+.btn-default:hover {
+    background-color: #43B1B1;
+    border-color: #007575;
+    color: #ffffff;
 }
 
 .btn-primary {
@@ -134,4 +147,9 @@ a:hover {
 
 .fc-scroller {
     color: #007575;
+}
+
+.fc-content {
+    background-color: #007575;
+    color: #ffffff;
 }
