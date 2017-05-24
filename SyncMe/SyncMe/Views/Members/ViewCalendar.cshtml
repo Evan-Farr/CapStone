@@ -31,7 +31,7 @@
             <br /><br>
             @Html.ActionLink("Sync Requests", "ViewSyncRequests", "SyncRequests", null, new { @class = "btn btn-primary btn-md" })
             <br /><br>
-            @Html.ActionLink("Event Invitions", "ViewEventInvitations", "Events", null, new { @class = "btn btn-primary btn-md" })
+            @Html.ActionLink("Event Invitations", "ViewEventInvitations", "Members", null, new { @class = "btn btn-primary btn-md" })
             <br /><br>
         </center>
     </div>
@@ -46,13 +46,10 @@
                     <h5 id="modalEnd" class="modal-body"></h5>
                     <h5 id="modalDetails" class="modal-body"></h5>
                     <h5 id="modalPrivate" class="modal-body"></h5>
+                    <div id="modal-links">
+
+                    </div>
                     <div class="modal-footer">
-                        @Html.ActionLink("Send Invitation", "SendEventInvitation", "Members", new { id = 1 }, new { @class = "btn btn-default btn-md" })
-                        @Html.ActionLink("Get Directions", "GetDirections", "Events", @*new { id =  },*@ new { @class = "btn btn-default btn-md" })
-                        @Html.ActionLink("Weather Forecast", "GetWeather", "Events", @*new { id =  },*@ new { @class = "btn btn-default btn-md" })
-                        @Html.ActionLink("Edit", "Edit", "Events", @*new { id =  },*@ new { @class = "btn btn-default btn-md" })
-                        @Html.ActionLink("Delete", "Delete", "Events", @*new { id =  },*@ new { @class = "btn btn-default btn-md" })
-                        <br /><br />
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
                 </div>
@@ -98,6 +95,7 @@
                 $('#modalEnd').html("END: " + event.end._d.toLocaleDateString() + " " + event.end._d.toLocaleTimeString());
                 $('#modalDetails').html("DETAILS: " + event.details);
                 $('#modalPrivate').html("PRIVATE: " + event.isPrivate);
+                $('#modal-links').html("<a class='btn btn-default btn-md' href='/Members/ChooseContacts/"+event.Id+"'>Send Invitation</a><a class='btn btn-default btn-md' href='/Events/GetDirections/event.Id'>Get Directions</a><a class='btn btn-default btn-md' href='/Events/GetWeather/event.Id'>Weather Forecast</a><a class='btn btn-default btn-md' href='/Events/Edit/event.Id'>Edit</a><a class='btn btn-default btn-md' href='/Events/Delete/event.Id'>Delete</a>");
                 $('#fullCalModal').modal();
             }
         });

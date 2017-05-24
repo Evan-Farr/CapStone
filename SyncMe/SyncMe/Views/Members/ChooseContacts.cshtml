@@ -51,7 +51,7 @@
     {
         <tr>
             <td>
-                <img src="@Url.Action("SelectPictureContact", "Profiles", new { id = item.Id })" alt="" />
+                <img src="@Url.Action("SelectPicture", "Profiles", new { id = item.Id })" alt="" />
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.FirstName)
@@ -79,7 +79,7 @@
                 @{ 
                     ViewBag.counter = 0;
                 }
-                @if (ViewBag.AllEventInvitations != 0)
+                @if (ViewBag.AllEventInvitations != null || ViewBag.AllEventIvitations != 0)
                 {
                     foreach (var invite in ViewBag.AllEventInvitations)
                     {
@@ -87,7 +87,7 @@
                         {
                             if (invite.Sender.Id == ViewBag.SenderId)
                             {
-                                <p style="color: green">Invite Sent!</p>
+                                <p style="color: indianred">Invite Sent</p>
                                 ViewBag.counter = 1;
                                 break;
                             }
