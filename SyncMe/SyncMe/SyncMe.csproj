@@ -804,6 +804,7 @@
     <Content Include="Views\Profiles\Search.cshtml" />
     <Content Include="Views\Profiles\SearchResults.cshtml" />
     <Content Include="Views\Members\ViewEventInvitations.cshtml" />
+    <Content Include="Views\Members\ChooseContacts.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

@@ -1,0 +1,108 @@
+﻿@model IEnumerable<SyncMe.Models.Profile>
+
+@{
+    ViewBag.Title = "ChooseContacts";
+}
+
+<h2>Invite Contacts</h2>
+
+<hr />
+<div class="col-md-12">
+    <div class="text-success">
+        @TempData["Message"]
+    </div>
+    <div class="text-warning">
+        @TempData["ErrorMessage"]
+    </div>
+</div>
+@Html.ActionLink("Done", "ViewCalendar", null, new { @class = "btn btn-primary btn-md" })
+<hr />
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayName("Profile Picture")
+        </th>
+        <th>
+            @Html.DisplayName("Name")
+        </th>
+        <th>
+            @Html.DisplayName("Age")
+        </th>
+        <th>
+            @Html.DisplayName("State")
+        </th>
+        <th>
+            @Html.DisplayName("Company")
+        </th>
+        <th>
+            @Html.DisplayName("Education")
+        </th>
+        <th>
+            @Html.DisplayName("Phone #")
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                <img src="@Url.Action("SelectPictureContact", "Profiles", new { id = item.Id })" alt="" />
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Age)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.State)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CompanyName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SchoolName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Phone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @{ 
+                    ViewBag.counter = 0;
+                }
+                @if (ViewBag.AllEventInvitations != 0)
+                {
+                    foreach (var invite in ViewBag.AllEventInvitations)
+                    {
+                        if (invite.Receiver.Id == item.Member.Id)
+                        {
+                            if (invite.Sender.Id == ViewBag.SenderId)
+                            {
+                                <p style="color: green">Invite Sent!</p>
+                                ViewBag.counter = 1;
+                                break;
+                            }
+                        }
+                    }
+                }
+                @if (ViewBag.counter == 0)
+                {
+                    @Html.ActionLink("Invite", "SendEventInvitation", new { eventId = ViewBag.EventId, id = item.Id }, null)
+                }
+            </td>
+        </tr>
+    }
+</table>
+<p>
+    @Html.ActionLink("Done", "ViewCalendar")
+</p>
+

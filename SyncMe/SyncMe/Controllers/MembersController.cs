@@ -296,24 +296,52 @@ namespace SyncMe.Controllers
             return RedirectToAction("ViewContacts");
         }
 
-        public ActionResult SendEventInvitation(Event eventSent, int? id)
+        public ActionResult SendEventInvitation(int? eventId, int? id)
         {
             var current = User.Identity.GetUserId();
             var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
             var sender = db.Profiles.Where(b => b.Member.Id == member.Id).Select(q => q).FirstOrDefault();
             var receiverProfile = db.Profiles.Where(p => p.Id == id).Select(a => a).FirstOrDefault();
             var receiver = db.Members.Where(w => w.Id == receiverProfile.Member.Id).Select(t => t).FirstOrDefault();
+            var @event = db.Events.Where(c => c.Id == eventId).Select(i => i).FirstOrDefault();
             EventInvitation eventInvitation = new EventInvitation();
             eventInvitation.Sender = sender;
             eventInvitation.Receiver = receiver;
             eventInvitation.Status = "Pending";
             eventInvitation.Date = DateTime.Today;
-            eventInvitation.Event = eventSent;
+            eventInvitation.Event = @event;
             receiver.EventInvitations.Add(eventInvitation);
             db.EventInvitations.Add(eventInvitation);
             db.SaveChanges();
             TempData["Message"] = "**Event invitation successfully sent!";
-            return RedirectToAction("ViewCalendar");
+            return RedirectToAction("ChooseContacts");
+        }
+
+        public ActionResult ChooseContacts(int? eventId)
+        {
+            var current = User.Identity.GetUserId();
+            var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
+            if(member.Contacts.Count == 0)
+            {
+                TempData["ErrorMessage"] = "**You currently don't have any contacts to send this event to...";
+                return RedirectToAction("ViewCalendar");
+            }
+            var profiles = new List<Profile>();
+            foreach(var contact in member.Contacts)
+            {
+                var profile = db.Profiles.Where(p => p.Id == contact.ContactId).Select(a => a).FirstOrDefault();
+                profiles.Add(profile);
+            }
+            if(db.EventInvitations.ToList().Count != 0)
+            {
+                var allEventInvitations = db.EventInvitations.ToList();
+                ViewBag.AllEventInvitations = allEventInvitations;
+            }
+            var sender = db.Profiles.Where(q => q.Member.Id == member.Id).Select(u => u).FirstOrDefault();
+            ViewBag.SenderId = sender.Id;
+            ViewBag.EventId = eventId;
+            ViewBag.counter = 0;
+            return View(profiles.OrderBy(o => o.LastName));
         }
 
         public ActionResult ViewEventInvitations()
@@ -333,9 +361,9 @@ namespace SyncMe.Controllers
             var user = User.Identity.GetUserId();
             var member = db.Members.Where(u => u.UserId.Id == user).Select(s => s).FirstOrDefault();
             var eventInvitation = db.EventInvitations.Where(n => n.Id == id).Select(o => o).FirstOrDefault();
-            var event1 = db.Events.Where(e => e.Id == eventInvitation.Event.Id).Select(y => y).FirstOrDefault();
+            var @event = db.Events.Where(e => e.Id == eventInvitation.Event.Id).Select(y => y).FirstOrDefault();
             eventInvitation.Status = "Approved";
-            member.Events.Add(event1);
+            member.Events.Add(@event);
             member.EventInvitations.Remove(eventInvitation);
             db.EventInvitations.Remove(eventInvitation);
             db.SaveChanges();
