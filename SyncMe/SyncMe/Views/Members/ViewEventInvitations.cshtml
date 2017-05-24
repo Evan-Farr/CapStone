@@ -1,0 +1,103 @@
+﻿@model IEnumerable<SyncMe.Models.EventInvitation>
+
+@{
+    ViewBag.Title = "ViewEventInvitations";
+}
+
+<h2>Pending Event Invitations</h2>
+
+<hr />
+<div class="col-md-12">
+    <div class="text-success">
+        @TempData["Message"]
+    </div>
+    <div class="text-warning">
+        @TempData["ErrorMessage"]
+    </div>
+</div>
+<hr />
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayName("Date Recieved")
+        </th>
+        <th>
+            @Html.DisplayName("Contact")
+        </th>
+        <th>
+            @Html.DisplayName("Title")
+        </th>
+        <th>
+            @Html.DisplayName("Street Address")
+        </th>
+        <th>
+            @Html.DisplayName("City")
+        </th>
+        <th>
+            @Html.DisplayName("State")
+        </th>
+        <th>
+            @Html.DisplayName("Start")
+        </th>
+        <th>
+            @Html.DisplayName("End")
+        </th>
+        <th>
+            @Html.DisplayName("Details")
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sender.FirstName)
+                @Html.DisplayFor(modelItem => item.Sender.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Event.title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Event.streetAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Event.city)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Event.state)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Event.start)
+                @Html.DisplayFor(modelItem => item.Event.startTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Event.end)
+                @Html.DisplayFor(modelItem => item.Event.endTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Event.details)
+            </td>
+            <td>
+                @if (item.Event.end < DateTime.Today)
+                {
+                    <p style="color: indianred">Expired</p>
+                    <br />
+                    @Html.ActionLink("Remove", "DenyContactRequest", new { id = item.Id })
+                }
+                else
+                {
+                    @Html.ActionLink("Accept", "AcceptEventInvitation", new { id = item.Id })
+                    <br />
+                    @Html.ActionLink("Deny", "DenyEventInvitation", new { id = item.Id })
+                }
+            </td>
+        </tr>
+    }
+</table>
+<p>
+    @Html.ActionLink("Back", "ViewCalendar", "Members")
+</p>

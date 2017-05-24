@@ -296,7 +296,7 @@ namespace SyncMe.Controllers
             return RedirectToAction("ViewContacts");
         }
 
-        public ActionResult SendEventInvite(int? id)
+        public ActionResult SendEventInvitation(Event eventSent, int? id)
         {
             var current = User.Identity.GetUserId();
             var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
@@ -308,11 +308,52 @@ namespace SyncMe.Controllers
             eventInvitation.Receiver = receiver;
             eventInvitation.Status = "Pending";
             eventInvitation.Date = DateTime.Today;
+            eventInvitation.Event = eventSent;
             receiver.EventInvitations.Add(eventInvitation);
             db.EventInvitations.Add(eventInvitation);
             db.SaveChanges();
-            TempData["Message"] = "**Contact request successfully sent!";
-            return RedirectToAction("Search", "Profiles");
+            TempData["Message"] = "**Event invitation successfully sent!";
+            return RedirectToAction("ViewCalendar");
+        }
+
+        public ActionResult ViewEventInvitations()
+        {
+            var user = User.Identity.GetUserId();
+            var member = db.Members.Where(u => u.UserId.Id == user).Select(s => s).FirstOrDefault();
+            var invites = new List<EventInvitation>();
+            foreach (var invite in member.EventInvitations)
+            {
+                invites.Add(invite);
+            }
+            return View(invites.OrderBy(t => t.Date));
+        }
+
+        public ActionResult AcceptEventIvitation(Event eventSent, int? id)
+        {
+            var user = User.Identity.GetUserId();
+            var member = db.Members.Where(u => u.UserId.Id == user).Select(s => s).FirstOrDefault();
+            var eventInvitation = db.EventInvitations.Where(n => n.Id == id).Select(o => o).FirstOrDefault();
+            var event1 = db.Events.Where(e => e.Id == eventInvitation.Event.Id).Select(y => y).FirstOrDefault();
+            eventInvitation.Status = "Approved";
+            member.Events.Add(event1);
+            member.EventInvitations.Remove(eventInvitation);
+            db.EventInvitations.Remove(eventInvitation);
+            db.SaveChanges();
+            TempData["Message"] = "**You have a new event!";
+            return RedirectToAction("ViewEventInvitations");
+        }
+
+        public ActionResult DenyEventInvitation(int? id)
+        {
+            var user = User.Identity.GetUserId();
+            var member = db.Members.Where(u => u.UserId.Id == user).Select(s => s).FirstOrDefault();
+            var eventInvitation = db.EventInvitations.Where(n => n.Id == id).Select(o => o).FirstOrDefault();
+            eventInvitation.Status = "Denied";
+            member.EventInvitations.Remove(eventInvitation);
+            db.EventInvitations.Remove(eventInvitation);
+            db.SaveChanges();
+            TempData["Message"] = "**Invitation was removed from your pending event invitations.";
+            return RedirectToAction("ViewEventInvitations");
         }
     }
 }

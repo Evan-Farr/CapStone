@@ -803,6 +803,7 @@
     <Content Include="Views\Members\ContactRequest.cshtml" />
     <Content Include="Views\Profiles\Search.cshtml" />
     <Content Include="Views\Profiles\SearchResults.cshtml" />
+    <Content Include="Views\Members\ViewEventInvitations.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
