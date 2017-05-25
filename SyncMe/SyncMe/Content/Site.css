@@ -205,10 +205,10 @@ a:hover {
     color: #007575;
 }
 
-.fc-content {
+/*.fc-content {
     background-color: #007575;
     color: #ffffff;
-}
+}*/
 
 .green-action-link {
     color: green;
@@ -236,6 +236,6 @@ a:hover {
   color: #ffffff;
   line-height: 110px;
   text-align: center;
-  background: orange;
+  background: purple;
   margin-left: 20px;
 }

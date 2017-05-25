@@ -77,23 +77,35 @@
             //googleCalendarApiKey: 'API-Key',
             droppable: true,
             slotDuration: '00:30:00',
-            scrollTime: '12:00:00 AM',
+            scrollTime: '06:00:00',
             slotEventOverLap: true,
             disableResizing: false,
             eventOrder: '-start',
-            events: @Html.Raw(Json.Encode(Model.ListA)),
-            eventClick: function(event, jsEvent, view){
-                $('#modalTitle').html(event.title);
-                $('#modalStart').html("START: " + event.start._d.toLocaleDateString() + " " + event.start._d.toLocaleTimeString());
-                $('#modalEnd').html("END: " + event.end._d.toLocaleDateString() + " " + event.end._d.toLocaleTimeString());
-                $('#modalDetails').html("DETAILS: " + event.details);
-                $('#modalPrivate').html("PRIVATE: " + event.isPrivate);
-                $('#modal-links').html("<a class='btn btn-default2 btn-md' href='/Members/ChooseContacts/"+event.Id+"'>Send Invitation</a><a class='btn btn-default1 btn-md' href='/Events/GetDirections/"+event.Id+"'>Get Directions</a><a class='btn btn-default1 btn-md' href='/Events/GetWeather/"+event.Id+"'>Weather Forecast</a><a class='btn btn-default1 btn-md' href='/Events/Edit/"+event.Id+"'>Edit</a><a class='btn btn-default1 btn-md' href='/Events/Delete/"+event.Id+"'>Delete</a>");
-                $('#fullCalModal').modal();
+            eventSources: [
+            {
+                events: @Html.Raw(Json.Encode(Model.ListA)),
+                color: '#007575',
+                textColor: 'white'
+            },
+            {
+                events: @Html.Raw(Json.Encode(Model.ListB)),
+                color: 'purple',
+                textColor: 'white'
             }
-        });
+            ],
+            @*events: @Html.Raw(Json.Encode(Model.ListA)),*@
+            eventClick: function(event, jsEvent, view){
+                    $('#modalTitle').html(event.title);
+                    $('#modalStart').html("START: " + event.start._d.toLocaleDateString() + " " + event.start._d.toLocaleTimeString());
+                    $('#modalEnd').html("END: " + event.end._d.toLocaleDateString() + " " + event.end._d.toLocaleTimeString());
+                    $('#modalDetails').html("DETAILS: " + event.details);
+                    $('#modalPrivate').html("PRIVATE: " + event.isPrivate);
+                    $('#modal-links').html("<a class='btn btn-default2 btn-md' href='/Members/ChooseContacts/"+event.Id+"'>Send Invitation</a><a class='btn btn-default1 btn-md' href='/Events/GetDirections/"+event.Id+"'>Get Directions</a><a class='btn btn-default1 btn-md' href='/Events/GetWeather/"+event.Id+"'>Weather Forecast</a><a class='btn btn-default1 btn-md' href='/Events/Edit/"+event.Id+"'>Edit</a><a class='btn btn-default1 btn-md' href='/Events/Delete/"+event.Id+"'>Delete</a>");
+                    $('#fullCalModal').modal();
+                }
+            });
 
-        $('#calendar2').fullCalendar({
+        @*$('#calendar').fullCalendar({
             allDay: false,
             timezone: 'local',
             selectable: true,
@@ -125,7 +137,7 @@
                 $('#modal-links').html("<a class='btn btn-default1 btn-md' href='/Members/AddToMyEvents/"+event.Id+"'>Add To My Events</a>");
                 $('#fullCalModal').modal();
             }
-        });
+        });*@
     });
 </script>
 
