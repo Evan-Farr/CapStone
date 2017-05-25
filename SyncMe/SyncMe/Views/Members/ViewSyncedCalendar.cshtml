@@ -121,7 +121,7 @@
                 $('#modalEnd').html("END: " + event.end._d.toLocaleDateString() + " " + event.end._d.toLocaleTimeString());
                 $('#modalDetails').html("DETAILS: " + event.details);
                 $('#modalPrivate').html("PRIVATE: " + event.isPrivate);
-                //$('#modal-links').html();
+                $('#modal-links').html("<a class='btn btn-default1 btn-md' href='/Members/AddToMyEvents/"+event.Id+"'>Add To My Events</a>");
                 $('#fullCalModal').modal();
             }
         });

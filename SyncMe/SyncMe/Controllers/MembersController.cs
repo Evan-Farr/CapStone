@@ -534,5 +534,30 @@ namespace SyncMe.Controllers
             viewModel.ListB = events2;
             return View(viewModel);
         }
+
+        public ActionResult AddToMyEvents(int? id)
+        {
+            var user = User.Identity.GetUserId();
+            var member = db.Members.Where(u => u.UserId.Id == user).Select(s => s).FirstOrDefault();
+            var @event = db.Events.Where(e => e.Id == id).Select(y => y).FirstOrDefault();
+            //var otherMember = db.Members.Where(o => o.Id == @event.Member_Id).Select(b => b).FirstOrDefault();
+            //var otherProfile = db.Profiles.Where(p => p.Member.Id == otherMember.Id).Select(t => t).FirstOrDefault();
+            var newEvent = new Event();
+            newEvent.title = @event.title;
+            newEvent.streetAddress = @event.streetAddress;
+            newEvent.city = @event.city;
+            newEvent.state = @event.state;
+            newEvent.zipCode = @event.zipCode;
+            newEvent.start = @event.start;
+            newEvent.end = @event.end;
+            newEvent.startTime = @event.startTime;
+            newEvent.endTime = @event.endTime;
+            newEvent.details = @event.details;
+            member.Events.Add(newEvent);
+            db.SaveChanges();
+            TempData["Message"] = "**You have a new event!";
+            //return RedirectToAction("ViewSyncedCalendar", new { id = otherProfile.Id });
+            return RedirectToAction("ViewCalendar");
+        }
     }
 }
