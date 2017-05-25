@@ -80,7 +80,7 @@
                 @{
                     ViewBag.counter = 0;
                 }
-                @if (ViewBag.AllSyncRequests != null || ViewBag.AllSyncRequests != 0)
+                @if (ViewBag.AllSyncRequests != null && ViewBag.AllSyncRequests.Count != 0)
                 {
                     foreach (var request in ViewBag.AllSyncRequests)
                     {

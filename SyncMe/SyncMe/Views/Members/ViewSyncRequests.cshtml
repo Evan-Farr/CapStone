@@ -16,6 +16,10 @@
     </div>
 </div>
 <hr />
+<p>
+    @Html.ActionLink("Back", "ViewCalendar", null, new { @class = "btn btn-primary btn-md" })
+</p>
+<hr />
 <table class="table">
     <tr>
         <th>
@@ -46,5 +50,5 @@
     }
 </table>
 <p>
-    @Html.ActionLink("Back", "ViewCalendar", null, new { @class = "btn btn-primary btn-md" })
+    @Html.ActionLink("Back", "ViewCalendar", "Members")
 </p>

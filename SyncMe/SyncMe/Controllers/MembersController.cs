@@ -438,12 +438,22 @@ namespace SyncMe.Controllers
             var user = User.Identity.GetUserId();
             var member = db.Members.Where(u => u.UserId.Id == user).Select(s => s).FirstOrDefault();
             var requests = new List<SyncRequest>();
+            if(member.SyncRequests.Count == 0)
+            {
+                TempData["ErrorMessage"] = "**You currently don't have any pending sync requests.";
+                return RedirectToAction("ViewCalendar");
+            }
             foreach (var request in member.SyncRequests)
             {
                 if(request.Status != "Approved")
                 {
                     requests.Add(request);
                 }
+            }
+            if (requests.Count == 0)
+            {
+                TempData["ErrorMessage"] = "**You currently don't have any pending sync requests.";
+                return RedirectToAction("ViewCalendar");
             }
             return View(requests.OrderBy(t => t.Date));
         }
@@ -459,12 +469,12 @@ namespace SyncMe.Controllers
             var newSyncRequest = new SyncRequest();
             newSyncRequest.Date = syncRequest.Date;
             newSyncRequest.Status = syncRequest.Status;
-            newSyncRequest.Sender = syncRequest.Sender;
-            newSyncRequest.Receiver = syncRequest.Receiver;
-            db.SyncRequests.Add(syncRequest);
-            sender.SyncRequests.Add(syncRequest);
+            newSyncRequest.Receiver = member;
+            newSyncRequest.Sender = senderProfile;
+            db.SyncRequests.Add(newSyncRequest);
+            sender.SyncRequests.Add(newSyncRequest);
             db.SaveChanges();
-            TempData["Message"] = "**You have a synced calendar!";
+            TempData["Message"] = "**You have a new synced calendar!";
             return RedirectToAction("ViewSyncRequests");
         }
 
@@ -522,7 +532,7 @@ namespace SyncMe.Controllers
                     events1.Add(@event);
                 }
             }
-            foreach (var @event2 in member.Events)
+            foreach (var @event2 in otherMember.Events)
             {
                 if (@event2.isPrivate == false)
                 {
