@@ -319,7 +319,6 @@ namespace SyncMe.Controllers
 
         public ActionResult ChooseContacts(int? id)
         {
-            //int eventId1 = int.Parse(eventId);
             var current = User.Identity.GetUserId();
             var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
             if(member.Contacts.Count == 0)
@@ -366,7 +365,18 @@ namespace SyncMe.Controllers
             var eventInvitation = db.EventInvitations.Where(n => n.Id == id).Select(o => o).FirstOrDefault();
             var @event = db.Events.Where(e => e.Id == eventInvitation.Event.Id).Select(y => y).FirstOrDefault();
             eventInvitation.Status = "Approved";
-            member.Events.Add(@event);
+            var newEvent = new Event();
+            newEvent.title = @event.title;
+            newEvent.streetAddress = @event.streetAddress;
+            newEvent.city = @event.city;
+            newEvent.state = @event.state;
+            newEvent.zipCode = @event.zipCode;
+            newEvent.start = @event.start;
+            newEvent.end = @event.end;
+            newEvent.startTime = @event.startTime;
+            newEvent.endTime = @event.endTime;
+            newEvent.details = @event.details;
+            member.Events.Add(newEvent);
             member.EventInvitations.Remove(eventInvitation);
             db.EventInvitations.Remove(eventInvitation);
             db.SaveChanges();
@@ -375,6 +385,103 @@ namespace SyncMe.Controllers
         }
 
         public ActionResult DenyEventInvitation(int? id)
+        {
+            var user = User.Identity.GetUserId();
+            var member = db.Members.Where(u => u.UserId.Id == user).Select(s => s).FirstOrDefault();
+            var eventInvitation = db.EventInvitations.Where(n => n.Id == id).Select(o => o).FirstOrDefault();
+            eventInvitation.Status = "Denied";
+            member.EventInvitations.Remove(eventInvitation);
+            db.EventInvitations.Remove(eventInvitation);
+            db.SaveChanges();
+            TempData["Message"] = "**Invitation was removed from your pending event invitations.";
+            return RedirectToAction("ViewEventInvitations");
+        }
+
+        public ActionResult SendSyncRequest(int? id)
+        {
+            var current = User.Identity.GetUserId();
+            var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
+            var sender = db.Profiles.Where(b => b.Member.Id == member.Id).Select(q => q).FirstOrDefault();
+            var receiverProfile = db.Profiles.Where(p => p.Id == id).Select(a => a).FirstOrDefault();
+            var receiver = db.Members.Where(w => w.Id == receiverProfile.Member.Id).Select(t => t).FirstOrDefault();
+            SyncRequest syncRequest = new SyncRequest();
+            syncRequest.Sender = sender;
+            syncRequest.Receiver = receiver;
+            syncRequest.Status = "Pending";
+            syncRequest.Date = DateTime.Today;
+            receiver.SyncRequests.Add(syncRequest);
+            db.SyncRequests.Add(syncRequest);
+            db.SaveChanges();
+            TempData["Message"] = "**Sync requeset successfully sent!";
+            return RedirectToAction("ChooseSyncContacts");
+        }
+
+        public ActionResult ChooseSyncContacts()
+        {
+            var current = User.Identity.GetUserId();
+            var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
+            if (member.Contacts.Count == 0)
+            {
+                TempData["ErrorMessage"] = "**You currently don't have any contacts to send a sync request to...";
+                return RedirectToAction("ViewCalendar");
+            }
+            var profiles = new List<Profile>();
+            foreach (var contact in member.Contacts)
+            {
+                var profile = db.Profiles.Where(p => p.Id == contact.ContactId).Select(a => a).FirstOrDefault();
+                profiles.Add(profile);
+            }
+            ViewBag.AllSyncRequests = 0;
+            if (db.EventInvitations.ToList().Count != 0)
+            {
+                var allSyncRequests = db.SyncRequests.ToList();
+                ViewBag.AllSyncRequests = allSyncRequests;
+            }
+            var sender = db.Profiles.Where(q => q.Member.Id == member.Id).Select(u => u).FirstOrDefault();
+            ViewBag.SenderId = sender.Id;
+            ViewBag.counter = 0;
+            return View(profiles.OrderBy(o => o.LastName));
+        }
+
+        public ActionResult ViewSyncRequests()
+        {
+            var user = User.Identity.GetUserId();
+            var member = db.Members.Where(u => u.UserId.Id == user).Select(s => s).FirstOrDefault();
+            var invites = new List<EventInvitation>();
+            foreach (var invite in member.EventInvitations)
+            {
+                invites.Add(invite);
+            }
+            return View(invites.OrderBy(t => t.Date));
+        }
+
+        public ActionResult AcceptSyncRequest(int? id)
+        {
+            var user = User.Identity.GetUserId();
+            var member = db.Members.Where(u => u.UserId.Id == user).Select(s => s).FirstOrDefault();
+            var eventInvitation = db.EventInvitations.Where(n => n.Id == id).Select(o => o).FirstOrDefault();
+            var @event = db.Events.Where(e => e.Id == eventInvitation.Event.Id).Select(y => y).FirstOrDefault();
+            eventInvitation.Status = "Approved";
+            var newEvent = new Event();
+            newEvent.title = @event.title;
+            newEvent.streetAddress = @event.streetAddress;
+            newEvent.city = @event.city;
+            newEvent.state = @event.state;
+            newEvent.zipCode = @event.zipCode;
+            newEvent.start = @event.start;
+            newEvent.end = @event.end;
+            newEvent.startTime = @event.startTime;
+            newEvent.endTime = @event.endTime;
+            newEvent.details = @event.details;
+            member.Events.Add(newEvent);
+            member.EventInvitations.Remove(eventInvitation);
+            db.EventInvitations.Remove(eventInvitation);
+            db.SaveChanges();
+            TempData["Message"] = "**You have a new event!";
+            return RedirectToAction("ViewEventInvitations");
+        }
+
+        public ActionResult DenySyncRequest(int? id)
         {
             var user = User.Identity.GetUserId();
             var member = db.Members.Where(u => u.UserId.Id == user).Select(s => s).FirstOrDefault();

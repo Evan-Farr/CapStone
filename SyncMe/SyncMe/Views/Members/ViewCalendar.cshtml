@@ -18,21 +18,25 @@
     <div class="col-md-1">
         <center>
             @Html.ActionLink("My Profile", "PrivateDetails", "Profiles", null, new { @class = "btn btn-primary btn-md" })
-            <br /><br />
+            <br /><br /><br />
+            @Html.ActionLink("Find Members", "Search", "Profiles", null, new { @class = "btn btn-primary btn-md" })
+            <br /><br /><br />
             @Html.ActionLink("Add New Event", "Create", "Events", null, new { @class = "btn btn-primary btn-md" })
             <br /><br />
-            @Html.ActionLink("View All Events", "PrivateIndex", "Events", null, new { @class = "btn btn-primary btn-md" })
+            @Html.ActionLink("List All Events", "PrivateIndex", "Events", null, new { @class = "btn btn-primary btn-md" })
             <br /><br />
-            @Html.ActionLink("My Contacts", "ViewContacts", "Members", null, new { @class = "btn btn-primary btn-md" })
-            <br /><br>
-            @Html.ActionLink("Contact Requests", "ViewContactRequests", "Members", null, new { @class = "btn btn-primary btn-md" })
-            <br /><br>
-            @Html.ActionLink("Find Members", "Search", "Profiles", null, new { @class = "btn btn-primary btn-md" })
-            <br /><br>
-            @Html.ActionLink("Sync Requests", "ViewSyncRequests", "SyncRequests", null, new { @class = "btn btn-primary btn-md" })
-            <br /><br>
             @Html.ActionLink("Event Invitations", "ViewEventInvitations", "Members", null, new { @class = "btn btn-primary btn-md" })
-            <br /><br>
+            <br /><br /><br />
+            @Html.ActionLink("My Contacts", "ViewContacts", "Members", null, new { @class = "btn btn-primary btn-md" })
+            <br /><br />
+            @Html.ActionLink("Contact Requests", "ViewContactRequests", "Members", null, new { @class = "btn btn-primary btn-md" })
+            <br /><br /><br />
+            @Html.ActionLink("Send Sync Requests", "ChooseSyncContacts", "Members", null, new { @class = "btn btn-primary btn-md" })
+            <br /><br />
+            @Html.ActionLink("View Sync Requests", "ViewSyncRequests", "Members", null, new { @class = "btn btn-primary btn-md" })
+            <br /><br />
+            @Html.ActionLink("Synced Calendars", "ChooseSyncedCalendar", "Members", null, new { @class = "btn btn-primary btn-md" })
+            <br /><br />
         </center>
     </div>
     <div class="col-md-11">
@@ -95,7 +99,7 @@
                 $('#modalEnd').html("END: " + event.end._d.toLocaleDateString() + " " + event.end._d.toLocaleTimeString());
                 $('#modalDetails').html("DETAILS: " + event.details);
                 $('#modalPrivate').html("PRIVATE: " + event.isPrivate);
-                $('#modal-links').html("<a class='btn btn-default btn-md' href='/Members/ChooseContacts/"+event.Id+"'>Send Invitation</a><a class='btn btn-default btn-md' href='/Events/GetDirections/event.Id'>Get Directions</a><a class='btn btn-default btn-md' href='/Events/GetWeather/event.Id'>Weather Forecast</a><a class='btn btn-default btn-md' href='/Events/Edit/event.Id'>Edit</a><a class='btn btn-default btn-md' href='/Events/Delete/event.Id'>Delete</a>");
+                $('#modal-links').html("<a class='btn btn-default2 btn-md' href='/Members/ChooseContacts/"+event.Id+"'>Send Invitation</a><a class='btn btn-default1 btn-md' href='/Events/GetDirections/"+event.Id+"'>Get Directions</a><a class='btn btn-default1 btn-md' href='/Events/GetWeather/"+event.Id+"'>Weather Forecast</a><a class='btn btn-default1 btn-md' href='/Events/Edit/"+event.Id+"'>Edit</a><a class='btn btn-default1 btn-md' href='/Events/Delete/"+event.Id+"'>Delete</a>");
                 $('#fullCalModal').modal();
             }
         });

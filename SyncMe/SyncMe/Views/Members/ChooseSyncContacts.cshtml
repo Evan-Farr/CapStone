@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<SyncMe.Models.Profile>
 
 @{
-    ViewBag.Title = "ChooseContacts";
+    ViewBag.Title = "ChooseSyncContacts";
 }
 
 <h2>Your Contacts</h2>
@@ -77,31 +77,40 @@
                 @Html.DisplayFor(modelItem => item.Email)
             </td>
             <td>
-                @{ 
+                @{
                     ViewBag.counter = 0;
                 }
-                @if (ViewBag.AllEventInvitations != null || ViewBag.AllEventIvitations != 0)
+                @if (ViewBag.AllSyncRequests != null || ViewBag.AllSyncRequests != 0)
                 {
-                    foreach (var invite in ViewBag.AllEventInvitations)
+                    foreach (var request in ViewBag.AllSyncRequests)
                     {
-                        if (invite.Receiver.Id == item.Member.Id)
+                        if (request.Receiver.Id == item.Member.Id)
                         {
-                            if (invite.Sender.Id == ViewBag.SenderId)
+                            if (request.Sender.Id == ViewBag.SenderId)
                             {
-                                <p style="color: indianred">Invite Sent</p>
-                                ViewBag.counter = 1;
-                                break;
+                                if (request.Status == "Pending")
+                                {
+                                    <p style="color: indianred">Request Pending</p>
+                                    ViewBag.counter = 1;
+                                    break;
+                                }
+                                else
+                                {
+                                    @Html.ActionLink("Accepted", "ViewSyncedCalendar", new { id = item.Id }, new { @class = "green-action-link" })
+                                    ViewBag.counter = 1;
+                                    break;
+                                }
                             }
                         }
                     }
                 }
                 @if (ViewBag.counter == 0)
                 {
-                    @Html.ActionLink("Invite", "SendEventInvitation", new { eventId = ViewBag.EventId, id = item.Id }, null)
+                    @Html.ActionLink("Send Request", "SendSyncRequest", new { id = item.Id }, null)
                 }
             </td>
         </tr>
-    }
+     }
 </table>
 <p>
     @Html.ActionLink("Done", "ViewCalendar")

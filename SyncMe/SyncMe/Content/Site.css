@@ -58,6 +58,46 @@ textarea {
     color: #ffffff;
 }
 
+.btn-default1 {
+    background-color: #007575;
+    border-color: #43B1B1;
+    color: #ffffff;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.btn-default1:hover {
+    background-color: #43B1B1;
+    border-color: #007575;
+    color: #ffffff;
+}
+
+.btn-default1:active {
+    background-color: #43B1B1;
+    border-color: #007575;
+    color: #ffffff;
+}
+
+.btn-default2 {
+    background-color: #007575;
+    border-color: #43B1B1;
+    color: #ffffff;
+    margin-left: 32px;
+    margin-right: 5px;
+}
+
+.btn-default2:hover {
+    background-color: #43B1B1;
+    border-color: #007575;
+    color: #ffffff;
+}
+
+.btn-default2:active {
+    background-color: #43B1B1;
+    border-color: #007575;
+    color: #ffffff;
+}
+
 .btn-primary {
     background-color: #007575;
     border-color: #43B1B1;
@@ -168,4 +208,8 @@ a:hover {
 .fc-content {
     background-color: #007575;
     color: #ffffff;
+}
+
+.green-action-link {
+    color: green;
 }
