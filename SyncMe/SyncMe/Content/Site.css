@@ -213,3 +213,29 @@ a:hover {
 .green-action-link {
     color: green;
 }
+
+.circle {
+  width: 110px;
+  height: 110px;
+  border-radius: 110%;
+  font-size: 13px;
+  color: #ffffff;
+  line-height: 110px;
+  text-align: center;
+  background: #007575;
+  margin-left: 20px;
+  margin-bottom: -25px;
+  margin-top: 50px;
+}
+
+.circle2 {
+  width: 110px;
+  height: 110px;
+  border-radius: 110%;
+  font-size: 13px;
+  color: #ffffff;
+  line-height: 110px;
+  text-align: center;
+  background: orange;
+  margin-left: 20px;
+}
