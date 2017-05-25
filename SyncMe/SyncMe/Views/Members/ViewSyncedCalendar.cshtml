@@ -1,4 +1,5 @@
-﻿@model IEnumerable<SyncMe.Models.Event>
+﻿@model SyncMe.Models.EventsViewModel
+
 @{
     ViewBag.Title = "ViewSyncedCalendar";
 }
@@ -46,6 +47,7 @@
             </div>
         </div>
         <div id='calendar'></div>
+        <div id='calendar2'></div>
     </div>
 </container>
 
@@ -78,7 +80,7 @@
             slotEventOverLap: true,
             disableResizing: false,
             eventOrder: '-start',
-            events: @Html.Raw(Json.Encode(Model)),
+            events: @Html.Raw(Json.Encode(Model.ListA)),
             eventClick: function(event, jsEvent, view){
                 $('#modalTitle').html(event.title);
                 $('#modalStart').html("START: " + event.start._d.toLocaleDateString() + " " + event.start._d.toLocaleTimeString());
@@ -86,6 +88,40 @@
                 $('#modalDetails').html("DETAILS: " + event.details);
                 $('#modalPrivate').html("PRIVATE: " + event.isPrivate);
                 $('#modal-links').html("<a class='btn btn-default2 btn-md' href='/Members/ChooseContacts/"+event.Id+"'>Send Invitation</a><a class='btn btn-default1 btn-md' href='/Events/GetDirections/"+event.Id+"'>Get Directions</a><a class='btn btn-default1 btn-md' href='/Events/GetWeather/"+event.Id+"'>Weather Forecast</a><a class='btn btn-default1 btn-md' href='/Events/Edit/"+event.Id+"'>Edit</a><a class='btn btn-default1 btn-md' href='/Events/Delete/"+event.Id+"'>Delete</a>");
+                $('#fullCalModal').modal();
+            }
+        });
+
+        $('#calendar2').fullCalendar({
+            allDay: false,
+            timezone: 'local',
+            selectable: true,
+            selectHelper: true,
+            editable: true,
+            year: y,
+            month: m,
+            date: d,
+            header: {
+                left: 'title',
+                right: 'prev,next,today,agendaDay,agendaWeek,month'
+            },
+            defaultView: 'month',
+            editable: true,
+            //googleCalendarApiKey: 'API-Key',
+            droppable: true,
+            slotDuration: '00:30:00',
+            scrollTime: '12:00:00 AM',
+            slotEventOverLap: true,
+            disableResizing: false,
+            eventOrder: '-start',
+            events: @Html.Raw(Json.Encode(Model.ListB)),
+            eventClick: function(event, jsEvent, view){
+                $('#modalTitle').html(event.title);
+                $('#modalStart').html("START: " + event.start._d.toLocaleDateString() + " " + event.start._d.toLocaleTimeString());
+                $('#modalEnd').html("END: " + event.end._d.toLocaleDateString() + " " + event.end._d.toLocaleTimeString());
+                $('#modalDetails').html("DETAILS: " + event.details);
+                $('#modalPrivate').html("PRIVATE: " + event.isPrivate);
+                //$('#modal-links').html();
                 $('#fullCalModal').modal();
             }
         });
