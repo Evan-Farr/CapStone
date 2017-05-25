@@ -1,0 +1,94 @@
+﻿@model IEnumerable<SyncMe.Models.Event>
+@{
+    ViewBag.Title = "ViewSyncedCalendar";
+}
+
+<br />
+<hr />
+<div class="col-md-12">
+    <div class="text-success">
+        @TempData["Message"]
+    </div>
+    <div class="text-warning">
+        @TempData["ErrorMessage"]
+    </div>
+</div>
+<hr />
+<container>
+    <div class="col-md-1">
+        <center>
+            @Html.ActionLink("Done", "ViewCalendar", "Members", null, new { @class = "btn btn-primary btn-md" })
+            <br /><br /><br /><br />
+            <p style="color: #007575">My Events</p>
+            <br /><br />
+            <p style="color: blue">Contact's Events</p>
+            <br /><br />
+        </center>
+    </div>
+    <div class="col-md-11">
+        <div id="fullCalModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 id="modalTitle" class="modal-title"></h4>
+                    </div>
+                    <h5 id="modalStart" class="modal-body"></h5>
+                    <h5 id="modalEnd" class="modal-body"></h5>
+                    <h5 id="modalDetails" class="modal-body"></h5>
+                    <h5 id="modalPrivate" class="modal-body"></h5>
+                    <div id="modal-links">
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id='calendar'></div>
+    </div>
+</container>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var date = new Date();
+        var d = date.getDate();
+        var m = date.getMonth();
+        var y = date.getFullYear();
+
+        $('#calendar').fullCalendar({
+            allDay: false,
+            timezone: 'local',
+            selectable: true,
+            selectHelper: true,
+            editable: true,
+            year: y,
+            month: m,
+            date: d,
+            header: {
+                left: 'title',
+                right: 'prev,next,today,agendaDay,agendaWeek,month'
+            },
+            defaultView: 'month',
+            editable: true,
+            //googleCalendarApiKey: 'API-Key',
+            droppable: true,
+            slotDuration: '00:30:00',
+            scrollTime: '12:00:00 AM',
+            slotEventOverLap: true,
+            disableResizing: false,
+            eventOrder: '-start',
+            events: @Html.Raw(Json.Encode(Model)),
+            eventClick: function(event, jsEvent, view){
+                $('#modalTitle').html(event.title);
+                $('#modalStart').html("START: " + event.start._d.toLocaleDateString() + " " + event.start._d.toLocaleTimeString());
+                $('#modalEnd').html("END: " + event.end._d.toLocaleDateString() + " " + event.end._d.toLocaleTimeString());
+                $('#modalDetails').html("DETAILS: " + event.details);
+                $('#modalPrivate').html("PRIVATE: " + event.isPrivate);
+                $('#modal-links').html("<a class='btn btn-default2 btn-md' href='/Members/ChooseContacts/"+event.Id+"'>Send Invitation</a><a class='btn btn-default1 btn-md' href='/Events/GetDirections/"+event.Id+"'>Get Directions</a><a class='btn btn-default1 btn-md' href='/Events/GetWeather/"+event.Id+"'>Weather Forecast</a><a class='btn btn-default1 btn-md' href='/Events/Edit/"+event.Id+"'>Edit</a><a class='btn btn-default1 btn-md' href='/Events/Delete/"+event.Id+"'>Delete</a>");
+                $('#fullCalModal').modal();
+            }
+        });
+    });
+</script>
+

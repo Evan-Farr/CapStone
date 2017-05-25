@@ -806,6 +806,8 @@
     <Content Include="Views\Members\ViewEventInvitations.cshtml" />
     <Content Include="Views\Members\ChooseContacts.cshtml" />
     <Content Include="Views\Members\ChooseSyncContacts.cshtml" />
+    <Content Include="Views\Members\ChooseSyncedCalendar.cshtml" />
+    <Content Include="Views\Members\ViewSyncedCalendar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

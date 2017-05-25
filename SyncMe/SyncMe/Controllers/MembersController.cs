@@ -43,16 +43,6 @@ namespace SyncMe.Controllers
             return View(member);
         }
 
-        //public ActionResult ContactRequest(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    var profile = db.Profiles.Where(p => p.Member.Id == id).Select(s => s).FirstOrDefault();
-        //    return View(profile);
-        //}
-
         // GET: Members/Create
         public ActionResult Create()
         {
@@ -432,7 +422,7 @@ namespace SyncMe.Controllers
                 profiles.Add(profile);
             }
             ViewBag.AllSyncRequests = 0;
-            if (db.EventInvitations.ToList().Count != 0)
+            if (db.SyncRequests.ToList().Count != 0)
             {
                 var allSyncRequests = db.SyncRequests.ToList();
                 ViewBag.AllSyncRequests = allSyncRequests;
@@ -485,13 +475,63 @@ namespace SyncMe.Controllers
         {
             var user = User.Identity.GetUserId();
             var member = db.Members.Where(u => u.UserId.Id == user).Select(s => s).FirstOrDefault();
-            var eventInvitation = db.EventInvitations.Where(n => n.Id == id).Select(o => o).FirstOrDefault();
-            eventInvitation.Status = "Denied";
-            member.EventInvitations.Remove(eventInvitation);
-            db.EventInvitations.Remove(eventInvitation);
+            var syncRequest = db.SyncRequests.Where(n => n.Sender.Id == id).Select(o => o).FirstOrDefault();
+            syncRequest.Status = "Denied";
+            member.SyncRequests.Remove(syncRequest);
+            db.SyncRequests.Remove(syncRequest);
             db.SaveChanges();
             TempData["Message"] = "**Invitation was removed from your pending event invitations.";
             return RedirectToAction("ViewEventInvitations");
+        }
+
+        public ActionResult ChooseSyncedCalendar()
+        {
+            var current = User.Identity.GetUserId();
+            var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
+            if (member.SyncRequests.Count == 0)
+            {
+                TempData["ErrorMessage"] = "**You currently don't have any synced calendars to view...";
+                return RedirectToAction("ViewCalendar");
+            }
+            var syncedCalendars = new List<Profile>();
+            foreach (var sync in member.SyncRequests)
+            {
+                if(sync.Status == "Accepted")
+                {
+                    var profile = db.Profiles.Where(p => p.Id == sync.Sender.Id).Select(a => a).FirstOrDefault();
+                    syncedCalendars.Add(profile);
+                }
+            }
+            if(syncedCalendars.Count == 0)
+            {
+                TempData["ErrorMessage"] = "**You currently don't have any synced calendars to view...";
+                return RedirectToAction("ViewCalendar");
+            }
+            return View(syncedCalendars.OrderBy(o => o.LastName));
+        }
+
+        public ActionResult ViewSyncedCalendar(int? id)
+        {
+            var current = User.Identity.GetUserId();
+            var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
+            var otherProfile = db.Profiles.Where(p => p.Id == id).Select(a => a).FirstOrDefault();
+            var otherMember = db.Members.Where(o => o.Id == otherProfile.Member.Id).Select(t => t).FirstOrDefault();
+            var events = new List<Event>();
+            foreach(var @event in member.Events)
+            {
+                if(@event.isPrivate == false)
+                {
+                    events.Add(@event);
+                }
+            }
+            foreach (var @event2 in member.Events)
+            {
+                if (@event2.isPrivate == false)
+                {
+                    events.Add(@event2);
+                }
+            }
+            return View(events);
         }
     }
 }
