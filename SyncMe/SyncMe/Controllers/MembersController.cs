@@ -548,6 +548,23 @@ namespace SyncMe.Controllers
             return View(viewModel);
         }
 
+        public ActionResult RemoveSyncedCalendar(int? id)
+        {
+            var user = User.Identity.GetUserId();
+            var member = db.Members.Where(u => u.UserId.Id == user).Select(s => s).FirstOrDefault();
+            var syncRequest = db.SyncRequests.Where(n => n.Sender.Id == id).Select(o => o).FirstOrDefault();
+            var syncRequest2 = db.SyncRequests.Where(k => k.Receiver.Id == id).Select(t => t).FirstOrDefault();
+            var otherProfile = db.Profiles.Where(b => b.Id == syncRequest.Receiver.Id).Select(n => n).FirstOrDefault();
+            var otherMember = db.Members.Where(v => v.Id == otherProfile.Member.Id).Select(e => e).FirstOrDefault();
+            member.SyncRequests.Remove(syncRequest);
+            otherMember.SyncRequests.Remove(syncRequest2);
+            db.SyncRequests.Remove(syncRequest2);
+            db.SyncRequests.Remove(syncRequest);
+            db.SaveChanges();
+            TempData["Message"] = "**Synced Calendar was successfully removed.";
+            return RedirectToAction("ViewSyncRequests");
+        }
+
         public ActionResult AddToMyEvents(int? id)
         {
             var user = User.Identity.GetUserId();

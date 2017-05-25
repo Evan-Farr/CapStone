@@ -37,9 +37,7 @@
                     <h5 id="modalEnd" class="modal-body"></h5>
                     <h5 id="modalDetails" class="modal-body"></h5>
                     <h5 id="modalPrivate" class="modal-body"></h5>
-                    <div id="modal-links">
-
-                    </div>
+                    <div id="modal-links"></div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
@@ -84,60 +82,44 @@
             eventSources: [
             {
                 events: @Html.Raw(Json.Encode(Model.ListA)),
+                "belongsTo": 'A',
                 color: '#007575',
                 textColor: 'white'
             },
             {
                 events: @Html.Raw(Json.Encode(Model.ListB)),
+                "belongsTo": 'B',
                 color: 'purple',
                 textColor: 'white'
             }
             ],
-            @*events: @Html.Raw(Json.Encode(Model.ListA)),*@
             eventClick: function(event, jsEvent, view){
                     $('#modalTitle').html(event.title);
                     $('#modalStart').html("START: " + event.start._d.toLocaleDateString() + " " + event.start._d.toLocaleTimeString());
                     $('#modalEnd').html("END: " + event.end._d.toLocaleDateString() + " " + event.end._d.toLocaleTimeString());
                     $('#modalDetails').html("DETAILS: " + event.details);
                     $('#modalPrivate').html("PRIVATE: " + event.isPrivate);
-                    $('#modal-links').html("<a class='btn btn-default2 btn-md' href='/Members/ChooseContacts/"+event.Id+"'>Send Invitation</a><a class='btn btn-default1 btn-md' href='/Events/GetDirections/"+event.Id+"'>Get Directions</a><a class='btn btn-default1 btn-md' href='/Events/GetWeather/"+event.Id+"'>Weather Forecast</a><a class='btn btn-default1 btn-md' href='/Events/Edit/"+event.Id+"'>Edit</a><a class='btn btn-default1 btn-md' href='/Events/Delete/"+event.Id+"'>Delete</a>");
+                    if(event.belongsto === 'A'){
+                        $('#modal-links').html("<a class='btn btn-default2 btn-md' href='/Members/ChooseContacts/"+event.Id+"'>Send Invitation</a><a class='btn btn-default1 btn-md' href='/Events/GetDirections/"+event.Id+"'>Get Directions</a><a class='btn btn-default1 btn-md' href='/Events/GetWeather/"+event.Id+"'>Weather Forecast</a><a class='btn btn-default1 btn-md' href='/Events/Edit/"+event.Id+"'>Edit</a><a class='btn btn-default1 btn-md' href='/Events/Delete/"+event.Id+"'>Delete</a>");
+                    } else if (event.belongsto === 'B') {
+                        $('#modal-links').html("<a class='btn btn-default1 btn-md' href='/Members/AddToMyEvents/"+event.Id+"'>Add To My Events</a>");
+                    }
+                    @*if(events === @Html.Raw(Json.Encode(Model.ListA))){
+                        $('#modal-links').html("<a class='btn btn-default2 btn-md' href='/Members/ChooseContacts/"+event.Id+"'>Send Invitation</a><a class='btn btn-default1 btn-md' href='/Events/GetDirections/"+event.Id+"'>Get Directions</a><a class='btn btn-default1 btn-md' href='/Events/GetWeather/"+event.Id+"'>Weather Forecast</a><a class='btn btn-default1 btn-md' href='/Events/Edit/"+event.Id+"'>Edit</a><a class='btn btn-default1 btn-md' href='/Events/Delete/"+event.Id+"'>Delete</a>");
+                    }
+                    else if(events === @Html.Raw(Json.Encode(Model.ListB))){
+                        $('#modal-links').html("<a class='btn btn-default1 btn-md' href='/Members/AddToMyEvents/"+event.Id+"'>Add To My Events</a>");
+                    }*@
+                    //if(Model.ListA.Contains(event)){
+                    //    $('#modal-links').html("<a class='btn btn-default2 btn-md' href='/Members/ChooseContacts/"+event.Id+"'>Send Invitation</a><a class='btn btn-default1 btn-md' href='/Events/GetDirections/"+event.Id+"'>Get Directions</a><a class='btn btn-default1 btn-md' href='/Events/GetWeather/"+event.Id+"'>Weather Forecast</a><a class='btn btn-default1 btn-md' href='/Events/Edit/"+event.Id+"'>Edit</a><a class='btn btn-default1 btn-md' href='/Events/Delete/"+event.Id+"'>Delete</a>");
+                    //}else if(Model.ListB.Contains(event)){
+                    //    $('#modal-links').html("<a class='btn btn-default1 btn-md' href='/Members/AddToMyEvents/"+event.Id+"'>Add To My Events</a>");
+                    //}
+                    //$('#modal-links').html("<a class='btn btn-default2 btn-md' href='/Members/ChooseContacts/"+event.Id+"'>Send Invitation</a><a class='btn btn-default1 btn-md' href='/Events/GetDirections/"+event.Id+"'>Get Directions</a><a class='btn btn-default1 btn-md' href='/Events/GetWeather/"+event.Id+"'>Weather Forecast</a><a class='btn btn-default1 btn-md' href='/Events/Edit/"+event.Id+"'>Edit</a><a class='btn btn-default1 btn-md' href='/Events/Delete/"+event.Id+"'>Delete</a>");
+                    //$('#modal-links2').html("<a class='btn btn-default1 btn-md' href='/Members/AddToMyEvents/"+event.Id+"'>Add To My Events</a>");
                     $('#fullCalModal').modal();
                 }
             });
-
-        @*$('#calendar').fullCalendar({
-            allDay: false,
-            timezone: 'local',
-            selectable: true,
-            selectHelper: true,
-            editable: true,
-            year: y,
-            month: m,
-            date: d,
-            header: {
-                left: 'title',
-                right: 'prev,next,today,agendaDay,agendaWeek,month'
-            },
-            defaultView: 'month',
-            editable: true,
-            //googleCalendarApiKey: 'API-Key',
-            droppable: true,
-            slotDuration: '00:30:00',
-            scrollTime: '12:00:00 AM',
-            slotEventOverLap: true,
-            disableResizing: false,
-            eventOrder: '-start',
-            events: @Html.Raw(Json.Encode(Model.ListB)),
-            eventClick: function(event, jsEvent, view){
-                $('#modalTitle').html(event.title);
-                $('#modalStart').html("START: " + event.start._d.toLocaleDateString() + " " + event.start._d.toLocaleTimeString());
-                $('#modalEnd').html("END: " + event.end._d.toLocaleDateString() + " " + event.end._d.toLocaleTimeString());
-                $('#modalDetails').html("DETAILS: " + event.details);
-                $('#modalPrivate').html("PRIVATE: " + event.isPrivate);
-                $('#modal-links').html("<a class='btn btn-default1 btn-md' href='/Members/AddToMyEvents/"+event.Id+"'>Add To My Events</a>");
-                $('#fullCalModal').modal();
-            }
-        });*@
     });
 </script>
 

@@ -78,9 +78,11 @@
             </td>
             <td>
                 @Html.ActionLink("View", "ViewSyncedCalendar", new { id = item.Id }, null)
+                <br />
+                @Html.ActionLink("Remove", "RemoveSyncedCalendar", new { id = item.Id }, null)
             </td>
         </tr>
-                    }
+}
 </table>
 <p>
     @Html.ActionLink("Done", "ViewCalendar")
