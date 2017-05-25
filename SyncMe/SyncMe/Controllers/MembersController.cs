@@ -437,38 +437,35 @@ namespace SyncMe.Controllers
         {
             var user = User.Identity.GetUserId();
             var member = db.Members.Where(u => u.UserId.Id == user).Select(s => s).FirstOrDefault();
-            var invites = new List<EventInvitation>();
-            foreach (var invite in member.EventInvitations)
+            var requests = new List<SyncRequest>();
+            foreach (var request in member.SyncRequests)
             {
-                invites.Add(invite);
+                if(request.Status != "Approved")
+                {
+                    requests.Add(request);
+                }
             }
-            return View(invites.OrderBy(t => t.Date));
+            return View(requests.OrderBy(t => t.Date));
         }
 
         public ActionResult AcceptSyncRequest(int? id)
         {
             var user = User.Identity.GetUserId();
             var member = db.Members.Where(u => u.UserId.Id == user).Select(s => s).FirstOrDefault();
-            var eventInvitation = db.EventInvitations.Where(n => n.Id == id).Select(o => o).FirstOrDefault();
-            var @event = db.Events.Where(e => e.Id == eventInvitation.Event.Id).Select(y => y).FirstOrDefault();
-            eventInvitation.Status = "Approved";
-            var newEvent = new Event();
-            newEvent.title = @event.title;
-            newEvent.streetAddress = @event.streetAddress;
-            newEvent.city = @event.city;
-            newEvent.state = @event.state;
-            newEvent.zipCode = @event.zipCode;
-            newEvent.start = @event.start;
-            newEvent.end = @event.end;
-            newEvent.startTime = @event.startTime;
-            newEvent.endTime = @event.endTime;
-            newEvent.details = @event.details;
-            member.Events.Add(newEvent);
-            member.EventInvitations.Remove(eventInvitation);
-            db.EventInvitations.Remove(eventInvitation);
+            var syncRequest = db.SyncRequests.Where(n => n.Id == id).Select(o => o).FirstOrDefault();
+            var senderProfile = db.Profiles.Where(p => p.Id == syncRequest.Sender.Id).Select(a => a).FirstOrDefault();
+            var sender = db.Members.Where(b => b.Id == senderProfile.Member.Id).Select(y => y).FirstOrDefault();
+            syncRequest.Status = "Approved";
+            var newSyncRequest = new SyncRequest();
+            newSyncRequest.Date = syncRequest.Date;
+            newSyncRequest.Status = syncRequest.Status;
+            newSyncRequest.Sender = syncRequest.Sender;
+            newSyncRequest.Receiver = syncRequest.Receiver;
+            db.SyncRequests.Add(syncRequest);
+            sender.SyncRequests.Add(syncRequest);
             db.SaveChanges();
-            TempData["Message"] = "**You have a new event!";
-            return RedirectToAction("ViewEventInvitations");
+            TempData["Message"] = "**You have a synced calendar!";
+            return RedirectToAction("ViewSyncRequests");
         }
 
         public ActionResult DenySyncRequest(int? id)
@@ -480,8 +477,8 @@ namespace SyncMe.Controllers
             member.SyncRequests.Remove(syncRequest);
             db.SyncRequests.Remove(syncRequest);
             db.SaveChanges();
-            TempData["Message"] = "**Invitation was removed from your pending event invitations.";
-            return RedirectToAction("ViewEventInvitations");
+            TempData["Message"] = "**Sync request was removed from your pending sync requests.";
+            return RedirectToAction("ViewSyncRequests");
         }
 
         public ActionResult ChooseSyncedCalendar()
@@ -496,7 +493,7 @@ namespace SyncMe.Controllers
             var syncedCalendars = new List<Profile>();
             foreach (var sync in member.SyncRequests)
             {
-                if(sync.Status == "Accepted")
+                if(sync.Status == "Approved")
                 {
                     var profile = db.Profiles.Where(p => p.Id == sync.Sender.Id).Select(a => a).FirstOrDefault();
                     syncedCalendars.Add(profile);
@@ -516,22 +513,26 @@ namespace SyncMe.Controllers
             var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
             var otherProfile = db.Profiles.Where(p => p.Id == id).Select(a => a).FirstOrDefault();
             var otherMember = db.Members.Where(o => o.Id == otherProfile.Member.Id).Select(t => t).FirstOrDefault();
-            var events = new List<Event>();
+            var events1 = new List<Event>();
+            var events2 = new List<Event>();
             foreach(var @event in member.Events)
             {
                 if(@event.isPrivate == false)
                 {
-                    events.Add(@event);
+                    events1.Add(@event);
                 }
             }
             foreach (var @event2 in member.Events)
             {
                 if (@event2.isPrivate == false)
                 {
-                    events.Add(@event2);
+                    events2.Add(@event2);
                 }
             }
-            return View(events);
+            var viewModel = new EventsViewModel();
+            viewModel.ListA = events1;
+            viewModel.ListB = events2;
+            return View(viewModel);
         }
     }
 }

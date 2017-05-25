@@ -260,6 +260,7 @@
     <Compile Include="Models\ContactRequest.cs" />
     <Compile Include="Models\Event.cs" />
     <Compile Include="Models\EventInvitation.cs" />
+    <Compile Include="Models\EventsViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Member.cs" />
@@ -808,6 +809,7 @@
     <Content Include="Views\Members\ChooseSyncContacts.cshtml" />
     <Content Include="Views\Members\ChooseSyncedCalendar.cshtml" />
     <Content Include="Views\Members\ViewSyncedCalendar.cshtml" />
+    <Content Include="Views\Members\ViewSyncRequests.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

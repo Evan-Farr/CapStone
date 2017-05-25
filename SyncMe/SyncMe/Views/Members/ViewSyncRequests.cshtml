@@ -1,0 +1,50 @@
+﻿@model IEnumerable<SyncMe.Models.SyncRequest>
+
+@{
+    ViewBag.Title = "ViewSyncRequests";
+}
+
+<h2>Pending Sync Requests</h2>
+
+<hr />
+<div class="col-md-12">
+    <div class="text-success">
+        @TempData["Message"]
+    </div>
+    <div class="text-warning">
+        @TempData["ErrorMessage"]
+    </div>
+</div>
+<hr />
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayName("Date Recieved")
+        </th>
+        <th>
+            @Html.DisplayName("Contact")
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sender.FirstName)
+                @Html.DisplayFor(modelItem => item.Sender.LastName)
+            </td>
+            <td>
+                @Html.ActionLink("Accept", "AcceptSyncRequest", new { id = item.Id })
+                <br />
+                @Html.ActionLink("Deny", "DenySyncRequest", new { id = item.Id })
+            </td>
+        </tr>
+    }
+</table>
+<p>
+    @Html.ActionLink("Back", "ViewCalendar", null, new { @class = "btn btn-primary btn-md" })
+</p>
