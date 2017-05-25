@@ -421,11 +421,13 @@ namespace SyncMe.Controllers
                 var profile = db.Profiles.Where(p => p.Id == contact.ContactId).Select(a => a).FirstOrDefault();
                 profiles.Add(profile);
             }
-            ViewBag.AllSyncRequests = 0;
+            ViewBag.AllSyncRequests = new List<SyncRequest>();
             if (db.SyncRequests.ToList().Count != 0)
             {
-                var allSyncRequests = db.SyncRequests.ToList();
-                ViewBag.AllSyncRequests = allSyncRequests;
+                foreach(var syncRequest in db.SyncRequests.ToList())
+                {
+                    ViewBag.AllSyncRequests.Add(syncRequest);
+                }
             }
             var sender = db.Profiles.Where(q => q.Member.Id == member.Id).Select(u => u).FirstOrDefault();
             ViewBag.SenderId = sender.Id;
@@ -462,6 +464,7 @@ namespace SyncMe.Controllers
         {
             var user = User.Identity.GetUserId();
             var member = db.Members.Where(u => u.UserId.Id == user).Select(s => s).FirstOrDefault();
+            var memberProfile = db.Profiles.Where(q => q.Member.Id == member.Id).Select(e => e).FirstOrDefault();
             var syncRequest = db.SyncRequests.Where(n => n.Id == id).Select(o => o).FirstOrDefault();
             var senderProfile = db.Profiles.Where(p => p.Id == syncRequest.Sender.Id).Select(a => a).FirstOrDefault();
             var sender = db.Members.Where(b => b.Id == senderProfile.Member.Id).Select(y => y).FirstOrDefault();
@@ -469,8 +472,8 @@ namespace SyncMe.Controllers
             var newSyncRequest = new SyncRequest();
             newSyncRequest.Date = syncRequest.Date;
             newSyncRequest.Status = syncRequest.Status;
-            newSyncRequest.Receiver = member;
-            newSyncRequest.Sender = senderProfile;
+            newSyncRequest.Receiver = sender;
+            newSyncRequest.Sender = memberProfile;
             db.SyncRequests.Add(newSyncRequest);
             sender.SyncRequests.Add(newSyncRequest);
             db.SaveChanges();
