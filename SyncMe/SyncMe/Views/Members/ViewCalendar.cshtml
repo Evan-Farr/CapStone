@@ -92,7 +92,13 @@
             slotEventOverLap: true,
             disableResizing: false,
             eventOrder: '-start',
-            events: @Html.Raw(Json.Encode(Model)),
+            eventSources: [
+            {
+                events: @Html.Raw(Json.Encode(Model)),
+                color: '#007575',
+                textColor: 'white'
+            }
+            ],
             eventClick: function(event, jsEvent, view){
                 $('#modalTitle').html(event.title);
                 $('#modalStart').html("START: " + event.start._d.toLocaleDateString() + " " + event.start._d.toLocaleTimeString());
