@@ -286,15 +286,15 @@ namespace SyncMe.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Contact contact = db.Contacts.Find(id);
+            Profile profile = db.Profiles.Find(id);
+            var contact = db.Contacts.Where(c => c.ContactId == profile.Id).Select(q => q).FirstOrDefault();
             if (contact == null)
             {
-                TempData["ErrorMessage"] = "**A problem occurred while removing contact. Please try again later.";
+                TempData["ErrorMessage"] = "**A problem occurred while attempting to remove contact.";
                 return RedirectToAction("ViewContacts");
             }
             var current = User.Identity.GetUserId();
             var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
-            var profile = db.Profiles.Where(b => b.Id == contact.ContactId).Select(x => x).FirstOrDefault(); 
             var member2 = db.Members.Where(t => t.Id == profile.Member.Id).Select(o => o).FirstOrDefault(); 
             var profile2 = db.Profiles.Where(z => z.Member.Id == member.Id).Select(w => w).FirstOrDefault(); 
             var contact2 = db.Contacts.Where(a => a.ContactId == profile2.Id).Select(y => y).FirstOrDefault(); 
@@ -505,9 +505,9 @@ namespace SyncMe.Controllers
             var syncRequest = db.SyncRequests.Where(n => n.Id == id).Select(o => o).FirstOrDefault();
             var senderProfile = db.Profiles.Where(p => p.Id == syncRequest.Sender.Id).Select(a => a).FirstOrDefault();
             var sender = db.Members.Where(b => b.Id == senderProfile.Member.Id).Select(y => y).FirstOrDefault();
-            var syncRequest2 = db.SyncRequests.Where(m => m.Sender.Id == memberProfile.Id && m.Receiver.Id == sender.Id).Select(r => r).FirstOrDefault();
+            var syncRequest2 = db.SyncRequests.Where(m => m.Sender == memberProfile && m.Receiver == sender).Select(r => r).FirstOrDefault();
             syncRequest.Status = "Approved";
-            syncRequest2.Status = "Approced";
+            syncRequest2.Status = "Approved";
             //var newSyncRequest = new SyncRequest();
             //newSyncRequest.Date = syncRequest.Date;
             //newSyncRequest.Status = syncRequest.Status;

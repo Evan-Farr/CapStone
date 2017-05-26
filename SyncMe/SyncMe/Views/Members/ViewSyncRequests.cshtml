@@ -20,10 +20,13 @@
     @Html.ActionLink("Back", "ViewCalendar", null, new { @class = "btn btn-primary btn-md" })
 </p>
 <hr />
-<table class="table">
+<table class="table" @*style="table-layout: fixed;"*@>
     <tr>
         <th>
             @Html.DisplayName("Date Recieved")
+        </th>
+        <th>
+            @Html.DisplayName("Profile Picture")
         </th>
         <th>
             @Html.DisplayName("Contact")
@@ -36,6 +39,9 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                <img src="@Url.Action("SelectPicture", "Profiles", new { id = item.Sender.Id })" alt="" />
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Sender.FirstName)
