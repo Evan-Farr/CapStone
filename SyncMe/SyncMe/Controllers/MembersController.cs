@@ -171,24 +171,8 @@ namespace SyncMe.Controllers
                 TempData["ErrorMessage"] = "**You currently don't have any contacts...";
                 return RedirectToAction("ViewCalendar");
             }
-            var profiles = new List<Profile>();
-            foreach (var contact in member.Contacts)
-            {
-                var profile = db.Profiles.Where(p => p.Id == contact.ContactId).Select(a => a).FirstOrDefault();
-                profiles.Add(profile);
-            }
-            ViewBag.AllSyncRequests = new List<SyncRequest>();
-            if (db.SyncRequests.ToList().Count != 0)
-            {
-                foreach (var syncRequest in db.SyncRequests.ToList())
-                {
-                    ViewBag.AllSyncRequests.Add(syncRequest);
-                }
-            }
-            var sender = db.Profiles.Where(q => q.Member.Id == member.Id).Select(u => u).FirstOrDefault();
-            ViewBag.SenderId = sender.Id;
-            ViewBag.counter = 0;
-            return View(profiles.OrderBy(o => o.LastName));
+            var contacts = member.Contacts.OrderBy(a => a.LastName).ToList();
+            return View(contacts);
         }
 
         public ActionResult SendContactRequest(int? id)
@@ -429,14 +413,10 @@ namespace SyncMe.Controllers
             db.SyncRequests.Add(syncRequest);
             db.SyncRequests.Add(syncRequest2);
             db.SaveChanges();
-            if(reRoute == "ChooseSyncContacts")
+            if (reRoute == "ChooseSyncContacts")
             {
                 TempData["Message"] = "**Sync requeset successfully sent!";
                 return RedirectToAction("ChooseSyncContacts");
-            }else if(reRoute == "ViewContacts")
-            {
-                TempData["Message"] = "**Sync requeset successfully sent!";
-                return RedirectToAction("ViewContacts");
             }
             TempData["ErrorMessage"] = "**An issue occured while attempting to send the sync request.";
 
