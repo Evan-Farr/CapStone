@@ -404,14 +404,8 @@ namespace SyncMe.Controllers
             syncRequest.Receiver = receiver;
             syncRequest.Status = "Pending";
             syncRequest.Date = DateTime.Today;
-            SyncRequest syncRequest2 = new SyncRequest();
-            syncRequest2.Sender = receiverProfile;
-            syncRequest2.Receiver = member;
-            syncRequest2.Status = "Pending";
-            syncRequest2.Date = DateTime.Today;
             receiver.SyncRequests.Add(syncRequest);
             db.SyncRequests.Add(syncRequest);
-            db.SyncRequests.Add(syncRequest2);
             db.SaveChanges();
             if (reRoute == "ChooseSyncContacts")
             {
@@ -485,16 +479,14 @@ namespace SyncMe.Controllers
             var syncRequest = db.SyncRequests.Where(n => n.Id == id).Select(o => o).FirstOrDefault();
             var senderProfile = db.Profiles.Where(p => p.Id == syncRequest.Sender.Id).Select(a => a).FirstOrDefault();
             var sender = db.Members.Where(b => b.Id == senderProfile.Member.Id).Select(y => y).FirstOrDefault();
-            var syncRequest2 = db.SyncRequests.Where(m => m.Sender == memberProfile && m.Receiver == sender).Select(r => r).FirstOrDefault();
             syncRequest.Status = "Approved";
-            syncRequest2.Status = "Approved";
-            //var newSyncRequest = new SyncRequest();
-            //newSyncRequest.Date = syncRequest.Date;
-            //newSyncRequest.Status = syncRequest.Status;
-            //newSyncRequest.Receiver = sender;
-            //newSyncRequest.Sender = memberProfile;
-            //db.SyncRequests.Add(newSyncRequest);
-            sender.SyncRequests.Add(syncRequest2);
+            var newSyncRequest = new SyncRequest();
+            newSyncRequest.Date = syncRequest.Date;
+            newSyncRequest.Status = syncRequest.Status;
+            newSyncRequest.Receiver = sender;
+            newSyncRequest.Sender = memberProfile;
+            db.SyncRequests.Add(newSyncRequest);
+            sender.SyncRequests.Add(newSyncRequest);
             db.SaveChanges();
             TempData["Message"] = "**You have a new synced calendar!";
             return RedirectToAction("ViewSyncRequests");
@@ -504,7 +496,7 @@ namespace SyncMe.Controllers
         {
             var user = User.Identity.GetUserId();
             var member = db.Members.Where(u => u.UserId.Id == user).Select(s => s).FirstOrDefault();
-            var syncRequest = db.SyncRequests.Where(n => n.Sender.Id == id).Select(o => o).FirstOrDefault();
+            var syncRequest = db.SyncRequests.Where(n => n.Id == id).Select(o => o).FirstOrDefault();
             syncRequest.Status = "Denied";
             member.SyncRequests.Remove(syncRequest);
             db.SyncRequests.Remove(syncRequest);
@@ -607,6 +599,28 @@ namespace SyncMe.Controllers
             TempData["Message"] = "**You have a new event!";
             //return RedirectToAction("ViewSyncedCalendar", new { id = otherProfile.Id });
             return RedirectToAction("ViewCalendar");
+        }
+
+        public ActionResult RemoveAllSyncRequests()
+        {
+            if(db.SyncRequests.ToList().Count == 0)
+            {
+                return RedirectToAction("Index", "Users");
+            }
+            foreach(var request in db.SyncRequests.ToList())
+            {
+                db.SyncRequests.Remove(request);
+            }
+            foreach(var member in db.Members.ToList())
+            {
+                foreach(var sync in member.SyncRequests)
+                {
+                    member.SyncRequests.Remove(sync);
+                }
+            }
+            db.SaveChanges();
+            TempData["Message"] = "**All sync requests deleted.";
+            return RedirectToAction("Index", "Users");
         }
     }
 }
