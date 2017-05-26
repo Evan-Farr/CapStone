@@ -105,7 +105,7 @@
                 }
                 @if (ViewBag.counter == 0)
                 {
-                    @Html.ActionLink("Send Request", "SendSyncRequest", new { id = item.Id }, null)
+                    @Html.ActionLink("Send Request", "SendSyncRequest", new { id = item.Id, reRoute = "ChooseSyncContacts" }, null)
                 }
             </td>
         </tr>

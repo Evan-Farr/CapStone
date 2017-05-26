@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SyncMe.Models.Contact>
+﻿@model IEnumerable<SyncMe.Models.Profile>
 
 @{
     ViewBag.Title = "ViewContacts";
@@ -49,7 +49,7 @@
     {
     <tr>
         <td>
-            <img src="@Url.Action("SelectPictureContact", "Profiles", new { id = item.Id })" alt="" />
+            <img src="@Url.Action("SelectPicture", "Profiles", new { id = item.Id })" alt="" />
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.FirstName)
@@ -74,7 +74,43 @@
             @Html.DisplayFor(modelItem => item.Email)
         </td>
         <td>
-            @Html.ActionLink("Remove Contact", "RemoveContact", new { id = item.Id }, null)
+            @{
+                ViewBag.counter = 0;
+            }
+            @if (ViewBag.AllSyncRequests.Count != 0)
+                {
+                    foreach (var request in ViewBag.AllSyncRequests)
+                    {
+                        if (request.Receiver.Id == item.Member.Id)
+                        {
+                            if (request.Sender.Id == ViewBag.SenderId)
+                            {
+                                if (request.Status == "Pending")
+                                {
+                                @Html.ActionLink("Remove Contact", "RemoveContact", new { id = item.Id }, null)
+                                <br />
+                                <p style="color: indianred">Request Pending</p>
+                                ViewBag.counter = 1;
+                                break;
+                            }
+                            else
+                            {
+                                @Html.ActionLink("Remove Contact", "RemoveContact", new { id = item.Id }, null)
+                                <br />
+                                @Html.ActionLink("View Sync", "ViewSyncedCalendar", new { id = item.Id }, new { @class = "green-action-link" })
+                                ViewBag.counter = 1;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            @if (ViewBag.counter == 0)
+            {
+                @Html.ActionLink("Remove Contact", "RemoveContact", new { id = item.Id }, null)
+                <br />
+                @Html.ActionLink("Send Sync Request", "SendSyncRequest", new { id = item.Id, reRoute = "ViewContacts" }, null)
+            }
         </td>
     </tr>
     }

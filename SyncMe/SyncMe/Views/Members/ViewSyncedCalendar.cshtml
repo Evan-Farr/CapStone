@@ -102,9 +102,9 @@
                     $('#modalEnd').html("END: " + event.end._d.toLocaleDateString() + " " + event.end._d.toLocaleTimeString());
                     $('#modalDetails').html("DETAILS: " + event.details);
                     $('#modalPrivate').html("PRIVATE: " + event.isPrivate);
-                    if(event === 'A'){
+                    if(event.data.param === 'A'){
                         $('#modal-links').html("<a class='btn btn-default2 btn-md' href='/Members/ChooseContacts/"+event.Id+"'>Send Invitation</a><a class='btn btn-default1 btn-md' href='/Events/GetDirections/"+event.Id+"'>Get Directions</a><a class='btn btn-default1 btn-md' href='/Events/GetWeather/"+event.Id+"'>Weather Forecast</a><a class='btn btn-default1 btn-md' href='/Events/Edit/"+event.Id+"'>Edit</a><a class='btn btn-default1 btn-md' href='/Events/Delete/"+event.Id+"'>Delete</a>");
-                    } else if (event === 'B') {
+                    } else if (event.data.param === 'B') {
                         $('#modal-links').html("<a class='btn btn-default1 btn-md' href='/Members/AddToMyEvents/"+event.Id+"'>Add To My Events</a>");
                     }
                     $('#fullCalModal').modal();
