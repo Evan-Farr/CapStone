@@ -1,0 +1,77 @@
+﻿@model SyncMe.Models.Event
+
+@{
+    ViewBag.Title = "GetWeather";
+}
+
+<h2>GetWeather</h2>
+
+<br />
+@Html.ActionLink("Done", "ViewCalendar", "Members", null, new { @class = "btn btn-primary btn-md" })
+<hr />
+<div>
+    <h4>@ViewBag.Name</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayName("Address")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.streetAddress)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("City")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.city)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("State")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.state)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Zip Code")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.zipCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Start")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.start)
+            @Html.DisplayFor(model => model.startTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("End")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.end)
+            @Html.DisplayFor(model => model.endTime)
+        </dd>
+    </dl>
+</div>
+<hr />
+<br />
+
+<br />
+@Html.ActionLink("Done", "ViewCalendar", "Members", null, new { @class = "btn btn-primary btn-md" })
+<hr />
+
+<script>
+        
+</script>
+<script async defer src="http://api.openweathermap.org/data/2.5/weather?id=CITYIDappid=a4a28fe9d0de8258583237ee29999aee&units=metric"></script>
