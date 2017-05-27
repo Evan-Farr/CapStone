@@ -8,11 +8,11 @@
 @Html.ActionLink("Done", "ViewCalendar", "Members", null, new { @class = "btn btn-primary btn-md" })
 <hr />
 <div>
-    <h4>@ViewBag.Name</h4>
+    <h4><strong>Event: </strong>@ViewBag.Name</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayName("Address")
+            @Html.DisplayName("address")
         </dt>
 
         <dd>
@@ -36,7 +36,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayName("Zip Code")
+            @Html.DisplayName("zip code")
         </dt>
 
         <dd>

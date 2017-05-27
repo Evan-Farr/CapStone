@@ -234,6 +234,13 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Class\Clouds.cs" />
+    <Compile Include="Class\Coord.cs" />
+    <Compile Include="Class\Main.cs" />
+    <Compile Include="Class\ResponseWeather.cs" />
+    <Compile Include="Class\Sys.cs" />
+    <Compile Include="Class\Weather.cs" />
+    <Compile Include="Class\Wind.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CalendarsController.cs" />
     <Compile Include="Controllers\ContactRequestsController.cs" />
