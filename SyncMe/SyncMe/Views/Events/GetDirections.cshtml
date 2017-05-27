@@ -67,6 +67,9 @@
 
 <div id="map"></div>
 <div id="directions-panel"></div>
+<br />
+@Html.ActionLink("Done", "ViewCalendar", "Members", null, new { @class = "btn btn-primary btn-md" })
+<hr />
 
 <script>
         var geocoder;
@@ -76,7 +79,6 @@
         var stepDisplay;
         var destination = @Html.Raw(Json.Encode(Model));
         var setDestination;
-        //var waypts = [];
         function initMap() {
             geocoder = new google.maps.Geocoder();
             directionsService = new google.maps.DirectionsService;
@@ -84,7 +86,7 @@
             var latlng = new google.maps.LatLng(43.0389, -87.9065);
             var mapOptions = {
                 center: latlng,
-                zoom: 13,
+                zoom: 7,
             };
             map = new google.maps.Map(document.getElementById("map"), mapOptions);
             directionsDisplay.setMap(map);
@@ -93,34 +95,28 @@
         }
 
         function codeAddress() {
-            for(var i = 0; i < destination.length; i++){
-                var address = destination[i].streetAddress + " " + destination[i].city + " " + destination[i].state + " " + destination[i].zipCode;
-                setDestination = address;
-                //waypts.push({
-                //    location: address,
-                //    stopover: true
-                //});
-                geocoder.geocode( { 'address': address}, function(results, status) {
-                    if (status == 'OK') {
-                        map.setCenter(results[0].geometry.location);
-                        var marker = new google.maps.Marker({
-                            map: map,
-                            position: results[0].geometry.location,
-                            animation: google.maps.Animation.DROP
-                        });
-                    } else {
-                        alert('Geocode was not successful for the following reason: ' + status);
-                    }
-                });
-            }
+            var address = destination.streetAddress + " " + destination.city + " " + destination.state + " " + destination.zipCode;
+            setDestination = address;
+            geocoder.geocode( { 'address': address}, function(results, status) {
+                if (status == 'OK') {
+                    map.setCenter(results[0].geometry.location);
+                    var marker = new google.maps.Marker({
+                        map: map,
+                        position: results[0].geometry.location,
+                        animation: google.maps.Animation.DROP
+                    });
+                } else {
+                    alert('Geocode was not successful for the following reason: ' + status);
+                }
+            });
         }
 
         function calculateAndDisplayRoute() {
             directionsService.route({
                 origin: "333 n plankinton ave Milwaukee, wi 53202",
                 destination: setDestination,
-                //waypoints: waypts,
-                //optimizeWaypoints: true,
+                waypoints: null,
+                optimizeWaypoints: true,
                 travelMode: 'DRIVING'
             }, function(response, status) {
                 if (status === 'OK') {
