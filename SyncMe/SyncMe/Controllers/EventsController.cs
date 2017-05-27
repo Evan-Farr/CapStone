@@ -177,5 +177,24 @@ namespace SyncMe.Controllers
             }
             return false;
         }
+
+        public ActionResult GetDirections(int? id)
+        {
+            var @event = db.Events.Where(e => e.Id == id).Select(s => s).FirstOrDefault();
+            if(@event.streetAddress == null)
+            {
+                TempData["ErrorMessage"] = "**Unable to get directions to this event. Make sure the event has a saved location.";
+                return RedirectToAction("ViewCalendar", "Members");
+            }
+            ViewBag.Name = @event.title;
+            return View(@event);
+        }
+
+        public ActionResult GetWeather(int? id)
+        {
+            var @event = db.Events.Where(e => e.Id == id).Select(s => s).FirstOrDefault();
+            ViewBag.Name = @event.title;
+            return View(@event);
+        }
     }
 }

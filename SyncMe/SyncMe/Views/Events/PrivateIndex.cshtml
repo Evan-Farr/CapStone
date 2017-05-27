@@ -24,16 +24,10 @@
             @Html.DisplayName("Zip Code")
         </th>
         <th>
-            @Html.DisplayName("Start Date")
+            @Html.DisplayName("Start")
         </th>
         <th>
-            @Html.DisplayName("End Date")
-        </th>
-        <th>
-            @Html.DisplayName("Start Time")
-        </th>
-        <th>
-            @Html.DisplayName("End Time")
+            @Html.DisplayName("End")
         </th>
         <th>
             @Html.DisplayName("Details")
@@ -64,14 +58,10 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.start)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.end)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.startTime)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.end)
                 @Html.DisplayFor(modelItem => item.endTime)
             </td>
             <td>

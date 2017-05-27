@@ -36,7 +36,10 @@
                     <h5 id="modalStart" class="modal-body"></h5>
                     <h5 id="modalEnd" class="modal-body"></h5>
                     <h5 id="modalDetails" class="modal-body"></h5>
-                    <h5 id="modalPrivate" class="modal-body"></h5>
+                    <h5 id="modalLocation" class="modal-body"></h5>
+                    <h5 id="modalAddress" class="modal-body"></h5>
+                    <h5 id="modalCity" class="modal-body"></h5>
+                    <h5 id="modalState" class="modal-body"></h5>
                     <div id="modal-links"></div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -82,18 +85,12 @@
             {
                 events: @Html.Raw(Json.Encode(Model.ListA)),
                 color: '#007575',
-                textColor: 'white',
-                data: {
-                    param: 'A'
-                }
+                textColor: 'white'
             },
             {
                 events: @Html.Raw(Json.Encode(Model.ListB)),
                 color: 'purple',
-                textColor: 'white',
-                data: {
-                    param: 'B'
-                }
+                textColor: 'white'
             }
             ],
             eventClick: function(event, jsEvent, view){
@@ -101,12 +98,15 @@
                     $('#modalStart').html("START: " + event.start._d.toLocaleDateString() + " " + event.start._d.toLocaleTimeString());
                     $('#modalEnd').html("END: " + event.end._d.toLocaleDateString() + " " + event.end._d.toLocaleTimeString());
                     $('#modalDetails').html("DETAILS: " + event.details);
-                    $('#modalPrivate').html("PRIVATE: " + event.isPrivate);
-                    if(event.data.param === 'A'){
-                        $('#modal-links').html("<a class='btn btn-default2 btn-md' href='/Members/ChooseContacts/"+event.Id+"'>Send Invitation</a><a class='btn btn-default1 btn-md' href='/Events/GetDirections/"+event.Id+"'>Get Directions</a><a class='btn btn-default1 btn-md' href='/Events/GetWeather/"+event.Id+"'>Weather Forecast</a><a class='btn btn-default1 btn-md' href='/Events/Edit/"+event.Id+"'>Edit</a><a class='btn btn-default1 btn-md' href='/Events/Delete/"+event.Id+"'>Delete</a>");
-                    } else if (event.data.param === 'B') {
-                        $('#modal-links').html("<a class='btn btn-default1 btn-md' href='/Members/AddToMyEvents/"+event.Id+"'>Add To My Events</a>");
-                    }
+                    $('#modalLocation').html(" ");
+                    $('#modalAddress').html("> Street Address: " + event.streetAddress);
+                    $('#modalCity').html("> City: " + event.city);
+                    $('#modalState').html("> State: " + event.state);
+                    //if(event === Model.ListA){
+                    //    $('#modal-links').html("<a class='btn btn-default2 btn-md' href='/Members/ChooseContacts/"+event.Id+"'>Send Invitation</a><a class='btn btn-default1 btn-md' href='/Events/GetDirections/"+event.Id+"'>Get Directions</a><a class='btn btn-default1 btn-md' href='/Events/GetWeather/"+event.Id+"'>Weather Forecast</a><a class='btn btn-default1 btn-md' href='/Events/Edit/"+event.Id+"'>Edit</a><a class='btn btn-default1 btn-md' href='/Events/Delete/"+event.Id+"'>Delete</a>");
+                    //} else if (event === Model.ListB) {
+                    //    $('#modal-links').html("<a class='btn btn-default1 btn-md' href='/Members/AddToMyEvents/"+event.Id+"'>Add To My Events</a>");
+                    //}
                     $('#fullCalModal').modal();
                 }
             });
