@@ -33,6 +33,7 @@ textarea {
     align-content: center;
     text-align: center;
     align-items: center;
+    vertical-align: central;
 }
 
 .navbar {
@@ -118,6 +119,31 @@ textarea {
 .btn-primary::selection {
     background-color: #43B1B1;
     border-color: #007575;
+}
+
+.btn-primary2 {
+    background-color: #007575;
+    border-color: #43B1B1;
+    opacity: 1;
+    min-width: 100px;
+    color: #ffffff;
+}
+.btn-primary2:hover {
+    background-color: #43B1B1;
+    border-color: #007575;
+    color: #ffffff;
+}
+
+.btn-primary2:active {
+    background-color: #43B1B1;
+    border-color: #007575;
+    color: #ffffff;
+}
+
+.btn-primary2::selection {
+    background-color: #43B1B1;
+    border-color: #007575;
+    color: #ffffff;
 }
 
 /*.navbar-brand {
@@ -223,9 +249,9 @@ a:hover {
   line-height: 110px;
   text-align: center;
   background: #007575;
-  margin-left: 20px;
+  /*margin-left: 20px;*/
   margin-bottom: -25px;
-  margin-top: 50px;
+  margin-top: 0px;
 }
 
 .circle2 {
@@ -237,7 +263,7 @@ a:hover {
   line-height: 110px;
   text-align: center;
   background: purple;
-  margin-left: 20px;
+  /*margin-left: 20px;*/
 }
 
 /*.container2 {

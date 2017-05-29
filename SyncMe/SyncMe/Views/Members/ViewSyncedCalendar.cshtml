@@ -18,7 +18,7 @@
 <container>
     <div class="col-md-1">
         <center>
-            @Html.ActionLink("Done", "ViewCalendar", "Members", null, new { @class = "btn btn-primary btn-md" })
+            @Html.ActionLink("Done", "ViewCalendar", "Members", null, new { @class = "btn btn-primary2 btn-md" })
             <br /><br /><br /><br />
             <p class="circle">My Events</p>
             <br /><br />
@@ -26,7 +26,7 @@
             <br /><br />
         </center>
     </div>
-    <div class="col-md-11">
+    <div class="col-md-offset-2">
         <div id="fullCalModal" class="modal fade">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -47,7 +47,7 @@
                 </div>
             </div>
         </div>
-        <div id='calendar'></div>
+        <div id='calendar' class="col-md-12"></div>
     </div>
 </container>
 
