@@ -102,7 +102,7 @@ textarea {
     background-color: #007575;
     border-color: #43B1B1;
     opacity: 1;
-    min-width: 170px;
+    min-width: 167px;
 }
 
 .btn-primary:hover {
@@ -239,3 +239,21 @@ a:hover {
   background: purple;
   margin-left: 20px;
 }
+
+/*.container2 {
+    width: 100%;
+    margin: auto;
+    padding: 10px;
+}
+
+.one {
+    width: 15%;
+    height: 200px;
+    float: left;
+}
+
+.two {
+    margin-left: 15%;
+    margin-top: -200px;
+    height: 500px;
+}*/
