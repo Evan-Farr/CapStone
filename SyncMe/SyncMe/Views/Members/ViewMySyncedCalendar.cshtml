@@ -1,7 +1,10 @@
 ﻿@model IEnumerable<SyncMe.Models.Event>
+
 @{
-    ViewBag.Title = "ViewCalendar";
+    ViewBag.Title = "ViewMySyncedCalendar";
 }
+
+<h2>ViewMySyncedCalendar</h2>
 
 <br />
 <br />
@@ -103,12 +106,17 @@
                 textColor: 'white'
             },
             {
-                events: {
-                    googleCalendarId: 'evan.c.farr@gmail.com',
-                },
+                events: 'https://calendar.google.com/calendar/ical/evan.c.farr%40gmail.com/public/basic.ics',
                 color: '#007575',
                 textColor: 'white'
             }
+            //{
+            //    events: {
+            //        googleCalendarId: 'evan.c.farr@gmail.calendar.google.com',
+            //    },
+            //    color: '#007575',
+            //    textColor: 'white'
+            //}
             ],
             eventClick: function(event, jsEvent, view){
                 $('#modalTitle').html(event.title);

@@ -559,6 +559,34 @@ namespace SyncMe.Controllers
             return View(viewModel);
         }
 
+        public ActionResult ViewMySyncedCalendar(string address)
+        {
+            try
+            {
+                var current = User.Identity.GetUserId();
+                var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
+                var events = new List<Event>();
+                foreach (var item in member.Events)
+                {
+                    events.Add(item);
+                }
+                ViewBag.Address = address;
+                return View(events);
+            }
+            catch
+            {
+                if (User.IsInRole("Admin"))
+                {
+                    return RedirectToAction("Index", "Users");
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "**An unknown error occured while syncing your calendar.";
+                    return RedirectToAction("ViewCalendar");
+                }
+            }
+        }
+
         public ActionResult RemoveSyncedCalendar(int? id)
         {
             var user = User.Identity.GetUserId();
@@ -628,20 +656,20 @@ namespace SyncMe.Controllers
             return View();
         }
 
-        public ActionResult SyncGoogleCalendar(string id)
+        public ActionResult SyncGoogleCalendar(string address)
         {
             var user = User.Identity.GetUserId();
             var member = db.Members.Where(u => u.UserId.Id == user).Select(s => s).FirstOrDefault();
             var memberProfile = db.Profiles.Where(q => q.Member.Id == member.Id).Select(e => e).FirstOrDefault();
-            if(id == null || id == "")
+            if(address == null || address == "")
             {
                 TempData["ErrorMessage"] = "**You must input a valid Google Calendar ID.";
                 return RedirectToAction("GetGoogleCalendarId");
             }
-            var googleCalendarId = id;
+            var calendarAddress = address;
             db.SaveChanges();
             TempData["Message"] = "**You successfully synced your Google Calendar!";
-            return RedirectToAction("ViewCalendar");
+            return RedirectToAction("ViewMySyncedCalendar", new { address = calendarAddress });
         }
     }
 }

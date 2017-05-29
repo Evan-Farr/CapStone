@@ -32,10 +32,10 @@
 </div>
 <hr />
 <div class="col-md-12" style="margin-top: 20px;">
-    <h2>@Html.Label("Google Calendar ID")</h2>
+    <h2>@Html.Label("ICAL Calendar Address")</h2>
     @using (Html.BeginForm("SyncGoogleCalendar", "Members", FormMethod.Get))
             {
-        <input type="text" name="id" />
+        <input type="text" name="address" />
         <button class="btn btn-default btn-md" type="submit">Sync</button>
     }
 </div>
