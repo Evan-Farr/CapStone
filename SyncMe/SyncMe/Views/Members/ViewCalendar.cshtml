@@ -89,7 +89,6 @@
             },
             defaultView: 'month',
             editable: true,
-            googleCalendarApiKey: 'AIzaSyAF5pcj3RQn9K4s9u844Q7jVha3_JZT-K0',
             droppable: true,
             slotDuration: '00:30:00',
             scrollTime: '12:00:00 AM',
@@ -104,9 +103,9 @@
             },
             {
                 events: {
-                    googleCalendarId: 'evan.c.farr@gmail.com'
+                    googleCalendarApiKey: 'AIzaSyDU4IWEgKdyXr-7GvaPLs3-bP286jkrj1g',
+                    googleCalendarId: 'evan.c.farr@gmail.com',
                 },
-                className: 'gcal-event',
                 color: '#007575',
                 textColor: 'white'
             }
@@ -127,3 +126,4 @@
         });
     });
 </script>
+<script async defer src="'https://www.googleapis.com/calendar/v3/calendars/calendarId/events/import'"></script>
