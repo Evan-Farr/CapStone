@@ -18,12 +18,12 @@
     <div class="col-md-1">
         <center>
             @Html.ActionLink("My Profile", "PrivateDetails", "Profiles", null, new { @class = "btn btn-primary btn-md" })
-            <br /><br /><br />
+            <br /><br />
             @Html.ActionLink("Find Members", "Search", "Profiles", null, new { @class = "btn btn-primary btn-md" })
             <br /><br /><br />
             @Html.ActionLink("Add New Event", "Create", "Events", null, new { @class = "btn btn-primary btn-md" })
             <br /><br />
-            @Html.ActionLink("List All Events", "PrivateIndex", "Events", null, new { @class = "btn btn-primary btn-md" })
+            @Html.ActionLink("List Active Events", "PrivateIndex", "Events", null, new { @class = "btn btn-primary btn-md" })
             <br /><br />
             @Html.ActionLink("Event Invitations", "ViewEventInvitations", "Members", null, new { @class = "btn btn-primary btn-md" })
             <br /><br /><br />
@@ -36,6 +36,8 @@
             @Html.ActionLink("View Sync Requests", "ViewSyncRequests", "Members", null, new { @class = "btn btn-primary btn-md" })
             <br /><br />
             @Html.ActionLink("Synced Calendars", "ChooseSyncedCalendar", "Members", null, new { @class = "btn btn-primary btn-md" })
+            <br /><br />
+            @Html.ActionLink("Sync Google Calendar", "GetGoogleCalendarId", "Members", null, new { @class = "btn btn-primary btn-md" })
             <br /><br />
         </center>
     </div>
@@ -87,7 +89,7 @@
             },
             defaultView: 'month',
             editable: true,
-            //googleCalendarApiKey: 'API-Key',
+            googleCalendarApiKey: 'AIzaSyAF5pcj3RQn9K4s9u844Q7jVha3_JZT-K0',
             droppable: true,
             slotDuration: '00:30:00',
             scrollTime: '12:00:00 AM',
@@ -97,6 +99,14 @@
             eventSources: [
             {
                 events: @Html.Raw(Json.Encode(Model)),
+                color: '#007575',
+                textColor: 'white'
+            },
+            {
+                events: {
+                    googleCalendarId: 'evan.c.farr@gmail.com'
+                },
+                className: 'gcal-event',
                 color: '#007575',
                 textColor: 'white'
             }

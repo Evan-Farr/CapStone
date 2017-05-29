@@ -622,5 +622,26 @@ namespace SyncMe.Controllers
             TempData["Message"] = "**All sync requests deleted.";
             return RedirectToAction("Index", "Users");
         }
+
+        public ActionResult GetGoogleCalendarId()
+        {
+            return View();
+        }
+
+        public ActionResult SyncGoogleCalendar(string id)
+        {
+            var user = User.Identity.GetUserId();
+            var member = db.Members.Where(u => u.UserId.Id == user).Select(s => s).FirstOrDefault();
+            var memberProfile = db.Profiles.Where(q => q.Member.Id == member.Id).Select(e => e).FirstOrDefault();
+            if(id == null || id == "")
+            {
+                TempData["ErrorMessage"] = "**You must input a valid Google Calendar ID.";
+                return RedirectToAction("GetGoogleCalendarId");
+            }
+            var googleCalendarId = id;
+            db.SaveChanges();
+            TempData["Message"] = "**You successfully synced your Google Calendar!";
+            return RedirectToAction("ViewCalendar");
+        }
     }
 }

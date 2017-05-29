@@ -819,6 +819,7 @@
     <Content Include="Views\Members\ViewSyncRequests.cshtml" />
     <Content Include="Views\Events\GetDirections.cshtml" />
     <Content Include="Views\Events\GetWeather.cshtml" />
+    <Content Include="Views\Members\GetGoogleCalendarId.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

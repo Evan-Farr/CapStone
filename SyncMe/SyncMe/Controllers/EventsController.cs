@@ -135,7 +135,8 @@ namespace SyncMe.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Event @event = db.Events.Find(id);
-            var member = db.Members.Where(m => m.Events.Contains(@event)).Select(s => s).FirstOrDefault();
+            var current = User.Identity.GetUserId();
+            var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
             member.Events.Remove(@event);
             db.Events.Remove(@event);
             db.SaveChanges();
