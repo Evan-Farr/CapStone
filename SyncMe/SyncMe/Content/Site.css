@@ -146,13 +146,14 @@ textarea {
     color: #ffffff;
 }
 
-/*.navbar-brand {
-    background-image: url(Images/logo.png);
+.navbar-brand {
+    background-image: url(Images/SyncMe-Logo.png);
     background-size: 100px, 100px;
     background-repeat: no-repeat;
     height: 50px;
     width: 100px;
-}*/
+    background-position-y: 10px;
+}
 
 .navbar-inverse .navbar-brand {
     color: #43B1B1;
@@ -188,10 +189,12 @@ a:hover {
 }
 
 .homepage-jumbotron-bg {
-    /*background-image: url(Images/background2.png);*/
-    background-size: cover;
-    background-position-y: 50px;
-    padding-top: 70px;
+    background-image: url(Images/syncme-j2.png);
+    /*background-position-x: 50%;*/
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position-y: 430px;
+    padding-top: 50px;
     text-align: center;
     line-height: 110px;
 }
@@ -199,17 +202,20 @@ a:hover {
 .homepage-jumbotron-bg .jumbotron {
     color: #fff;
     background: rgba(0,0,0,0.5);
-    /*height: 700px;*/
     text-align: center;
-    min-height: 700px;
+    min-height: 800px;
     min-width: 100%;
     /*border-radius: 100000% !important;*/
 }
 
 @media screen and (min-width: 768px) {
     .homepage-jumbotron-bg {
-        background-position-y: -124px;
+        /*background-position-y: -124px;*/
     }
+}
+
+.jumbotron {
+    margin-bottom: 0px !important;
 }
 
 .jumbotron-home-text {

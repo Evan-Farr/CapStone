@@ -281,7 +281,7 @@ namespace SyncMe.Controllers
             var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
             var member2 = db.Members.Where(t => t.Id == profile.Member.Id).Select(o => o).FirstOrDefault(); 
             var profile2 = db.Profiles.Where(z => z.Member.Id == member.Id).Select(w => w).FirstOrDefault(); 
-            var contact2 = db.Contacts.Where(a => a.ContactId == profile2.Id).Select(y => y).FirstOrDefault(); 
+            var contact2 = db.Contacts.Where(a => a.ContactId == profile2.Id).Select(y => y).FirstOrDefault();
             member.Contacts.Remove(contact);
             member2.Contacts.Remove(contact2);
             db.Contacts.Remove(contact);
