@@ -199,7 +199,12 @@ namespace SyncMe.Controllers
             var user = User.Identity.GetUserId();
             var member = db.Members.Where(u => u.UserId.Id == user).Select(s => s).FirstOrDefault();
             var requests = new List<Profile>();
-            foreach(var request in member.ContactRequests)
+            if (member.ContactRequests.Count == 0)
+            {
+                TempData["ErrorMessage"] = "**You currently don't have any pending contact requests.";
+                return RedirectToAction("ViewCalendar");
+            }
+            foreach (var request in member.ContactRequests)
             {
                 var profile = db.Profiles.Where(p => p.Id == request.Sender.Id).Select(a => a).FirstOrDefault();
                 requests.Add(profile);
@@ -346,6 +351,11 @@ namespace SyncMe.Controllers
             var user = User.Identity.GetUserId();
             var member = db.Members.Where(u => u.UserId.Id == user).Select(s => s).FirstOrDefault();
             var invites = new List<EventInvitation>();
+            if (member.EventInvitations.Count == 0)
+            {
+                TempData["ErrorMessage"] = "**You currently don't have any pending event invitations.";
+                return RedirectToAction("ViewCalendar");
+            }
             foreach (var invite in member.EventInvitations)
             {
                 invites.Add(invite);
