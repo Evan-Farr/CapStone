@@ -13,7 +13,6 @@ namespace SyncMe
             ConfigureAuth(app);
             CreateRolesAndUsers();
             //app.MapSignalR();
-            NotifyMe();
 
         }
 

@@ -190,15 +190,20 @@ a:hover {
 .homepage-jumbotron-bg {
     /*background-image: url(Images/background2.png);*/
     background-size: cover;
-    background-position-y: 0px;
+    background-position-y: 50px;
     padding-top: 70px;
+    text-align: center;
+    line-height: 110px;
 }
 
 .homepage-jumbotron-bg .jumbotron {
     color: #fff;
     background: rgba(0,0,0,0.5);
-    height: 700px;
+    /*height: 700px;*/
     text-align: center;
+    min-height: 700px;
+    min-width: 100%;
+    /*border-radius: 100000% !important;*/
 }
 
 @media screen and (min-width: 768px) {
@@ -283,3 +288,11 @@ a:hover {
     margin-top: -200px;
     height: 500px;
 }*/
+
+.avatar_head {
+width: 30px;
+height: 30px;
+-moz-border-radius: 15px;
+-webkit-border-radius: 15px;
+border-radius: 15px;
+}
