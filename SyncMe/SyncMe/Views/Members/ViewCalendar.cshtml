@@ -95,20 +95,20 @@
             slotEventOverLap: true,
             disableResizing: false,
             eventOrder: '-start',
-            googleCalendarApiKey: 'AIzaSyDU4IWEgKdyXr-7GvaPLs3-bP286jkrj1g',
+            googleCalendarApiKey: 'AIzaSyCUrVivP-syjNYU2FC3_uqSUu_chxN49mg',
             eventSources: [
             {
                 events: @Html.Raw(Json.Encode(Model)),
                 color: '#007575',
                 textColor: 'white'
-            },
-            {
-                events: {
-                    googleCalendarId: 'evan.c.farr@gmail.com',
-                },
-                color: '#007575',
-                textColor: 'white'
             }
+            //{
+            //    events: {
+            //        googleCalendarId: 'evan.c.farr@group.calendar.google.com'
+            //    },
+            //    color: '#007575',
+            //    textColor: 'white'
+            //}
             ],
             eventClick: function(event, jsEvent, view){
                 $('#modalTitle').html(event.title);
