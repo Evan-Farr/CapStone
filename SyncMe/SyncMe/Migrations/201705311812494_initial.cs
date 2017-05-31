@@ -60,6 +60,7 @@ namespace SyncMe.Migrations
                     {
                         Id = c.Int(nullable: false, identity: true),
                         ContactId = c.Int(),
+                        FriendId = c.Int(),
                         ProfilePictureId = c.Binary(),
                         FirstName = c.String(),
                         LastName = c.String(),

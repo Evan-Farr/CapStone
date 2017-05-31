@@ -189,35 +189,47 @@ namespace SyncMe.Controllers
                         bytesToRead -= n;
                     }
                     profile.ProfilePictureId = bytes;
-                    var contact = db.Contacts.Where(r => r.ContactId == profile.Id).Select(p => p).FirstOrDefault();
-                    contact.ContactId = profile.Id;
-                    contact.ProfilePictureId = profile.ProfilePictureId;
-                    contact.FirstName = profile.FirstName;
-                    contact.LastName = profile.LastName;
-                    contact.Age = profile.Age;
-                    contact.State = profile.State;
-                    contact.CompanyName = profile.CompanyName;
-                    contact.SchoolName = profile.SchoolName;
-                    contact.Phone = profile.Phone;
-                    contact.Email = profile.Email;
-                    db.Entry(contact).State = EntityState.Modified;
+                    if(db.Contacts.ToList().Count != 0)
+                    {
+                        foreach (var contact in db.Contacts.ToList())
+                        {
+                            if (contact.ContactId == profile.Id)
+                            {
+                                contact.ProfilePictureId = profile.ProfilePictureId;
+                                contact.FirstName = profile.FirstName;
+                                contact.LastName = profile.LastName;
+                                contact.Age = profile.Age;
+                                contact.State = profile.State;
+                                contact.CompanyName = profile.CompanyName;
+                                contact.SchoolName = profile.SchoolName;
+                                contact.Phone = profile.Phone;
+                                contact.Email = profile.Email;
+                            }
+                        }
+                    }
                     db.Entry(profile).State = EntityState.Modified;
                     db.SaveChanges();
                     if (User.IsInRole("Admin")) { return RedirectToAction("Details", new { id = profile.Id }); }
                     return RedirectToAction("PrivateDetails");
                 }
-                var contact2 = db.Contacts.Where(c => c.ContactId == profile.Id).Select(s => s).FirstOrDefault();
-                contact2.ContactId = profile.Id;
-                contact2.ProfilePictureId = profile.ProfilePictureId;
-                contact2.FirstName = profile.FirstName;
-                contact2.LastName = profile.LastName;
-                contact2.Age = profile.Age;
-                contact2.State = profile.State;
-                contact2.CompanyName = profile.CompanyName;
-                contact2.SchoolName = profile.SchoolName;
-                contact2.Phone = profile.Phone;
-                contact2.Email = profile.Email;
-                db.Entry(contact2).State = EntityState.Modified;
+                if (db.Contacts.ToList().Count != 0)
+                {
+                    foreach (var contact in db.Contacts.ToList())
+                    {
+                        if (contact.ContactId == profile.Id)
+                        {
+                            contact.ProfilePictureId = profile.ProfilePictureId;
+                            contact.FirstName = profile.FirstName;
+                            contact.LastName = profile.LastName;
+                            contact.Age = profile.Age;
+                            contact.State = profile.State;
+                            contact.CompanyName = profile.CompanyName;
+                            contact.SchoolName = profile.SchoolName;
+                            contact.Phone = profile.Phone;
+                            contact.Email = profile.Email;
+                        }
+                    }
+                }
                 db.Entry(profile).State = EntityState.Modified;
                 db.SaveChanges();
                 if (User.IsInRole("Admin")) { return RedirectToAction("Details", new { id = profile.Id }); }

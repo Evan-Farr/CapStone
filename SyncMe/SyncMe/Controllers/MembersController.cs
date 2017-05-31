@@ -223,6 +223,7 @@ namespace SyncMe.Controllers
             contactRequest.Status = "Approved";
             Contact contact = new Contact();
             contact.ContactId = senderProfile.Id;
+            contact.FriendId = member.Id;
             contact.ProfilePictureId = senderProfile.ProfilePictureId;
             contact.FirstName = senderProfile.FirstName;
             contact.LastName = senderProfile.LastName;
@@ -234,6 +235,7 @@ namespace SyncMe.Controllers
             contact.Email = senderProfile.Email;
             Contact contact2 = new Contact();
             contact2.ContactId = receiverProfile.Id;
+            contact.FriendId = sender.Id;
             contact2.ProfilePictureId = receiverProfile.ProfilePictureId;
             contact2.FirstName = receiverProfile.FirstName;
             contact2.LastName = receiverProfile.LastName;
@@ -275,22 +277,28 @@ namespace SyncMe.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Profile profile = db.Profiles.Find(id);
-            var contact = db.Contacts.Where(c => c.ContactId == profile.Id).Select(q => q).FirstOrDefault();
+            Contact contact = db.Contacts.Find(id);
             if (contact == null)
             {
                 TempData["ErrorMessage"] = "**A problem occurred while attempting to remove contact.";
                 return RedirectToAction("ViewContacts");
             }
+            var otherProfile = db.Profiles.Where(p => p.Id == contact.ContactId).Select(n => n).FirstOrDefault();
             var current = User.Identity.GetUserId();
             var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
-            var member2 = db.Members.Where(t => t.Id == profile.Member.Id).Select(o => o).FirstOrDefault(); 
+            var member2 = db.Members.Where(t => t.Id == otherProfile.Member.Id).Select(o => o).FirstOrDefault(); 
             var profile2 = db.Profiles.Where(z => z.Member.Id == member.Id).Select(w => w).FirstOrDefault(); 
-            var contact2 = db.Contacts.Where(a => a.ContactId == profile2.Id).Select(y => y).FirstOrDefault();
+            var contact2 = db.Contacts.Where(a => a.ContactId == profile2.Id && a.FriendId == member2.Id).Select(y => y).FirstOrDefault();
+            var syncRequest1 = db.SyncRequests.Where(b => b.Sender.Id == profile2.Id && b.Receiver.Id == member2.Id).Select(v => v).FirstOrDefault();
+            var syncRequest2 = db.SyncRequests.Where(g => g.Sender.Id == otherProfile.Id && g.Receiver.Id == member.Id).Select(u => u).FirstOrDefault();
             member.Contacts.Remove(contact);
+            member.SyncRequests.Remove(syncRequest1);
+            member2.SyncRequests.Remove(syncRequest2);
             member2.Contacts.Remove(contact2);
             db.Contacts.Remove(contact);
             db.Contacts.Remove(contact2);
+            db.SyncRequests.Remove(syncRequest1);
+            db.SyncRequests.Remove(syncRequest2);
             db.SaveChanges();
             TempData["Message"] = "**SyncMe member successfully removed from your contacts.";
             return RedirectToAction("ViewContacts");
