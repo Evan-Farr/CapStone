@@ -41,7 +41,7 @@
                 @Html.DisplayFor(modelItem => item.Date)
             </td>
             <td>
-                <img src="@Url.Action("SelectPicture", "Profiles", new { id = item.Sender.Id })" alt="" />
+                <img src="@Url.Action("SelectPicture", "Profiles", new { id = item.Sender.Id })" alt="" class="profile-picture"/>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Sender.FirstName)
