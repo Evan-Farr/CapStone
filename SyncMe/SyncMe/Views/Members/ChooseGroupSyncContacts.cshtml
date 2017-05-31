@@ -83,7 +83,7 @@
 }
 </table>
 <p>
-    <input type="submit" value="Send Request" class="btn btn-primary btn-md" @Html.BeginForm("SendGroupSyncRequest", "Members", new { profiles = item.Id, reRoute = "ChooseGroupSyncContacts" }) />
+    @*<input type="submit" value="Send Request" class="btn btn-primary btn-md" @Html.BeginForm("SendGroupSyncRequest", "Members", new { profiles = item.Id, reRoute = "ChooseGroupSyncContacts" }) />*@
     <br />
     @Html.ActionLink("Cancel", "ViewCalendar", null, new { @class = "btn btn-primary btn-md" })
 </p>
