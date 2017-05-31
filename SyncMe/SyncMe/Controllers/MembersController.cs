@@ -476,25 +476,31 @@ namespace SyncMe.Controllers
             return View(profiles.OrderBy(o => o.LastName));
         }
 
-        public ActionResult SendGroupSyncRequest(List<Profile> profiles, string reRoute)
+        public ActionResult SendGroupSyncRequest(string reRoute, List<int> selectedProfiles)
         {
             var current = User.Identity.GetUserId();
             var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
             var sender = db.Profiles.Where(b => b.Member.Id == member.Id).Select(q => q).FirstOrDefault();
-            if(profiles.Count == 0)
+            if(selectedProfiles.Count == 0)
             {
                 TempData["ErrorMessage"] = "**You did not select any contacts...";
                 return RedirectToAction("ChooseGroupSyncContacts");
             }
             var receivers = new List<Member>();
-            foreach(var profile in profiles)
+            foreach(var profileId in selectedProfiles)
             {
-                var receiverProfile = db.Profiles.Where(p => p.Id == profile.Id).Select(a => a).FirstOrDefault();
-                var receiver = db.Members.Where(w => w.Id == receiverProfile.Member.Id).Select(t => t).FirstOrDefault();
+                if(profileId != 0)
+                {
+                    var receiverProfile = db.Profiles.Where(p => p.Id == profileId).Select(a => a).FirstOrDefault();
+                    var receiver = db.Members.Where(w => w.Id == receiverProfile.Member.Id).Select(t => t).FirstOrDefault();
+                }
             }
             GroupSyncRequest syncRequest = new GroupSyncRequest();
             syncRequest.Sender = sender;
-            syncRequest.Receivers = receivers;
+            foreach(var p in receivers)
+            {
+                syncRequest.Receivers.Add(p);
+            }
             syncRequest.Status = "Pending";
             syncRequest.Date = DateTime.Today;
             foreach(var person in receivers)
