@@ -304,21 +304,28 @@ border-radius: 15px;
 }
 
 .profile-picture {
-    max-height: 1000px;
-    max-width: 1000px;
+    height: 140px;
+    width: 140px;
     border: groove;
+    border-color: #007575;
+    border-width: 7px;
 }
 
 .profile-picture2 {
-    padding-left: 193px;
-    max-height: 1000px;
-    max-width: 1000px;
+    margin-left: 193px;
+    height: 240px;
+    width: 240px;
     border: groove;
+    border-color: #007575;
+    border-width: 10px;
 }
 
 .profile-picture3 {
-    padding-left: 87px;
-    max-height: 1000px;
-    max-width: 1000px;
+    margin-left: 87px;
+    height: 240px;
+    width: 240px;
     border: groove;
+    border-color: #007575;
+    border-width: 10px;
+    
 }
