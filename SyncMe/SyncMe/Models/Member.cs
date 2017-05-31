@@ -13,6 +13,7 @@ namespace SyncMe.Models
             Contacts = new List<Contact>();
             ContactRequests = new List<ContactRequest>();
             SyncRequests = new List<SyncRequest>();
+            GroupSyncRequests = new List<GroupSyncRequest>();
             EventInvitations = new List<EventInvitation>();
             Events = new List<Event>();
         }
@@ -40,6 +41,7 @@ namespace SyncMe.Models
         public virtual ICollection<Contact> Contacts { get; set; }
         public virtual ICollection<ContactRequest> ContactRequests { get; set; }
         public virtual ICollection<SyncRequest> SyncRequests { get; set; }
+        public virtual ICollection<GroupSyncRequest> GroupSyncRequests { get; set; }
         public virtual ICollection<EventInvitation> EventInvitations { get; set; }
         public virtual Calendar Calendar { get; set; }
         public virtual ICollection<Event> Events { get; set; }

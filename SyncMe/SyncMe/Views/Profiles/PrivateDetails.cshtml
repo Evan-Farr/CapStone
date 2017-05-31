@@ -77,9 +77,9 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id })
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-primary btn-md" })
     <br />
-    @Html.ActionLink("Back", "ViewCalendar", "Members")
+    @Html.ActionLink("Back", "ViewCalendar", "Members", null, new { @class = "btn btn-primary btn-md" })
 
     @*@Html.ActionLink("Send Contact Request", "SendContactRequest", "Members", new { id = Model.Id }, null)
         @Html.ActionLink("Back", "ViewCalendar", "Members")*@

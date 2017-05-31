@@ -435,11 +435,15 @@ namespace SyncMe.Controllers
             db.SaveChanges();
             if (reRoute == "ChooseSyncContacts")
             {
-                TempData["Message"] = "**Sync requeset successfully sent!";
+                TempData["Message"] = "**Sync request successfully sent!";
                 return RedirectToAction("ChooseSyncContacts");
             }
+            if (reRoute == "ChooseGroupSyncContacts")
+            {
+                TempData["Message"] = "**Group sync requeset successfully sent!";
+                return RedirectToAction("ViewCalendar");
+            }
             TempData["ErrorMessage"] = "**An issue occured while attempting to send the sync request.";
-
             return RedirectToAction("ViewCalendar");
         }
 
@@ -472,6 +476,64 @@ namespace SyncMe.Controllers
             return View(profiles.OrderBy(o => o.LastName));
         }
 
+        public ActionResult SendGroupSyncRequest(List<Profile> profiles, string reRoute)
+        {
+            var current = User.Identity.GetUserId();
+            var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
+            var sender = db.Profiles.Where(b => b.Member.Id == member.Id).Select(q => q).FirstOrDefault();
+            if(profiles.Count == 0)
+            {
+                TempData["ErrorMessage"] = "**You did not select any contacts...";
+                return RedirectToAction("ChooseGroupSyncContacts");
+            }
+            var receivers = new List<Member>();
+            foreach(var profile in profiles)
+            {
+                var receiverProfile = db.Profiles.Where(p => p.Id == profile.Id).Select(a => a).FirstOrDefault();
+                var receiver = db.Members.Where(w => w.Id == receiverProfile.Member.Id).Select(t => t).FirstOrDefault();
+            }
+            GroupSyncRequest syncRequest = new GroupSyncRequest();
+            syncRequest.Sender = sender;
+            syncRequest.Receivers = receivers;
+            syncRequest.Status = "Pending";
+            syncRequest.Date = DateTime.Today;
+            foreach(var person in receivers)
+            {
+                person.GroupSyncRequests.Add(syncRequest);
+            }
+            db.GroupSyncRequests.Add(syncRequest);
+            db.SaveChanges();
+            if (reRoute == "ChooseGroupSyncContacts")
+            {
+                TempData["Message"] = "**Group sync requeset successfully sent!";
+                return RedirectToAction("ViewCalendar");
+            }
+            TempData["ErrorMessage"] = "**An issue occured while attempting to send the sync request.";
+            return RedirectToAction("ViewCalendar");
+        }
+
+        public ActionResult ChooseGroupSyncContacts()
+        {
+            var current = User.Identity.GetUserId();
+            var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
+            if (member.Contacts.Count == 0)
+            {
+                TempData["ErrorMessage"] = "**You currently don't have any contacts to send a sync request to...";
+                return RedirectToAction("ViewCalendar");
+            }
+            var profiles = new List<Profile>();
+            foreach (var contact in member.Contacts)
+            {
+                var profile = db.Profiles.Where(p => p.Id == contact.ContactId).Select(a => a).FirstOrDefault();
+                profiles.Add(profile);
+            }
+            ViewBag.AllSyncRequests = new List<SyncRequest>();
+            var sender = db.Profiles.Where(q => q.Member.Id == member.Id).Select(u => u).FirstOrDefault();
+            ViewBag.SenderId = sender.Id;
+            ViewBag.counter = 0;
+            return View(profiles.OrderBy(o => o.LastName));
+        }
+
         public ActionResult ViewSyncRequests()
         {
             var user = User.Identity.GetUserId();
@@ -497,6 +559,31 @@ namespace SyncMe.Controllers
             return View(requests.OrderBy(t => t.Date));
         }
 
+        public ActionResult ViewGroupSyncRequests()
+        {
+            var user = User.Identity.GetUserId();
+            var member = db.Members.Where(u => u.UserId.Id == user).Select(s => s).FirstOrDefault();
+            var requests = new List<GroupSyncRequest>();
+            if (member.GroupSyncRequests.Count == 0)
+            {
+                TempData["ErrorMessage"] = "**You currently don't have any pending group sync requests.";
+                return RedirectToAction("ViewCalendar");
+            }
+            foreach (var request in member.GroupSyncRequests)
+            {
+                if (request.Status != "Approved")
+                {
+                    requests.Add(request);
+                }
+            }
+            if (requests.Count == 0)
+            {
+                TempData["ErrorMessage"] = "**You currently don't have any pending group sync requests.";
+                return RedirectToAction("ViewCalendar");
+            }
+            return View(requests.OrderBy(t => t.Date));
+        }
+
         public ActionResult AcceptSyncRequest(int? id)
         {
             var user = User.Identity.GetUserId();
@@ -516,6 +603,34 @@ namespace SyncMe.Controllers
             db.SaveChanges();
             TempData["Message"] = "**You have a new synced calendar!";
             return RedirectToAction("ViewSyncRequests");
+        }
+
+        public ActionResult AcceptGroupSyncRequest(int? id)
+        {
+            var user = User.Identity.GetUserId();
+            var member = db.Members.Where(u => u.UserId.Id == user).Select(s => s).FirstOrDefault();
+            var memberProfile = db.Profiles.Where(q => q.Member.Id == member.Id).Select(e => e).FirstOrDefault();
+            var syncRequest = db.GroupSyncRequests.Where(n => n.Id == id).Select(o => o).FirstOrDefault();
+            var senderProfile = db.Profiles.Where(p => p.Id == syncRequest.Sender.Id).Select(a => a).FirstOrDefault();
+            var sender = db.Members.Where(b => b.Id == senderProfile.Member.Id).Select(y => y).FirstOrDefault();
+            syncRequest.Status = "Approved";
+            var newGroupSyncRequest = new GroupSyncRequest();
+            newGroupSyncRequest.Date = syncRequest.Date;
+            newGroupSyncRequest.Status = "Approved";
+            foreach(var receiver in syncRequest.Receivers)
+            {
+                if(receiver.Id != member.Id)
+                {
+                    newGroupSyncRequest.Receivers.Add(receiver);
+                }
+            }
+            newGroupSyncRequest.Receivers.Add(sender);
+            newGroupSyncRequest.Sender = memberProfile;
+            db.GroupSyncRequests.Add(newGroupSyncRequest);
+            sender.GroupSyncRequests.Add(newGroupSyncRequest);
+            db.SaveChanges();
+            TempData["Message"] = "**You have a new group synced calendar!";
+            return RedirectToAction("ViewGroupSyncRequests");
         }
 
         public ActionResult DenySyncRequest(int? id)
