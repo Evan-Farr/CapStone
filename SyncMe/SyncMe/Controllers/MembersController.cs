@@ -627,8 +627,8 @@ namespace SyncMe.Controllers
             newGroupSyncRequest.Status = "Approved";
             newGroupSyncRequest.Receivers = syncRequest.Receivers;
             newGroupSyncRequest.Sender = syncRequest.Sender;
-            db.GroupSyncRequests.Add(newGroupSyncRequest);
-            member.GroupSyncRequests.Remove(syncRequest);
+            //db.GroupSyncRequests.Add(newGroupSyncRequest);
+            member.GroupSyncRequests.ToList().Remove(syncRequest);
             member.GroupSyncRequests.Add(newGroupSyncRequest);
             sender.GroupSyncRequests.Add(newGroupSyncRequest);
             db.SaveChanges();
@@ -992,16 +992,16 @@ namespace SyncMe.Controllers
             {
                 return RedirectToAction("Index", "Users");
             }
-            foreach (var request in db.GroupSyncRequests.ToList())
-            {
-                db.GroupSyncRequests.Remove(request);
-            }
             foreach (var member in db.Members.ToList())
             {
-                foreach (var sync in member.GroupSyncRequests)
+                foreach (var sync in member.GroupSyncRequests.ToList())
                 {
                     member.GroupSyncRequests.Remove(sync);
                 }
+            }
+            foreach (var request in db.GroupSyncRequests.ToList())
+            {
+                db.GroupSyncRequests.Remove(request);
             }
             db.SaveChanges();
             TempData["Message"] = "**All group sync requests deleted.";
