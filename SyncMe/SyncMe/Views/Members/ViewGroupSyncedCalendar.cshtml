@@ -1,8 +1,10 @@
 ﻿@model SyncMe.Models.EventsViewModel
 
 @{
-    ViewBag.Title = "ViewSyncedCalendar";
+    ViewBag.Title = "ViewGroupSyncedCalendar";
 }
+
+<h2>ViewGroupSyncedCalendar</h2>
 
 <br />
 <hr />
@@ -22,7 +24,13 @@
             <br /><br /><br /><br />
             <p class="circle">My Events</p>
             <br /><br />
-            <p class="circle2">@ViewBag.Name1 @ViewBag.Name2</p>
+            <p class="circle2">@ViewBag.Name1 @ViewBag.Name11</p>
+            <br /><br />
+            <p class="circle2">@ViewBag.Name2 @ViewBag.Name22</p>
+            <br /><br />
+            <p class="circle2">@ViewBag.Name3 @ViewBag.Name33</p>
+            <br /><br />
+            <p class="circle2">@ViewBag.Name4 @ViewBag.Name44</p>
             <br /><br />
         </center>
     </div>
@@ -90,6 +98,21 @@
                 events: @Html.Raw(Json.Encode(Model.ListB)),
                 color: 'purple',
                 textColor: 'white'
+            },
+            {
+                events: @Html.Raw(Json.Encode(Model.ListC)),
+                color: 'red',
+                textColor: 'white'
+            },
+            {
+                events: @Html.Raw(Json.Encode(Model.ListD)),
+                color: 'blue',
+                textColor: 'white'
+            },
+            {
+                events: @Html.Raw(Json.Encode(Model.ListE)),
+                color: 'orange',
+                textColor: 'white'
             }
             ],
             eventClick: function(event, jsEvent, view){
@@ -111,4 +134,3 @@
             });
     });
 </script>
-

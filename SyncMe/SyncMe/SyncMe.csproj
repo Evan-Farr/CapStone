@@ -869,6 +869,9 @@
     <Content Include="Views\Members\GetGoogleCalendarId.cshtml" />
     <Content Include="Views\Members\ViewMySyncedCalendar.cshtml" />
     <Content Include="Views\Members\ChooseGroupSyncContacts.cshtml" />
+    <Content Include="Views\Members\ViewGroupSyncedCalendar.cshtml" />
+    <Content Include="Views\Members\ChooseGroupSyncedCalendar.cshtml" />
+    <Content Include="Views\Members\ViewGroupSyncRequests.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

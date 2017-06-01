@@ -700,37 +700,43 @@ namespace SyncMe.Controllers
         {
             var current = User.Identity.GetUserId();
             var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
+            var profile = db.Profiles.Where(p => p.Member.Id == member.Id).Select(a => a).FirstOrDefault();
             if (member.GroupSyncRequests.Count == 0)
             {
-                TempData["ErrorMessage"] = "**You currently don't have any group synced calendars to view...";
+                TempData["ErrorMessage"] = "**You currently don't have any synced group calendars to view...";
                 return RedirectToAction("ViewCalendar");
             }
-            var syncedCalendars = new List<Profile>();
+            var syncedCalendars = new List<GroupSyncRequest>();
             foreach (var sync in member.GroupSyncRequests)
             {
                 if (sync.Status == "Approved")
                 {
-                    foreach(var person in sync.Receivers)
+                    syncedCalendars.Add(sync);
+                }
+            }
+            foreach(var syncRequest in db.GroupSyncRequests.ToList())
+            {
+                if(syncRequest.Sender.Id == profile.Id)
+                {
+                    if(syncRequest.Status == "Approved")
                     {
-                        var profile1 = db.Profiles.Where(m => m.Member.Id == person.Id).Select(t => t).FirstOrDefault();
-                        syncedCalendars.Add(profile1);
+                        syncedCalendars.Add(syncRequest);
                     }
-                    var profile = db.Profiles.Where(p => p.Id == sync.Sender.Id).Select(a => a).FirstOrDefault();
-                    syncedCalendars.Add(profile);
                 }
             }
             if (syncedCalendars.Count == 0)
             {
-                TempData["ErrorMessage"] = "**You currently don't have any synced calendars to view...";
+                TempData["ErrorMessage"] = "**You currently don't have any synced group calendars to view...";
                 return RedirectToAction("ViewCalendar");
             }
-            return View(syncedCalendars.OrderBy(o => o.LastName));
+            return View(syncedCalendars.OrderBy(o => o.Date));
         }
 
         public ActionResult ViewSyncedCalendar(int? id)
         {
             var current = User.Identity.GetUserId();
             var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
+            var profile = db.Profiles.Where(l => l.Member.Id == member.Id).Select(b => b).FirstOrDefault();
             var otherProfile = db.Profiles.Where(p => p.Id == id).Select(a => a).FirstOrDefault();
             var otherMember = db.Members.Where(o => o.Id == otherProfile.Member.Id).Select(t => t).FirstOrDefault();
             var events1 = new List<Event>();
@@ -752,6 +758,8 @@ namespace SyncMe.Controllers
             var viewModel = new EventsViewModel();
             viewModel.ListA = events1;
             viewModel.ListB = events2;
+            ViewBag.Name1 = otherProfile.FirstName;
+            ViewBag.Name2 = otherProfile.LastName;
             return View(viewModel);
         }
 
@@ -792,136 +800,64 @@ namespace SyncMe.Controllers
                 viewModel.ListB = events2;
                 return View(viewModel);
             }
-            else if (countMembers.Count == 2)
-            {
-                var events1 = new List<Event>();
-                var events2 = new List<Event>();
-                var events3 = new List<Event>();
-                for(int i = 0; i < countMembers.Count; i++)
-                {
-                    if(countMembers[i] == countMembers[0])
-                    {
-
-                    }
-                    var otherMember = db.Members.Where(o => o.Id == people.Id).Select(t => t).FirstOrDefault();
-                    foreach (var @event2 in otherMember.Events)
-                    {
-                        if(events2.Count == 0)
-                        {
-                            if (@event2.isPrivate == false)
-                            {
-                                events2.Add(@event2);
-                            }
-                        }else
-                        {
-                            if (@event2.isPrivate == false)
-                            {
-                                events3.Add(@event2);
-                            }
-                        }
-                    }
-                }
-                foreach (var @event in member.Events)
-                {
-                    if (@event.isPrivate == false)
-                    {
-                        events1.Add(@event);
-                    }
-                }
-                var viewModel = new EventsViewModel();
-                viewModel.ListA = events1;
-                viewModel.ListB = events2;
-                viewModel.ListC = events3;
-                return View(viewModel);
-            }
-            else if (countMembers.Count == 3)
-            {
-                var events1 = new List<Event>();
-                var events2 = new List<Event>();
-                var events3 = new List<Event>();
-                var events4 = new List<Event>();
-                foreach (var people in countMembers)
-                {
-                    var otherMember = db.Members.Where(o => o.Id == people.Id).Select(t => t).FirstOrDefault();
-                    foreach (var @event2 in otherMember.Events)
-                    {
-                        if (events2.Count == 0)
-                        {
-                            if (@event2.isPrivate == false)
-                            {
-                                events2.Add(@event2);
-                            }
-                        }
-                        if (events3.Count == 0)
-                        {
-                            if (@event2.isPrivate == false)
-                            {
-                                events3.Add(@event2);
-                            }
-                        }
-                        else
-                        {
-                            if (@event2.isPrivate == false)
-                            {
-                                events4.Add(@event2);
-                            }
-                        }
-                    }
-                }
-                foreach (var @event in member.Events)
-                {
-                    if (@event.isPrivate == false)
-                    {
-                        events1.Add(@event);
-                    }
-                }
-                var viewModel = new EventsViewModel();
-                viewModel.ListA = events1;
-                viewModel.ListB = events2;
-                viewModel.ListC = events3;
-                viewModel.ListD = events4;
-                return View(viewModel);
-            }
-            else if (countMembers.Count == 4)
+            else if (countMembers.Count >= 2)
             {
                 var events1 = new List<Event>();
                 var events2 = new List<Event>();
                 var events3 = new List<Event>();
                 var events4 = new List<Event>();
                 var events5 = new List<Event>();
-                foreach (var people in countMembers)
+                for (int i = 0; i < countMembers.Count; i++)
                 {
-                    var otherMember = db.Members.Where(o => o.Id == people.Id).Select(t => t).FirstOrDefault();
-                    foreach (var @event2 in otherMember.Events)
+                    if(countMembers[i] == countMembers[0])
                     {
-                        if (events2.Count == 0)
+                        var otherMember = db.Members.Where(o => o.Id == countMembers[i].Id).Select(t => t).FirstOrDefault();
+                        foreach (var @event2 in otherMember.Events)
                         {
                             if (@event2.isPrivate == false)
                             {
                                 events2.Add(@event2);
                             }
                         }
-                        if (events3.Count == 0)
+                    }
+                    if(countMembers[i] == countMembers[1])
+                    {
+                        var otherMember = db.Members.Where(o => o.Id == countMembers[i].Id).Select(t => t).FirstOrDefault();
+                        foreach (var @event2 in otherMember.Events)
                         {
                             if (@event2.isPrivate == false)
                             {
                                 events3.Add(@event2);
                             }
                         }
-                        if (events3.Count == 0)
+                    }
+                    try
+                    {
+                        if (countMembers[i] == countMembers[2])
                         {
-                            if (@event2.isPrivate == false)
+                            var otherMember = db.Members.Where(o => o.Id == countMembers[i].Id).Select(t => t).FirstOrDefault();
+                            foreach (var @event2 in otherMember.Events)
                             {
-                                events4.Add(@event2);
+                                if (@event2.isPrivate == false)
+                                {
+                                    events4.Add(@event2);
+                                }
                             }
                         }
-                        else
+                        if (countMembers[i] == countMembers[3])
                         {
-                            if (@event2.isPrivate == false)
+                            var otherMember = db.Members.Where(o => o.Id == countMembers[i].Id).Select(t => t).FirstOrDefault();
+                            foreach (var @event2 in otherMember.Events)
                             {
-                                events5.Add(@event2);
+                                if (@event2.isPrivate == false)
+                                {
+                                    events5.Add(@event2);
+                                }
                             }
                         }
+                    }catch
+                    {
+
                     }
                 }
                 foreach (var @event in member.Events)
@@ -971,12 +907,12 @@ namespace SyncMe.Controllers
             }
         }
 
-        public ActionResult RemoveSyncedCalendar(int? id)
+        public ActionResult RemoveSyncedCalendar(int? id) //possible issue with finding right calendar since only checking sender id
         {
             var user = User.Identity.GetUserId();
             var member = db.Members.Where(u => u.UserId.Id == user).Select(s => s).FirstOrDefault();
             var syncRequest = db.SyncRequests.Where(n => n.Sender.Id == id).Select(o => o).FirstOrDefault();
-            var syncRequest2 = db.SyncRequests.Where(k => k.Receiver.Id == id).Select(t => t).FirstOrDefault();
+            var syncRequest2 = db.SyncRequests.Where(k => k.Receiver.Id == id).Select(t => t).FirstOrDefault(); 
             var otherProfile = db.Profiles.Where(b => b.Id == syncRequest.Sender.Id).Select(n => n).FirstOrDefault();
             var otherMember = db.Members.Where(v => v.Id == otherProfile.Member.Id).Select(e => e).FirstOrDefault();
             member.SyncRequests.Remove(syncRequest);
@@ -984,7 +920,30 @@ namespace SyncMe.Controllers
             db.SyncRequests.Remove(syncRequest2);
             db.SyncRequests.Remove(syncRequest);
             db.SaveChanges();
-            TempData["Message"] = "**Synced Calendar was successfully removed.";
+            TempData["Message"] = "**Synced calendar was successfully removed.";
+            return RedirectToAction("ViewSyncRequests");
+        }
+
+        public ActionResult RemoveGroupSyncedCalendar(int? id)
+        {
+            var user = User.Identity.GetUserId();
+            var member = db.Members.Where(u => u.UserId.Id == user).Select(s => s).FirstOrDefault();
+            var memberProfile = db.Profiles.Where(m => m.Member.Id == member.Id).Select(a => a).FirstOrDefault();
+            var syncRequest = db.GroupSyncRequests.Where(n => n.Id == id).Select(o => o).FirstOrDefault();
+            member.GroupSyncRequests.Remove(syncRequest);
+            if(syncRequest.Sender.Id == memberProfile.Id)
+            {
+                syncRequest.Sender = null;
+            }else
+            {
+                syncRequest.Receivers.Remove(member);
+            }
+            if(syncRequest.Sender == null && syncRequest.Receivers.Count == 0)
+            {
+                db.GroupSyncRequests.Remove(syncRequest);
+            }
+            db.SaveChanges();
+            TempData["Message"] = "**Group synced calendar was successfully removed.";
             return RedirectToAction("ViewSyncRequests");
         }
 

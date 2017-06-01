@@ -1,10 +1,10 @@
-﻿@model IEnumerable<SyncMe.Models.SyncRequest>
+﻿@model IEnumerable<SyncMe.Models.GroupSyncRequest>
 
 @{
-    ViewBag.Title = "ViewSyncRequests";
+    ViewBag.Title = "ViewGroupSyncRequests";
 }
 
-<h2>Pending Sync Requests</h2>
+<h2>Pending Group Sync Requests</h2>
 
 <hr />
 <div class="col-md-12">
@@ -20,7 +20,7 @@
     @Html.ActionLink("Back", "ViewCalendar", null, new { @class = "btn btn-primary btn-md" })
 </p>
 <hr />
-<table class="table" @*style="table-layout: fixed;"*@>
+<table class="table">
     <tr>
         <th>
             @Html.DisplayName("Date Recieved")
@@ -29,7 +29,10 @@
             @Html.DisplayName("Profile Picture")
         </th>
         <th>
-            @Html.DisplayName("Contact")
+            @Html.DisplayName("Creator")
+        </th>
+        <th>
+            @Html.DisplayName("Invited")
         </th>
         <th></th>
     </tr>
@@ -41,16 +44,19 @@
                 @Html.DisplayFor(modelItem => item.Date)
             </td>
             <td>
-                <img src="@Url.Action("SelectPicture", "Profiles", new { id = item.Sender.Id })" alt="" class="profile-picture"/>
+                <img src="@Url.Action("SelectPicture", "Profiles", new { id = item.Sender.Id })" alt="" class="profile-picture" />
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Sender.FirstName)
                 @Html.DisplayFor(modelItem => item.Sender.LastName)
             </td>
             <td>
-                @Html.ActionLink("Accept", "AcceptSyncRequest", new { id = item.Id })
+                @Html.DisplayFor(modelItem => item.Receivers.Count)
+            </td>
+            <td>
+                @Html.ActionLink("Accept", "AcceptGroupSyncRequest", new { id = item.Id })
                 <br />
-                @Html.ActionLink("Deny", "DenySyncRequest", new { id = item.Id })
+                @Html.ActionLink("Deny", "DenyGroupSyncRequest", new { id = item.Id })
             </td>
         </tr>
     }
@@ -58,3 +64,4 @@
 <p>
     @Html.ActionLink("Back", "ViewCalendar", null, new { @class = "btn btn-primary btn-md" })
 </p>
+

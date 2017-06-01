@@ -1,0 +1,61 @@
+﻿@model IEnumerable<SyncMe.Models.GroupSyncRequest>
+
+@{
+    ViewBag.Title = "ChooseGroupSyncedCalendar";
+}
+
+<h2>Your Synced Group Calendars</h2>
+
+<hr />
+<br />
+@Html.ActionLink("Done", "ViewCalendar", null, new { @class = "btn btn-primary btn-md" })
+<hr />
+<div class="col-md-12">
+    <div class="text-success">
+        @TempData["Message"]
+    </div>
+    <div class="text-warning">
+        @TempData["ErrorMessage"]
+    </div>
+</div>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayName("Date Started")
+        </th>
+        <th>
+            @Html.DisplayName("Creator")
+        </th>
+        <th>
+            @Html.DisplayName("Members")
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sender.FirstName)
+                @Html.DisplayFor(modelItem => item.Sender.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Receivers.Count + 1)
+            </td>
+            
+            <td>
+                @Html.ActionLink("View", "ViewGroupSyncedCalendar", new { id = item.Id }, null)
+                <br />
+                @Html.ActionLink("Remove", "RemoveGroupSyncedCalendar", new { id = item.Id }, null)
+            </td>
+        </tr>
+    }
+</table>
+<p>
+    @Html.ActionLink("Done", "ViewCalendar", null, new { @class = "btn btn-primary btn-md" })
+</p>
+
