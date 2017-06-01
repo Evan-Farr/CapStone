@@ -488,6 +488,7 @@ namespace SyncMe.Controllers
                 {
                     var receiverProfile = db.Profiles.Where(p => p.Id == profileId).Select(a => a).FirstOrDefault();
                     var receiver = db.Members.Where(w => w.Id == receiverProfile.Member.Id).Select(t => t).FirstOrDefault();
+                    receivers.Add(receiver);
                 }
             }
             if (receivers.Count == 0)
@@ -502,10 +503,7 @@ namespace SyncMe.Controllers
             }
             GroupSyncRequest syncRequest = new GroupSyncRequest();
             syncRequest.Sender = sender;
-            foreach(var p in receivers)
-            {
-                syncRequest.Receivers.Add(p);
-            }
+            syncRequest.Receivers = receivers;
             syncRequest.Status = "Pending";
             syncRequest.Date = DateTime.Today;
             foreach(var person in receivers)
@@ -624,20 +622,14 @@ namespace SyncMe.Controllers
             var syncRequest = db.GroupSyncRequests.Where(n => n.Id == id).Select(o => o).FirstOrDefault();
             var senderProfile = db.Profiles.Where(p => p.Id == syncRequest.Sender.Id).Select(a => a).FirstOrDefault();
             var sender = db.Members.Where(b => b.Id == senderProfile.Member.Id).Select(y => y).FirstOrDefault();
-            syncRequest.Status = "Approved";
             var newGroupSyncRequest = new GroupSyncRequest();
             newGroupSyncRequest.Date = syncRequest.Date;
             newGroupSyncRequest.Status = "Approved";
-            foreach(var receiver in syncRequest.Receivers)
-            {
-                if(receiver.Id != member.Id)
-                {
-                    newGroupSyncRequest.Receivers.Add(receiver);
-                }
-            }
-            newGroupSyncRequest.Receivers.Add(sender);
-            newGroupSyncRequest.Sender = memberProfile;
+            newGroupSyncRequest.Receivers = syncRequest.Receivers;
+            newGroupSyncRequest.Sender = syncRequest.Sender;
             db.GroupSyncRequests.Add(newGroupSyncRequest);
+            member.GroupSyncRequests.Remove(syncRequest);
+            member.GroupSyncRequests.Add(newGroupSyncRequest);
             sender.GroupSyncRequests.Add(newGroupSyncRequest);
             db.SaveChanges();
             TempData["Message"] = "**You have a new group synced calendar!";
@@ -714,16 +706,16 @@ namespace SyncMe.Controllers
                     syncedCalendars.Add(sync);
                 }
             }
-            foreach(var syncRequest in db.GroupSyncRequests.ToList())
-            {
-                if(syncRequest.Sender.Id == profile.Id)
-                {
-                    if(syncRequest.Status == "Approved")
-                    {
-                        syncedCalendars.Add(syncRequest);
-                    }
-                }
-            }
+            //foreach(var syncRequest in db.GroupSyncRequests.ToList())
+            //{
+            //    if(syncRequest.Sender.Id == profile.Id)
+            //    {
+            //        if(syncRequest.Status == "Approved")
+            //        {
+            //            syncedCalendars.Add(syncRequest);
+            //        }
+            //    }
+            //}
             if (syncedCalendars.Count == 0)
             {
                 TempData["ErrorMessage"] = "**You currently don't have any synced group calendars to view...";
@@ -991,6 +983,28 @@ namespace SyncMe.Controllers
             }
             db.SaveChanges();
             TempData["Message"] = "**All sync requests deleted.";
+            return RedirectToAction("Index", "Users");
+        }
+
+        public ActionResult RemoveAllGroupSyncRequests()
+        {
+            if (db.GroupSyncRequests.ToList().Count == 0)
+            {
+                return RedirectToAction("Index", "Users");
+            }
+            foreach (var request in db.GroupSyncRequests.ToList())
+            {
+                db.GroupSyncRequests.Remove(request);
+            }
+            foreach (var member in db.Members.ToList())
+            {
+                foreach (var sync in member.GroupSyncRequests)
+                {
+                    member.GroupSyncRequests.Remove(sync);
+                }
+            }
+            db.SaveChanges();
+            TempData["Message"] = "**All group sync requests deleted.";
             return RedirectToAction("Index", "Users");
         }
 
