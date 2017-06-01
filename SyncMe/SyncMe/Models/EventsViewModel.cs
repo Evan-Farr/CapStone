@@ -9,5 +9,8 @@ namespace SyncMe.Models
     {
         public List<Event> ListA { get; set; }
         public List<Event> ListB { get; set; }
+        public List<Event> ListC { get; set; }
+        public List<Event> ListD { get; set; }
+        public List<Event> ListE { get; set; }
     }
 }

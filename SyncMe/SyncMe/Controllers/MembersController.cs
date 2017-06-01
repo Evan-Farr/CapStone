@@ -481,11 +481,6 @@ namespace SyncMe.Controllers
             var current = User.Identity.GetUserId();
             var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
             var sender = db.Profiles.Where(b => b.Member.Id == member.Id).Select(q => q).FirstOrDefault();
-            if(selectedProfiles.Count == 0)
-            {
-                TempData["ErrorMessage"] = "**You did not select any contacts...";
-                return RedirectToAction("ChooseGroupSyncContacts");
-            }
             var receivers = new List<Member>();
             foreach(var profileId in selectedProfiles)
             {
@@ -494,6 +489,16 @@ namespace SyncMe.Controllers
                     var receiverProfile = db.Profiles.Where(p => p.Id == profileId).Select(a => a).FirstOrDefault();
                     var receiver = db.Members.Where(w => w.Id == receiverProfile.Member.Id).Select(t => t).FirstOrDefault();
                 }
+            }
+            if (receivers.Count == 0)
+            {
+                TempData["ErrorMessage"] = "**You did not select any contacts...";
+                return RedirectToAction("ChooseGroupSyncContacts");
+            }
+            if(receivers.Count >= 5)
+            {
+                TempData["ErrorMessage"] = "**You may only select up to four contacts per group sync request.";
+                return RedirectToAction("ChooseGroupSyncContacts");
             }
             GroupSyncRequest syncRequest = new GroupSyncRequest();
             syncRequest.Sender = sender;
@@ -652,6 +657,19 @@ namespace SyncMe.Controllers
             return RedirectToAction("ViewSyncRequests");
         }
 
+        public ActionResult DenyGroupSyncRequest(int? id)
+        {
+            var user = User.Identity.GetUserId();
+            var member = db.Members.Where(u => u.UserId.Id == user).Select(s => s).FirstOrDefault();
+            var syncRequest = db.GroupSyncRequests.Where(n => n.Id == id).Select(o => o).FirstOrDefault();
+            syncRequest.Status = "Denied";
+            member.GroupSyncRequests.Remove(syncRequest);
+            syncRequest.Receivers.Remove(member);
+            db.SaveChanges();
+            TempData["Message"] = "**Sync request was removed from your pending sync requests.";
+            return RedirectToAction("ViewSyncRequests");
+        }
+
         public ActionResult ChooseSyncedCalendar()
         {
             var current = User.Identity.GetUserId();
@@ -671,6 +689,37 @@ namespace SyncMe.Controllers
                 }
             }
             if(syncedCalendars.Count == 0)
+            {
+                TempData["ErrorMessage"] = "**You currently don't have any synced calendars to view...";
+                return RedirectToAction("ViewCalendar");
+            }
+            return View(syncedCalendars.OrderBy(o => o.LastName));
+        }
+
+        public ActionResult ChooseGroupSyncedCalendar()
+        {
+            var current = User.Identity.GetUserId();
+            var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
+            if (member.GroupSyncRequests.Count == 0)
+            {
+                TempData["ErrorMessage"] = "**You currently don't have any group synced calendars to view...";
+                return RedirectToAction("ViewCalendar");
+            }
+            var syncedCalendars = new List<Profile>();
+            foreach (var sync in member.GroupSyncRequests)
+            {
+                if (sync.Status == "Approved")
+                {
+                    foreach(var person in sync.Receivers)
+                    {
+                        var profile1 = db.Profiles.Where(m => m.Member.Id == person.Id).Select(t => t).FirstOrDefault();
+                        syncedCalendars.Add(profile1);
+                    }
+                    var profile = db.Profiles.Where(p => p.Id == sync.Sender.Id).Select(a => a).FirstOrDefault();
+                    syncedCalendars.Add(profile);
+                }
+            }
+            if (syncedCalendars.Count == 0)
             {
                 TempData["ErrorMessage"] = "**You currently don't have any synced calendars to view...";
                 return RedirectToAction("ViewCalendar");
@@ -704,6 +753,194 @@ namespace SyncMe.Controllers
             viewModel.ListA = events1;
             viewModel.ListB = events2;
             return View(viewModel);
+        }
+
+        public ActionResult ViewGroupSyncedCalendar(int? id)
+        {
+            var current = User.Identity.GetUserId();
+            var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
+            var groupSynced = db.GroupSyncRequests.Where(g => g.Id == id).Select(a => a).FirstOrDefault();
+            var countMembers = new List<Member>();
+            foreach(var person in groupSynced.Receivers)
+            {
+                countMembers.Add(person);
+            }
+            if(countMembers.Count == 1)
+            {
+                var events1 = new List<Event>();
+                var events2 = new List<Event>();
+                foreach (var people in countMembers)
+                {
+                    var otherMember = db.Members.Where(o => o.Id == people.Id).Select(t => t).FirstOrDefault();
+                    foreach (var @event2 in otherMember.Events)
+                    {
+                        if (@event2.isPrivate == false)
+                        {
+                            events2.Add(@event2);
+                        }
+                    }
+                }
+                foreach (var @event in member.Events)
+                {
+                    if (@event.isPrivate == false)
+                    {
+                        events1.Add(@event);
+                    }
+                }
+                var viewModel = new EventsViewModel();
+                viewModel.ListA = events1;
+                viewModel.ListB = events2;
+                return View(viewModel);
+            }
+            else if (countMembers.Count == 2)
+            {
+                var events1 = new List<Event>();
+                var events2 = new List<Event>();
+                var events3 = new List<Event>();
+                for(int i = 0; i < countMembers.Count; i++)
+                {
+                    if(countMembers[i] == countMembers[0])
+                    {
+
+                    }
+                    var otherMember = db.Members.Where(o => o.Id == people.Id).Select(t => t).FirstOrDefault();
+                    foreach (var @event2 in otherMember.Events)
+                    {
+                        if(events2.Count == 0)
+                        {
+                            if (@event2.isPrivate == false)
+                            {
+                                events2.Add(@event2);
+                            }
+                        }else
+                        {
+                            if (@event2.isPrivate == false)
+                            {
+                                events3.Add(@event2);
+                            }
+                        }
+                    }
+                }
+                foreach (var @event in member.Events)
+                {
+                    if (@event.isPrivate == false)
+                    {
+                        events1.Add(@event);
+                    }
+                }
+                var viewModel = new EventsViewModel();
+                viewModel.ListA = events1;
+                viewModel.ListB = events2;
+                viewModel.ListC = events3;
+                return View(viewModel);
+            }
+            else if (countMembers.Count == 3)
+            {
+                var events1 = new List<Event>();
+                var events2 = new List<Event>();
+                var events3 = new List<Event>();
+                var events4 = new List<Event>();
+                foreach (var people in countMembers)
+                {
+                    var otherMember = db.Members.Where(o => o.Id == people.Id).Select(t => t).FirstOrDefault();
+                    foreach (var @event2 in otherMember.Events)
+                    {
+                        if (events2.Count == 0)
+                        {
+                            if (@event2.isPrivate == false)
+                            {
+                                events2.Add(@event2);
+                            }
+                        }
+                        if (events3.Count == 0)
+                        {
+                            if (@event2.isPrivate == false)
+                            {
+                                events3.Add(@event2);
+                            }
+                        }
+                        else
+                        {
+                            if (@event2.isPrivate == false)
+                            {
+                                events4.Add(@event2);
+                            }
+                        }
+                    }
+                }
+                foreach (var @event in member.Events)
+                {
+                    if (@event.isPrivate == false)
+                    {
+                        events1.Add(@event);
+                    }
+                }
+                var viewModel = new EventsViewModel();
+                viewModel.ListA = events1;
+                viewModel.ListB = events2;
+                viewModel.ListC = events3;
+                viewModel.ListD = events4;
+                return View(viewModel);
+            }
+            else if (countMembers.Count == 4)
+            {
+                var events1 = new List<Event>();
+                var events2 = new List<Event>();
+                var events3 = new List<Event>();
+                var events4 = new List<Event>();
+                var events5 = new List<Event>();
+                foreach (var people in countMembers)
+                {
+                    var otherMember = db.Members.Where(o => o.Id == people.Id).Select(t => t).FirstOrDefault();
+                    foreach (var @event2 in otherMember.Events)
+                    {
+                        if (events2.Count == 0)
+                        {
+                            if (@event2.isPrivate == false)
+                            {
+                                events2.Add(@event2);
+                            }
+                        }
+                        if (events3.Count == 0)
+                        {
+                            if (@event2.isPrivate == false)
+                            {
+                                events3.Add(@event2);
+                            }
+                        }
+                        if (events3.Count == 0)
+                        {
+                            if (@event2.isPrivate == false)
+                            {
+                                events4.Add(@event2);
+                            }
+                        }
+                        else
+                        {
+                            if (@event2.isPrivate == false)
+                            {
+                                events5.Add(@event2);
+                            }
+                        }
+                    }
+                }
+                foreach (var @event in member.Events)
+                {
+                    if (@event.isPrivate == false)
+                    {
+                        events1.Add(@event);
+                    }
+                }
+                var viewModel = new EventsViewModel();
+                viewModel.ListA = events1;
+                viewModel.ListB = events2;
+                viewModel.ListC = events3;
+                viewModel.ListD = events4;
+                viewModel.ListE = events5;
+                return View(viewModel);
+            }
+            TempData["ErrorMessage"] = "**An unknown error occured while retrieving your group synced calendar.";
+            return RedirectToAction("ViewCalendar");
         }
 
         public ActionResult ViewMySyncedCalendar(string address)
