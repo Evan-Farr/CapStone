@@ -292,9 +292,13 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201706021740386_initial.cs" />
-    <Compile Include="Migrations\201706021740386_initial.Designer.cs">
-      <DependentUpon>201706021740386_initial.cs</DependentUpon>
+    <Compile Include="Migrations\201706021830554_initial1.cs" />
+    <Compile Include="Migrations\201706021830554_initial1.Designer.cs">
+      <DependentUpon>201706021830554_initial1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201706021832434_icollection in groupcalendar.cs" />
+    <Compile Include="Migrations\201706021832434_icollection in groupcalendar.Designer.cs">
+      <DependentUpon>201706021832434_icollection in groupcalendar.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -881,8 +885,11 @@
     <Content Include="Scripts\jquery-3.1.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201706021740386_initial.resx">
-      <DependentUpon>201706021740386_initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201706021830554_initial1.resx">
+      <DependentUpon>201706021830554_initial1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706021832434_icollection in groupcalendar.resx">
+      <DependentUpon>201706021832434_icollection in groupcalendar.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

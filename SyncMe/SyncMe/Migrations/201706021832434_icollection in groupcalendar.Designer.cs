@@ -7,13 +7,13 @@ namespace SyncMe.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class initial : IMigrationMetadata
+    public sealed partial class icollectioningroupcalendar : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(initial));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(icollectioningroupcalendar));
         
         string IMigrationMetadata.Id
         {
-            get { return "201706021740386_initial"; }
+            get { return "201706021832434_icollection in groupcalendar"; }
         }
         
         string IMigrationMetadata.Source
