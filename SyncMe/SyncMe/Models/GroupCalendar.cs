@@ -6,17 +6,16 @@ using System.Web;
 
 namespace SyncMe.Models
 {
-    public class GroupSyncRequest
+    public class GroupCalendar
     {
         [Key]
         public int Id { get; set; }
         [Required, DataType(DataType.Date)]
         public DateTime Date { get; set; }
-        [Required]
-        public string Status { get; set; }
+        public int RequestId { get; set; }
         public int Invited { get; set; }
 
-        public virtual Profile Sender { get; set; }
-        public virtual List<Member> Receivers { get; set; }
+        public virtual Profile Creator { get; set; }
+        public virtual List<Member> Members { get; set; }
     }
 }

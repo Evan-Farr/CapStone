@@ -138,12 +138,27 @@ namespace SyncMe.Migrations
                 .Index(t => t.Member_Id);
             
             CreateTable(
+                "dbo.GroupCalendars",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        Date = c.DateTime(nullable: false),
+                        RequestId = c.Int(nullable: false),
+                        Invited = c.Int(nullable: false),
+                        Creator_Id = c.Int(),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Profiles", t => t.Creator_Id)
+                .Index(t => t.Creator_Id);
+            
+            CreateTable(
                 "dbo.GroupSyncRequests",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
                         Date = c.DateTime(nullable: false),
                         Status = c.String(nullable: false),
+                        Invited = c.Int(nullable: false),
                         Sender_Id = c.Int(),
                     })
                 .PrimaryKey(t => t.Id)
@@ -235,6 +250,19 @@ namespace SyncMe.Migrations
                 .Index(t => t.Name, unique: true, name: "RoleNameIndex");
             
             CreateTable(
+                "dbo.GroupCalendarMembers",
+                c => new
+                    {
+                        GroupCalendar_Id = c.Int(nullable: false),
+                        Member_Id = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => new { t.GroupCalendar_Id, t.Member_Id })
+                .ForeignKey("dbo.GroupCalendars", t => t.GroupCalendar_Id, cascadeDelete: true)
+                .ForeignKey("dbo.Members", t => t.Member_Id, cascadeDelete: true)
+                .Index(t => t.GroupCalendar_Id)
+                .Index(t => t.Member_Id);
+            
+            CreateTable(
                 "dbo.GroupSyncRequestMembers",
                 c => new
                     {
@@ -262,6 +290,9 @@ namespace SyncMe.Migrations
             DropForeignKey("dbo.GroupSyncRequests", "Sender_Id", "dbo.Profiles");
             DropForeignKey("dbo.GroupSyncRequestMembers", "Member_Id", "dbo.Members");
             DropForeignKey("dbo.GroupSyncRequestMembers", "GroupSyncRequest_Id", "dbo.GroupSyncRequests");
+            DropForeignKey("dbo.GroupCalendarMembers", "Member_Id", "dbo.Members");
+            DropForeignKey("dbo.GroupCalendarMembers", "GroupCalendar_Id", "dbo.GroupCalendars");
+            DropForeignKey("dbo.GroupCalendars", "Creator_Id", "dbo.Profiles");
             DropForeignKey("dbo.Events", "Member_Id", "dbo.Members");
             DropForeignKey("dbo.EventInvitations", "Sender_Id", "dbo.Profiles");
             DropForeignKey("dbo.Profiles", "Member_Id", "dbo.Members");
@@ -272,6 +303,8 @@ namespace SyncMe.Migrations
             DropForeignKey("dbo.Members", "Calendar_Id", "dbo.Calendars");
             DropIndex("dbo.GroupSyncRequestMembers", new[] { "Member_Id" });
             DropIndex("dbo.GroupSyncRequestMembers", new[] { "GroupSyncRequest_Id" });
+            DropIndex("dbo.GroupCalendarMembers", new[] { "Member_Id" });
+            DropIndex("dbo.GroupCalendarMembers", new[] { "GroupCalendar_Id" });
             DropIndex("dbo.AspNetRoles", "RoleNameIndex");
             DropIndex("dbo.AspNetUserRoles", new[] { "RoleId" });
             DropIndex("dbo.AspNetUserRoles", new[] { "UserId" });
@@ -281,6 +314,7 @@ namespace SyncMe.Migrations
             DropIndex("dbo.SyncRequests", new[] { "Sender_Id" });
             DropIndex("dbo.SyncRequests", new[] { "Receiver_Id" });
             DropIndex("dbo.GroupSyncRequests", new[] { "Sender_Id" });
+            DropIndex("dbo.GroupCalendars", new[] { "Creator_Id" });
             DropIndex("dbo.Profiles", new[] { "Member_Id" });
             DropIndex("dbo.Events", new[] { "Member_Id" });
             DropIndex("dbo.EventInvitations", new[] { "Sender_Id" });
@@ -292,6 +326,7 @@ namespace SyncMe.Migrations
             DropIndex("dbo.ContactRequests", new[] { "Sender_Id" });
             DropIndex("dbo.ContactRequests", new[] { "Receiver_Id" });
             DropTable("dbo.GroupSyncRequestMembers");
+            DropTable("dbo.GroupCalendarMembers");
             DropTable("dbo.AspNetRoles");
             DropTable("dbo.AspNetUserRoles");
             DropTable("dbo.AspNetUserLogins");
@@ -299,6 +334,7 @@ namespace SyncMe.Migrations
             DropTable("dbo.AspNetUsers");
             DropTable("dbo.SyncRequests");
             DropTable("dbo.GroupSyncRequests");
+            DropTable("dbo.GroupCalendars");
             DropTable("dbo.Profiles");
             DropTable("dbo.Events");
             DropTable("dbo.EventInvitations");

@@ -1,10 +1,10 @@
-﻿@model IEnumerable<SyncMe.Models.GroupSyncRequest>
+﻿@model IEnumerable<SyncMe.Models.GroupCalendar>
 
 @{
     ViewBag.Title = "ChooseGroupSyncedCalendar";
 }
 
-<h2>Your Synced Group Calendars</h2>
+<h2>Your Group Calendars</h2>
 
 <hr />
 <br />
@@ -28,7 +28,10 @@
             @Html.DisplayName("Creator")
         </th>
         <th>
-            @Html.DisplayName("Members")
+            @Html.DisplayName("Invited")
+        </th>
+        <th>
+            @Html.DisplayName("Joined")
         </th>
         <th></th>
     </tr>
@@ -40,11 +43,14 @@
                 @Html.DisplayFor(modelItem => item.Date)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Sender.FirstName)
-                @Html.DisplayFor(modelItem => item.Sender.LastName)
+                @Html.DisplayFor(modelItem => item.Creator.FirstName)
+                @Html.DisplayFor(modelItem => item.Creator.LastName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Receivers.Count)
+                @Html.DisplayFor(modelItem => item.Invited)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Members.Count)
             </td>
             
             <td>

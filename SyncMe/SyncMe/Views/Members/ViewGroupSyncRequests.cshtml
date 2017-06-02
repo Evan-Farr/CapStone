@@ -51,7 +51,7 @@
                 @Html.DisplayFor(modelItem => item.Sender.LastName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Receivers.Count)
+                @Html.DisplayFor(modelItem => item.Invited)
             </td>
             <td>
                 @Html.ActionLink("Accept", "AcceptGroupSyncRequest", new { id = item.Id })

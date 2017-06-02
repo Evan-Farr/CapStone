@@ -16,6 +16,7 @@ namespace SyncMe.Models
             GroupSyncRequests = new List<GroupSyncRequest>();
             EventInvitations = new List<EventInvitation>();
             Events = new List<Event>();
+            GroupCalendars = new List<GroupCalendar>();
         }
 
         [Key]
@@ -44,6 +45,7 @@ namespace SyncMe.Models
         public virtual ICollection<GroupSyncRequest> GroupSyncRequests { get; set; }
         public virtual ICollection<EventInvitation> EventInvitations { get; set; }
         public virtual Calendar Calendar { get; set; }
+        public virtual ICollection<GroupCalendar> GroupCalendars { get; set; }
         public virtual ICollection<Event> Events { get; set; }
         public virtual ApplicationUser UserId { get; set; }
     }

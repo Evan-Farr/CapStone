@@ -292,9 +292,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201705312105184_initial.cs" />
-    <Compile Include="Migrations\201705312105184_initial.Designer.cs">
-      <DependentUpon>201705312105184_initial.cs</DependentUpon>
+    <Compile Include="Migrations\201706021740386_initial.cs" />
+    <Compile Include="Migrations\201706021740386_initial.Designer.cs">
+      <DependentUpon>201706021740386_initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -304,6 +304,7 @@
     <Compile Include="Models\Event.cs" />
     <Compile Include="Models\EventInvitation.cs" />
     <Compile Include="Models\EventsViewModel.cs" />
+    <Compile Include="Models\GroupCalendar.cs" />
     <Compile Include="Models\GroupSyncRequest.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -880,8 +881,8 @@
     <Content Include="Scripts\jquery-3.1.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201705312105184_initial.resx">
-      <DependentUpon>201705312105184_initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201706021740386_initial.resx">
+      <DependentUpon>201706021740386_initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

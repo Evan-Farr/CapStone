@@ -29,7 +29,7 @@ textarea {
 }
 
 .col-md-1 {
-    padding-top: 49px;
+    padding-top: 4px;
     align-content: center;
     text-align: center;
     align-items: center;
@@ -275,6 +275,46 @@ a:hover {
   text-align: center;
   background: purple;
   /*margin-left: 20px;*/
+}
+
+.circle3 {
+  width: 110px;
+  height: 110px;
+  border-radius: 110%;
+  font-size: 13px;
+  color: #ffffff;
+  line-height: 110px;
+  text-align: center;
+  background: #C32500;
+  /*margin-left: 20px;*/
+  margin-bottom: -25px;
+  margin-top: 0px;
+}
+
+.circle4 {
+  width: 110px;
+  height: 110px;
+  border-radius: 110%;
+  font-size: 13px;
+  color: #ffffff;
+  line-height: 110px;
+  text-align: center;
+  background: #074A7D;
+  /*margin-left: 20px;*/
+}
+
+.circle5 {
+  width: 110px;
+  height: 110px;
+  border-radius: 110%;
+  font-size: 13px;
+  color: #ffffff;
+  line-height: 110px;
+  text-align: center;
+  background: #C35800;
+  /*margin-left: 20px;*/
+  margin-bottom: -25px;
+  margin-top: 0px;
 }
 
 /*.container2 {

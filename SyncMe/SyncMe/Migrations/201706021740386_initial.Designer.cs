@@ -13,7 +13,7 @@ namespace SyncMe.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201705312105184_initial"; }
+            get { return "201706021740386_initial"; }
         }
         
         string IMigrationMetadata.Source
