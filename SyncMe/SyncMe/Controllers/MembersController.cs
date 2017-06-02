@@ -782,7 +782,7 @@ namespace SyncMe.Controllers
                             }
                         }
                     }
-                    if(countMembers[i] == countMembers[1])
+                    else if(countMembers[i] == countMembers[1])
                     {
                         var otherMember = db.Members.Where(o => o.Id == memberId).Select(t => t).FirstOrDefault();
                         var profile = db.Profiles.Where(p => p.Member.Id == otherMember.Id).Select(h => h).FirstOrDefault();
@@ -796,7 +796,7 @@ namespace SyncMe.Controllers
                             }
                         }
                     }
-                    if (countMembers[i] == countMembers[2])
+                    else if (countMembers[i] == countMembers[2])
                     {
                         var otherMember = db.Members.Where(o => o.Id == memberId).Select(t => t).FirstOrDefault();
                         var profile = db.Profiles.Where(p => p.Member.Id == otherMember.Id).Select(h => h).FirstOrDefault();
@@ -810,7 +810,7 @@ namespace SyncMe.Controllers
                             }
                         }
                     }
-                    if (countMembers[i] == countMembers[3])
+                    else if (countMembers[i] == countMembers[3])
                     {
                         var otherMember = db.Members.Where(o => o.Id == memberId).Select(t => t).FirstOrDefault();
                         var profile = db.Profiles.Where(p => p.Member.Id == otherMember.Id).Select(h => h).FirstOrDefault();
@@ -824,7 +824,7 @@ namespace SyncMe.Controllers
                             }
                         }
                     }
-                    if (countMembers[i] == countMembers[4])
+                    else if (countMembers[i] == countMembers[4])
                     {
                         var otherMember = db.Members.Where(o => o.Id == memberId).Select(t => t).FirstOrDefault();
                         var profile = db.Profiles.Where(p => p.Member.Id == otherMember.Id).Select(h => h).FirstOrDefault();

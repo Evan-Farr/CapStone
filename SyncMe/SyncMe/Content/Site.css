@@ -274,6 +274,7 @@ a:hover {
   line-height: 110px;
   text-align: center;
   background: purple;
+  margin-bottom: -25px;
   /*margin-left: 20px;*/
 }
 
@@ -300,6 +301,7 @@ a:hover {
   line-height: 110px;
   text-align: center;
   background: #074A7D;
+  margin-bottom: -25px;
   /*margin-left: 20px;*/
 }
 
