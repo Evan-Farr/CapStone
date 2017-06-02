@@ -25,19 +25,51 @@
             <br /><br />
             @Html.ActionLink("List Active Events", "PrivateIndex", "Events", null, new { @class = "btn btn-primary btn-md" })
             <br /><br />
-            @Html.ActionLink("Event Invitations", "ViewEventInvitations", "Members", null, new { @class = "btn btn-primary btn-md" })
+            <div class="cont">
+                <div class="div2">
+                    @Html.ActionLink("Event Invitations", "ViewEventInvitations", "Members", null, new { @class = "btn btn-primary btn-md" })
+                </div>
+                <div class="div1">
+                    @if (ViewBag.EventInvitations != 0) {<p class="notification-circle">@ViewBag.EventInvitations</p>}
+                </div>
+            </div>
+            @*@Html.ActionLink("Event Invitations", "ViewEventInvitations", "Members", null, new { @class = "btn btn-primary btn-md" })@if (ViewBag.EventInvitations != 0) {<p class="notification-circle">@ViewBag.EventInvitations</p>}*@
             <br /><br /><br />
             @Html.ActionLink("My Contacts", "ViewContacts", "Members", null, new { @class = "btn btn-primary btn-md" })
             <br /><br />
-            @Html.ActionLink("Contact Requests", "ViewContactRequests", "Members", null, new { @class = "btn btn-primary btn-md" })
+            <div class="cont">
+                <div class="div2">
+                    @Html.ActionLink("Contact Requests", "ViewContactRequests", "Members", null, new { @class = "btn btn-primary btn-md" })
+                </div>
+                <div class="div1">
+                    @if (ViewBag.ContactRequests != 0) {<p class="notification-circle">@ViewBag.ContactRequests</p>}
+                </div>
+            </div>
+            @*@Html.ActionLink("Contact Requests", "ViewContactRequests", "Members", null, new { @class = "btn btn-primary btn-md" })@if (ViewBag.ContactRequests != 0) {<p class="notification-circle">@ViewBag.ContactRequests</p>}*@
             <br /><br /><br />
             @Html.ActionLink("Request Sync", "ChooseSyncContacts", "Members", null, new { @class = "btn btn-primary btn-md" })
             <br /><br />
             @Html.ActionLink("Request Group Sync", "ChooseGroupSyncContacts", "Members", null, new { @class = "btn btn-primary btn-md" })
             <br /><br />
-            @Html.ActionLink("Sync Requests", "ViewSyncRequests", "Members", null, new { @class = "btn btn-primary btn-md" })
+            <div class="cont">
+                <div class="div2">
+                    @Html.ActionLink("Sync Requests", "ViewSyncRequests", "Members", null, new { @class = "btn btn-primary btn-md" })
+                </div>
+                <div class="div1">
+                    @if (ViewBag.SyncRequests != 0) {<p class="notification-circle">@ViewBag.SyncRequests</p>}
+                </div>
+            </div>
+            @*@Html.ActionLink("Sync Requests", "ViewSyncRequests", "Members", null, new { @class = "btn btn-primary btn-md" })@if (ViewBag.SyncRequests != 0) {<p class="notification-circle">@ViewBag.SyncRequests</p>}*@
             <br /><br />
-            @Html.ActionLink("Group Sync Requests", "ViewGroupSyncRequests", "Members", null, new { @class = "btn btn-primary btn-md" })
+            <div class="cont">
+                <div class="div2">
+                    @Html.ActionLink("Group Requests", "ViewGroupSyncRequests", "Members", null, new { @class = "btn btn-primary btn-md" })
+                </div>
+                <div class="div1">
+                    @if (ViewBag.GroupSyncRequests != 0) {<p class="notification-circle">@ViewBag.GroupSyncRequests</p>}
+                </div>
+            </div>
+            @*@Html.ActionLink("Group Sync Requests", "ViewGroupSyncRequests", "Members", null, new { @class = "btn btn-primary btn-md" })@if (ViewBag.GroupSyncRequests != 0) {<p class="notification-circle">@ViewBag.GroupSyncRequests</p>}*@
             <br /><br />
             @Html.ActionLink("Synced Calendars", "ChooseSyncedCalendar", "Members", null, new { @class = "btn btn-primary btn-md" })
             <br /><br />

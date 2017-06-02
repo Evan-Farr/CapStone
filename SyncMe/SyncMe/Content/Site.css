@@ -369,5 +369,23 @@ border-radius: 15px;
     border: groove;
     border-color: #007575;
     border-width: 10px;
-    
+}
+
+.notification-circle {
+  width: 15px;
+  height: 30px;
+  border-radius: 100%;
+  font-size: 15px;
+  color: #ffffff;
+  line-height: 30px;
+  text-align: center;
+  background: none;
+}
+
+.cont {
+position: relative;
+margin-bottom: 15px;
+}
+.div1, .div2 {
+position: absolute;
 }

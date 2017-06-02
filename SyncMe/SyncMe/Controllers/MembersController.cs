@@ -149,6 +149,22 @@ namespace SyncMe.Controllers
                 {
                     events.Add(item);
                 }
+                if(member.EventInvitations.Count != 0)
+                {
+                    ViewBag.EventInvitations = member.EventInvitations.Count;
+                }
+                if (member.ContactRequests.Count != 0)
+                {
+                    ViewBag.ContactRequests = member.ContactRequests.Count;
+                }
+                if (member.SyncRequests.Count != 0)
+                {
+                    ViewBag.SyncRequests = member.SyncRequests.Count;
+                }
+                if (member.GroupSyncRequests.Count != 0)
+                {
+                    ViewBag.GroupSyncRequests = member.GroupSyncRequests.Count;
+                }
                 return View(events);
             }catch
             {
@@ -669,7 +685,7 @@ namespace SyncMe.Controllers
                 }
             }
             db.SaveChanges();
-            TempData["Message"] = "**Sync request was removed from your pending sync requests.";
+            TempData["Message"] = "**Sync request was removed from your pending group sync requests.";
             return RedirectToAction("ViewGroupSyncRequests");
         }
 
@@ -911,8 +927,12 @@ namespace SyncMe.Controllers
                     break;
                 }
             }
+            if(calendar.Members.Count == 0)
+            {
+                db.GroupCalendars.Remove(calendar);
+            }
             db.SaveChanges();
-            TempData["Message"] = "**You are no longer a member of that group calendar.";
+            TempData["Message"] = "**You are no longer a member of a group calendar.";
             return RedirectToAction("ChooseGroupSyncedCalendar");
         }
 
