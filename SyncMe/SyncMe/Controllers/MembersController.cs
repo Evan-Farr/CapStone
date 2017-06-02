@@ -895,7 +895,7 @@ namespace SyncMe.Controllers
             }
         }
 
-        public ActionResult RemoveSyncedCalendar(int? id) //possible issue with finding right calendar since only checking sender id
+        public ActionResult RemoveSyncedCalendar(int? id) 
         {
             var user = User.Identity.GetUserId();
             var member = db.Members.Where(u => u.UserId.Id == user).Select(s => s).FirstOrDefault();
