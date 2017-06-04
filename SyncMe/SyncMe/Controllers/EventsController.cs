@@ -12,7 +12,6 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Web.Routing;
 using System.Globalization;
-using SyncMe.Weather;
 
 namespace SyncMe.Controllers
 {

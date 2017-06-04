@@ -63,26 +63,37 @@
     </dl>
 </div>
 <hr />
-<br />
-
-<p id="reply">
-
-</p>
-<button>Get Weather</button>
-
-<br />
+<br /><br />
+<div style="margin-left: 100px;">
+    @*<p id="name"></p>*@
+    @*<p id="date"></p>*@
+    <p id="temp"></p>
+    <p id="humidity"></p>
+    <p id="sky"></p>
+    @*<button>Get Weather</button>*@
+</div>
+<br /><hr />
+@*<br />
 @Html.ActionLink("Done", "ViewCalendar", "Members", null, new { @class = "btn btn-primary btn-md" })
-<hr />
+<hr />*@
 
+<script src="~/Scripts/jquery-3.1.1.js"></script>
+<script src="~/Scripts/jquery-3.1.1.min.js"></script>
+@Scripts.Render("~/bundles/jquery")
 <script>
+    var city = @Html.Raw(Json.Encode(Model.city));
+
     $(document).ready(function () {
-        $("button").click(function () {
-            $.get("http://api.openweathermap.org/data/2.5/forecast?id=524901&APPID=a4a28fe9d0de8258583237ee29999aee&units=imperial", function (response) {
-                //response
+        //$("button").click(function () {
+            $.get("http://api.openweathermap.org/data/2.5/forecast?q="+city+"&APPID=a4a28fe9d0de8258583237ee29999aee&units=imperial", function (response) {
+                console.log(response);
+                //$("#name").text(response.city.name);
+                //$("#date").text(response.list[0].dt_txt);
+                $("#temp").text("Temperature: " + response.list[0].main.temp + String.fromCharCode(176) + "F");
+                $("#humidity").text("Humidity: " + response.list[0].main.humidity + "%");
+                $("#sky").text("Sky: " + response.list[0].weather[0].main)
             });
-        });
+        //});
     });
     
 </script>
-
-@*<script async defer src="http://api.openweathermap.org/data/2.5/weather?id=CITYIDappid=a4a28fe9d0de8258583237ee29999aee&units=metric"></script>*@
