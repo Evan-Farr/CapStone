@@ -4,8 +4,6 @@
     ViewBag.Title = "GetWeather";
 }
 
-<h2>GetWeather</h2>
-
 <br />
 @Html.ActionLink("Done", "ViewCalendar", "Members", null, new { @class = "btn btn-primary btn-md" })
 <hr />
@@ -67,11 +65,24 @@
 <hr />
 <br />
 
+<p id="reply">
+
+</p>
+<button>Get Weather</button>
+
 <br />
 @Html.ActionLink("Done", "ViewCalendar", "Members", null, new { @class = "btn btn-primary btn-md" })
 <hr />
 
 <script>
-        
+    $(document).ready(function () {
+        $("button").click(function () {
+            $.get("http://api.openweathermap.org/data/2.5/forecast?id=524901&APPID=a4a28fe9d0de8258583237ee29999aee&units=imperial", function (response) {
+                //response
+            });
+        });
+    });
+    
 </script>
-<script async defer src="http://api.openweathermap.org/data/2.5/weather?id=CITYIDappid=a4a28fe9d0de8258583237ee29999aee&units=metric"></script>
+
+@*<script async defer src="http://api.openweathermap.org/data/2.5/weather?id=CITYIDappid=a4a28fe9d0de8258583237ee29999aee&units=metric"></script>*@

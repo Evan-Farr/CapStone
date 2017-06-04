@@ -5,12 +5,14 @@ using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web;
+using System.Web.Script.Serialization;
 using System.Web.Mvc;
 using SyncMe.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Web.Routing;
 using System.Globalization;
+using SyncMe.Weather;
 
 namespace SyncMe.Controllers
 {
@@ -197,5 +199,6 @@ namespace SyncMe.Controllers
             ViewBag.Name = @event.title;
             return View(@event);
         }
+
     }
 }
