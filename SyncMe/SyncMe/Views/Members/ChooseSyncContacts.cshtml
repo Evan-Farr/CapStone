@@ -101,6 +101,24 @@
                                 }
                             }
                         }
+                        else if (request.Sender.Id == item.Id)
+                        {
+                            if (request.Receiver.Id == ViewBag.memberId)
+                            {
+                                if (request.Status == "Pending")
+                                {
+                                    <p style="color: indianred">Request Pending</p>
+                                    ViewBag.counter = 1;
+                                    break;
+                                }
+                                else
+                                {
+                                    @Html.ActionLink("Accepted", "ViewSyncedCalendar", new { id = item.Id }, new { @class = "green-action-link" })
+                                    ViewBag.counter = 1;
+                                    break;
+                                }
+                            }
+                        }
                     }
                 }
                 @if (ViewBag.counter == 0)

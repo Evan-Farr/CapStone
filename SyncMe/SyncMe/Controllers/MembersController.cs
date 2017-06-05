@@ -145,6 +145,14 @@ namespace SyncMe.Controllers
                 var current = User.Identity.GetUserId();
                 var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
                 var events = new List<Event>();
+                var syncRequests = new List<SyncRequest>();
+                foreach(var request in member.SyncRequests)
+                {
+                    if(request.Status == "Pending")
+                    {
+                        syncRequests.Add(request);
+                    }
+                }
                 foreach (var item in member.Events)
                 {
                     events.Add(item);
@@ -159,7 +167,7 @@ namespace SyncMe.Controllers
                 }
                 if (member.SyncRequests.Count != 0)
                 {
-                    ViewBag.SyncRequests = member.SyncRequests.Count;
+                    ViewBag.SyncRequests = syncRequests.Count;
                 }
                 if (member.GroupSyncRequests.Count != 0)
                 {
@@ -467,6 +475,7 @@ namespace SyncMe.Controllers
         {
             var current = User.Identity.GetUserId();
             var member = db.Members.Where(m => m.UserId.Id == current).Select(s => s).FirstOrDefault();
+            var memberProfile = db.Profiles.Where(t => t.Member.Id == member.Id).Select(k => k).FirstOrDefault();
             if (member.Contacts.Count == 0)
             {
                 TempData["ErrorMessage"] = "**You currently don't have any contacts to send a sync request to...";
@@ -488,6 +497,8 @@ namespace SyncMe.Controllers
             }
             var sender = db.Profiles.Where(q => q.Member.Id == member.Id).Select(u => u).FirstOrDefault();
             ViewBag.SenderId = sender.Id;
+            ViewBag.MemberId = member.Id;
+            ViewBag.SenderId2 = memberProfile.Id;
             ViewBag.counter = 0;
             return View(profiles.OrderBy(o => o.LastName));
         }
