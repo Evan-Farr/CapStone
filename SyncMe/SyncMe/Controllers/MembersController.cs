@@ -8,8 +8,8 @@ using System.Web;
 using System.Web.Mvc;
 using SyncMe.Models;
 using Microsoft.AspNet.Identity;
-using System.Net.Http;
-using System.Net.Mail;
+using SendGrid;
+using SendGrid.Helpers.Mail;
 
 namespace SyncMe.Controllers
 {
@@ -354,14 +354,16 @@ namespace SyncMe.Controllers
             eventInvitation.Event = @event;
             receiver.EventInvitations.Add(eventInvitation);
             db.EventInvitations.Add(eventInvitation);
-            //var myMessage = new SendGrid.SendGridMessage();
-            //myMessage.AddTo("test@sendgrid.com");
-            //myMessage.From = new MailAddress("evan.c.farr@gmail.com", "SyncMe");
-            //myMessage.Subject = "New event invitation received!";
-            //myMessage.Text = "Please sign into your SyncMe account to accept or deny a your new event invitation.";
-
-            //var transportWeb = new SendGrid.Web("SENDGRID_APIKEY");
-            //transportWeb.DeliverAsync(myMessage);
+            var msg = new SendGridMessage();
+            msg.SetFrom(new EmailAddress("evan.c.farr@gmailc.om", "SyncMe"));
+            var recipients = new List<EmailAddress>
+            {
+                new EmailAddress(receiver.Email, receiver.FirstName + " " + receiver.LastName)
+            };
+            msg.AddTos(recipients);
+            msg.SetSubject(sender.FirstName + sender.LastName + " sent you a new event invitation!");
+            msg.AddContent(MimeType.Text, "Sign into your SyncMe account to accept or deny " + sender.FirstName + sender.LastName + "'s event invitation.");
+            msg.AddContent(MimeType.Html, "<p>Sign into your SyncMe account to accept or deny + sender.FirstName + sender.LastName + 's event invitation.</p>");
             db.SaveChanges();
             TempData["Message"] = "**Event invitation successfully sent!";
             return RedirectToAction("ChooseContacts", new { id = @event.Id});
